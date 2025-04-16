@@ -648,7 +648,23 @@ namespace Time4SellersApp
                 startzeit = StartzeitEndzeitStart.Value;
                 endzeit = StartzeitEndzeitEnde.Value;
             }
-            Writer.WriteData(startzeit, endzeit, bookingType, bemerkung);
+            string? error = Writer.WriteData(startzeit, endzeit, bookingType, bemerkung);
+
+            if (error != null)
+            {
+                MessageBox.Show(
+                error,  
+                "Fehler",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error
+                );
+                return;
+            }
+            else
+            {
+                MessageBox.Show("Daten gespeichert!");
+            }
+                
         }
     }
 }

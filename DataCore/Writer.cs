@@ -8,10 +8,10 @@ namespace _4Time.DataCore
 {
     internal class Writer : Connector
     {
-        internal static string WriteData(DateTime? StartTime = null, DateTime? EndTime = null, string? bookingType = null, object? args = null)
+        internal static string? WriteData(DateTime? StartTime = null, DateTime? EndTime = null, string? bookingType = null, object? args = null)
         {
             //Implement Write Logic Here
-            return "this is a example error message";
+            return "Logic not Implemented!";
         }
     }
 }
