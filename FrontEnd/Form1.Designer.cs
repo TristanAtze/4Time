@@ -31,6 +31,11 @@
         private NumericUpDown EndzeitDauerStunden;
         private DateTimePicker EndzeitDauerStart;
         private Label label2;
+        private Label label5;
+        private ComboBox BookingType;
+        private Button button1;
+        private PictureBox pictureBox2;
+        private PictureBox pictureBox1;
 
         /// <summary>
         /// Erforderliche Methode für die Designerunterstützung.
