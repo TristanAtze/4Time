@@ -1,3 +1,4 @@
+using _4Time.DataCore;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -32,7 +33,6 @@ namespace Time4SellersApp
         private TextBox txtBemerkung;
         private Label lblBemerkung;
         private Button btnSpeichern;
-        private Label lblStandartEintragung;
         private Button btnSettingsEintragen;
         private Button btnNeuladenEintragen;
 
@@ -44,6 +44,7 @@ namespace Time4SellersApp
         public MainForm()
         {
             InitializeComponent();
+            rbStartzeitEndzeit.Checked = true;
         }
 
         private void InitializeComponent()
@@ -61,6 +62,18 @@ namespace Time4SellersApp
             btnSettingsUebersicht = new Button();
             btnNeuladenUebersicht = new Button();
             tabEintragen = new TabPage();
+            label3 = new Label();
+            label4 = new Label();
+            EndzeitDauerMinuten = new NumericUpDown();
+            EndzeitDauerStunden = new NumericUpDown();
+            EndzeitDauerStart = new DateTimePicker();
+            label2 = new Label();
+            label1 = new Label();
+            StartzeitDauerMinuten = new NumericUpDown();
+            StartzeitDauerStunden = new NumericUpDown();
+            StartzeitDauerStart = new DateTimePicker();
+            StartzeitEndzeitEnde = new DateTimePicker();
+            StartzeitEndzeitStart = new DateTimePicker();
             pictureLogoEintragen = new PictureBox();
             rbStartzeitEndzeit = new RadioButton();
             rbStartzeitDauer = new RadioButton();
@@ -69,7 +82,6 @@ namespace Time4SellersApp
             lblBemerkung = new Label();
             txtBemerkung = new TextBox();
             btnSpeichern = new Button();
-            lblStandartEintragung = new Label();
             btnSettingsEintragen = new Button();
             btnNeuladenEintragen = new Button();
             tabAuslesen = new TabPage();
@@ -80,6 +92,10 @@ namespace Time4SellersApp
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureLogoUebersicht).BeginInit();
             tabEintragen.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)EndzeitDauerMinuten).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)EndzeitDauerStunden).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)StartzeitDauerMinuten).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)StartzeitDauerStunden).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureLogoEintragen).BeginInit();
             tabAuslesen.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureLogoAuslesen).BeginInit();
@@ -117,13 +133,13 @@ namespace Time4SellersApp
             // 
             // pictureLogoUebersicht
             // 
+            pictureLogoUebersicht.ImageLocation = "Logo.png";
             pictureLogoUebersicht.Location = new Point(20, 14);
             pictureLogoUebersicht.Name = "pictureLogoUebersicht";
             pictureLogoUebersicht.Size = new Size(424, 122);
             pictureLogoUebersicht.SizeMode = PictureBoxSizeMode.Zoom;
             pictureLogoUebersicht.TabIndex = 0;
             pictureLogoUebersicht.TabStop = false;
-            pictureLogoUebersicht.Image = Image.FromFile("Logo.png");
             // 
             // lblArbeitszeitHeute
             // 
@@ -207,6 +223,18 @@ namespace Time4SellersApp
             // 
             // tabEintragen
             // 
+            tabEintragen.Controls.Add(label3);
+            tabEintragen.Controls.Add(label4);
+            tabEintragen.Controls.Add(EndzeitDauerMinuten);
+            tabEintragen.Controls.Add(EndzeitDauerStunden);
+            tabEintragen.Controls.Add(EndzeitDauerStart);
+            tabEintragen.Controls.Add(label2);
+            tabEintragen.Controls.Add(label1);
+            tabEintragen.Controls.Add(StartzeitDauerMinuten);
+            tabEintragen.Controls.Add(StartzeitDauerStunden);
+            tabEintragen.Controls.Add(StartzeitDauerStart);
+            tabEintragen.Controls.Add(StartzeitEndzeitEnde);
+            tabEintragen.Controls.Add(StartzeitEndzeitStart);
             tabEintragen.Controls.Add(pictureLogoEintragen);
             tabEintragen.Controls.Add(rbStartzeitEndzeit);
             tabEintragen.Controls.Add(rbStartzeitDauer);
@@ -215,7 +243,6 @@ namespace Time4SellersApp
             tabEintragen.Controls.Add(lblBemerkung);
             tabEintragen.Controls.Add(txtBemerkung);
             tabEintragen.Controls.Add(btnSpeichern);
-            tabEintragen.Controls.Add(lblStandartEintragung);
             tabEintragen.Controls.Add(btnSettingsEintragen);
             tabEintragen.Controls.Add(btnNeuladenEintragen);
             tabEintragen.Location = new Point(4, 24);
@@ -224,9 +251,110 @@ namespace Time4SellersApp
             tabEintragen.TabIndex = 1;
             tabEintragen.Text = "Eintragen";
             // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(233, 270);
+            label3.Name = "label3";
+            label3.Size = new Size(54, 15);
+            label3.TabIndex = 24;
+            label3.Text = "Stunden:";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(358, 271);
+            label4.Name = "label4";
+            label4.Size = new Size(55, 15);
+            label4.TabIndex = 23;
+            label4.Text = "Minuten:";
+            // 
+            // EndzeitDauerMinuten
+            // 
+            EndzeitDauerMinuten.Location = new Point(420, 269);
+            EndzeitDauerMinuten.Name = "EndzeitDauerMinuten";
+            EndzeitDauerMinuten.Size = new Size(38, 23);
+            EndzeitDauerMinuten.TabIndex = 22;
+            // 
+            // EndzeitDauerStunden
+            // 
+            EndzeitDauerStunden.Location = new Point(294, 268);
+            EndzeitDauerStunden.Name = "EndzeitDauerStunden";
+            EndzeitDauerStunden.Size = new Size(38, 23);
+            EndzeitDauerStunden.TabIndex = 21;
+            // 
+            // EndzeitDauerStart
+            // 
+            EndzeitDauerStart.AllowDrop = true;
+            EndzeitDauerStart.Format = DateTimePickerFormat.Time;
+            EndzeitDauerStart.Location = new Point(15, 268);
+            EndzeitDauerStart.Name = "EndzeitDauerStart";
+            EndzeitDauerStart.Size = new Size(200, 23);
+            EndzeitDauerStart.TabIndex = 20;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(233, 200);
+            label2.Name = "label2";
+            label2.Size = new Size(54, 15);
+            label2.TabIndex = 19;
+            label2.Text = "Stunden:";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(358, 198);
+            label1.Name = "label1";
+            label1.Size = new Size(55, 15);
+            label1.TabIndex = 18;
+            label1.Text = "Minuten:";
+            // 
+            // StartzeitDauerMinuten
+            // 
+            StartzeitDauerMinuten.Location = new Point(419, 198);
+            StartzeitDauerMinuten.Name = "StartzeitDauerMinuten";
+            StartzeitDauerMinuten.Size = new Size(38, 23);
+            StartzeitDauerMinuten.TabIndex = 17;
+            // 
+            // StartzeitDauerStunden
+            // 
+            StartzeitDauerStunden.Location = new Point(294, 198);
+            StartzeitDauerStunden.Name = "StartzeitDauerStunden";
+            StartzeitDauerStunden.Size = new Size(38, 23);
+            StartzeitDauerStunden.TabIndex = 16;
+            // 
+            // StartzeitDauerStart
+            // 
+            StartzeitDauerStart.AllowDrop = true;
+            StartzeitDauerStart.Format = DateTimePickerFormat.Time;
+            StartzeitDauerStart.Location = new Point(15, 194);
+            StartzeitDauerStart.Name = "StartzeitDauerStart";
+            StartzeitDauerStart.Size = new Size(200, 23);
+            StartzeitDauerStart.TabIndex = 15;
+            // 
+            // StartzeitEndzeitEnde
+            // 
+            StartzeitEndzeitEnde.AllowDrop = true;
+            StartzeitEndzeitEnde.Format = DateTimePickerFormat.Time;
+            StartzeitEndzeitEnde.Location = new Point(258, 129);
+            StartzeitEndzeitEnde.Name = "StartzeitEndzeitEnde";
+            StartzeitEndzeitEnde.Size = new Size(200, 23);
+            StartzeitEndzeitEnde.TabIndex = 14;
+            // 
+            // StartzeitEndzeitStart
+            // 
+            StartzeitEndzeitStart.AllowDrop = true;
+            StartzeitEndzeitStart.Format = DateTimePickerFormat.Time;
+            StartzeitEndzeitStart.Location = new Point(15, 129);
+            StartzeitEndzeitStart.Name = "StartzeitEndzeitStart";
+            StartzeitEndzeitStart.Size = new Size(200, 23);
+            StartzeitEndzeitStart.TabIndex = 12;
+            // 
             // pictureLogoEintragen
             // 
-            pictureLogoEintragen.Location = new Point(54, 23);
+            pictureLogoEintragen.ImageLocation = "Logo.png";
+            pictureLogoEintragen.Location = new Point(64, 13);
             pictureLogoEintragen.Name = "pictureLogoEintragen";
             pictureLogoEintragen.Size = new Size(323, 75);
             pictureLogoEintragen.SizeMode = PictureBoxSizeMode.Zoom;
@@ -241,29 +369,32 @@ namespace Time4SellersApp
             rbStartzeitEndzeit.Size = new Size(116, 19);
             rbStartzeitEndzeit.TabIndex = 1;
             rbStartzeitEndzeit.Text = "Startzeit - Endzeit";
+            rbStartzeitEndzeit.CheckedChanged += rbStartzeitEndzeit_CheckedChanged;
             // 
             // rbStartzeitDauer
             // 
             rbStartzeitDauer.AutoSize = true;
-            rbStartzeitDauer.Location = new Point(15, 138);
+            rbStartzeitDauer.Location = new Point(15, 169);
             rbStartzeitDauer.Name = "rbStartzeitDauer";
             rbStartzeitDauer.Size = new Size(109, 19);
             rbStartzeitDauer.TabIndex = 2;
             rbStartzeitDauer.Text = "Startzeit - Dauer";
+            rbStartzeitDauer.CheckedChanged += rbStartzeitDauer_CheckedChanged;
             // 
             // rbEndzeitDauer
             // 
             rbEndzeitDauer.AutoSize = true;
-            rbEndzeitDauer.Location = new Point(15, 163);
+            rbEndzeitDauer.Location = new Point(15, 243);
             rbEndzeitDauer.Name = "rbEndzeitDauer";
             rbEndzeitDauer.Size = new Size(105, 19);
             rbEndzeitDauer.TabIndex = 3;
             rbEndzeitDauer.Text = "Endzeit - Dauer";
+            rbEndzeitDauer.CheckedChanged += rbEndzeitDauer_CheckedChanged;
             // 
             // lblInfoEintragen
             // 
             lblInfoEintragen.AutoSize = true;
-            lblInfoEintragen.Location = new Point(20, 202);
+            lblInfoEintragen.Location = new Point(15, 307);
             lblInfoEintragen.Name = "lblInfoEintragen";
             lblInfoEintragen.Size = new Size(329, 15);
             lblInfoEintragen.TabIndex = 4;
@@ -272,7 +403,7 @@ namespace Time4SellersApp
             // lblBemerkung
             // 
             lblBemerkung.AutoSize = true;
-            lblBemerkung.Location = new Point(20, 248);
+            lblBemerkung.Location = new Point(3, 333);
             lblBemerkung.Name = "lblBemerkung";
             lblBemerkung.Size = new Size(71, 15);
             lblBemerkung.TabIndex = 5;
@@ -280,27 +411,19 @@ namespace Time4SellersApp
             // 
             // txtBemerkung
             // 
-            txtBemerkung.Location = new Point(20, 278);
+            txtBemerkung.Location = new Point(0, 351);
             txtBemerkung.Name = "txtBemerkung";
             txtBemerkung.Size = new Size(425, 23);
             txtBemerkung.TabIndex = 6;
             // 
             // btnSpeichern
             // 
-            btnSpeichern.Location = new Point(20, 318);
+            btnSpeichern.Location = new Point(0, 380);
             btnSpeichern.Name = "btnSpeichern";
             btnSpeichern.Size = new Size(100, 30);
             btnSpeichern.TabIndex = 7;
             btnSpeichern.Text = "Speichern";
-            // 
-            // lblStandartEintragung
-            // 
-            lblStandartEintragung.AutoSize = true;
-            lblStandartEintragung.Location = new Point(184, 422);
-            lblStandartEintragung.Name = "lblStandartEintragung";
-            lblStandartEintragung.Size = new Size(112, 15);
-            lblStandartEintragung.TabIndex = 8;
-            lblStandartEintragung.Text = "Standart Eintragung";
+            btnSpeichern.Click += btnSpeichern_Click;
             // 
             // btnSettingsEintragen
             // 
@@ -325,7 +448,7 @@ namespace Time4SellersApp
             tabAuslesen.Controls.Add(btnNeuladenAuslesen);
             tabAuslesen.Location = new Point(4, 24);
             tabAuslesen.Name = "tabAuslesen";
-            tabAuslesen.Size = new Size(380, 533);
+            tabAuslesen.Size = new Size(466, 533);
             tabAuslesen.TabIndex = 2;
             tabAuslesen.Text = "Auslesen";
             // 
@@ -367,10 +490,72 @@ namespace Time4SellersApp
             ((System.ComponentModel.ISupportInitialize)pictureLogoUebersicht).EndInit();
             tabEintragen.ResumeLayout(false);
             tabEintragen.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)EndzeitDauerMinuten).EndInit();
+            ((System.ComponentModel.ISupportInitialize)EndzeitDauerStunden).EndInit();
+            ((System.ComponentModel.ISupportInitialize)StartzeitDauerMinuten).EndInit();
+            ((System.ComponentModel.ISupportInitialize)StartzeitDauerStunden).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureLogoEintragen).EndInit();
             tabAuslesen.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureLogoAuslesen).EndInit();
             ResumeLayout(false);
+        }
+
+        private void rbStartzeitEndzeit_CheckedChanged(object sender, EventArgs e)
+        {
+            StartzeitDauerStart.Enabled = false;
+            StartzeitDauerStunden.Enabled = false;
+            StartzeitDauerMinuten.Enabled = false;
+            EndzeitDauerStart.Enabled = false;
+            EndzeitDauerStunden.Enabled = false;
+            EndzeitDauerMinuten.Enabled = false;
+            StartzeitEndzeitStart.Enabled = true;
+            StartzeitEndzeitEnde.Enabled = true;
+        }
+
+        private void rbStartzeitDauer_CheckedChanged(object sender, EventArgs e)
+        {
+            StartzeitDauerStart.Enabled = true;
+            StartzeitDauerStunden.Enabled = true;
+            StartzeitDauerMinuten.Enabled = true;
+            EndzeitDauerStart.Enabled = false;
+            EndzeitDauerStunden.Enabled = false;
+            EndzeitDauerMinuten.Enabled = false;
+            StartzeitEndzeitStart.Enabled = false;
+            StartzeitEndzeitEnde.Enabled = false;
+        }
+
+        private void rbEndzeitDauer_CheckedChanged(object sender, EventArgs e)
+        {
+            StartzeitDauerStart.Enabled = false;
+            StartzeitDauerStunden.Enabled = false;
+            StartzeitDauerMinuten.Enabled = false;
+            EndzeitDauerStart.Enabled = true;
+            EndzeitDauerStunden.Enabled = true;
+            EndzeitDauerMinuten.Enabled = true;
+            StartzeitEndzeitStart.Enabled = false;
+            StartzeitEndzeitEnde.Enabled = false;
+        }
+
+        private void btnSpeichern_Click(object sender, EventArgs e)
+        {
+            DateTime Startzeit = DateTime.Now;
+            DateTime Endzeit = DateTime.Now;
+            if (StartzeitDauerStart.Enabled && StartzeitDauerStunden.Enabled && StartzeitDauerMinuten.Enabled)
+            {
+                Startzeit = StartzeitDauerStart.Value;
+                Endzeit = Startzeit.AddHours((double)StartzeitDauerStunden.Value).AddMinutes((double)StartzeitDauerMinuten.Value);
+            }
+            else if (EndzeitDauerStart.Enabled && EndzeitDauerStunden.Enabled && EndzeitDauerMinuten.Enabled)
+            {
+                Endzeit = EndzeitDauerStart.Value;
+                Startzeit = Endzeit.AddHours(-(double)EndzeitDauerStunden.Value).AddMinutes(-(double)EndzeitDauerMinuten.Value);
+            }
+            else if (StartzeitEndzeitStart.Enabled && StartzeitEndzeitEnde.Enabled)
+            {
+                Startzeit = StartzeitEndzeitStart.Value;
+                Endzeit = StartzeitEndzeitEnde.Value;
+            }
+            Writer.WriteData(Startzeit, Endzeit);
         }
     }
 }
