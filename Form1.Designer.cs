@@ -1,16 +1,16 @@
-﻿namespace _4Time
+﻿namespace Time4SellersApp
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
-        ///  Required designer variable.
+        /// Erforderliche Designervariable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        ///  Clean up any resources being used.
+        /// Verwendete Ressourcen bereinigen.
         /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        /// <param name="disposing">True, wenn verwaltete Ressourcen gelöscht werden sollen; andernfalls False.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,20 +20,9 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
         /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
+        /// Erforderliche Methode für die Designerunterstützung.
+        /// Der Inhalt der Methode darf nicht mit dem Code-Editor geändert werden.
         /// </summary>
-        private void InitializeComponent()
-        {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
-        }
-
-        #endregion
     }
 }
