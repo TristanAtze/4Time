@@ -36,6 +36,12 @@
         private Button button1;
         private PictureBox pictureBox2;
         private PictureBox pictureBox1;
+        private Label OTWeek;
+        private Label PTWeek;
+        private Label OTToday;
+        private Label PTToday;
+        private Label WTWeek;
+        private Label WTToday;
 
         /// <summary>
         /// Erforderliche Methode für die Designerunterstützung.
