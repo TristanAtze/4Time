@@ -33,7 +33,6 @@
         private Label label2;
         private Label label5;
         private ComboBox BookingType;
-        private Button button1;
         private PictureBox pictureBox2;
         private PictureBox pictureBox1;
         private Label OTWeek;
@@ -42,6 +41,15 @@
         private Label PTToday;
         private Label WTWeek;
         private Label WTToday;
+        private Label LogginName;
+        private Label loggedInAs;
+        private DataGridViewTextBoxColumn colStart;
+        private DataGridViewTextBoxColumn colEnd;
+        private DataGridViewTextBoxColumn colArt;
+        private DataGridViewTextBoxColumn colKommentar;
+        private DataGridViewTextBoxColumn colDauer;
+        private Button Löschen;
+        private Button Neuladen;
 
         /// <summary>
         /// Erforderliche Methode für die Designerunterstützung.
