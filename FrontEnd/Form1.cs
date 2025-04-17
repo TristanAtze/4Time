@@ -85,6 +85,7 @@ namespace Time4SellersApp
             WTWeek.Text = "42:00 std";
             OTToday.Text = "00:40 std";
             OTWeek.Text = "02:00 std";
+            LogginName.Text = Connector.FirstName + " " + Connector.LastName;
 
             // Testen der Verschlüsselung
             //string encrypted = Crypto.Encrypt("Test Satz");
@@ -140,6 +141,14 @@ namespace Time4SellersApp
             pictureBox1 = new PictureBox();
             btnSettingsAuslesen = new Button();
             btnNeuladenAuslesen = new Button();
+            dgvEntries = new DataGridView();
+            this.colStart = new DataGridViewTextBoxColumn();
+            this.colEnd = new DataGridViewTextBoxColumn();
+            this.colArt = new DataGridViewTextBoxColumn();
+            this.colKommentar = new DataGridViewTextBoxColumn();
+            this.colDauer = new DataGridViewTextBoxColumn();
+            this.loggedInAs = new Label();
+            this.LogginName = new Label();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureLogoUebersicht).BeginInit();
@@ -151,6 +160,7 @@ namespace Time4SellersApp
             ((System.ComponentModel.ISupportInitialize)StartzeitDauerStunden).BeginInit();
             tabAuslesen.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvEntries).BeginInit();
             SuspendLayout();
             // 
             // tabControl
@@ -167,6 +177,8 @@ namespace Time4SellersApp
             // 
             // tabUebersicht
             // 
+            tabUebersicht.Controls.Add(this.LogginName);
+            tabUebersicht.Controls.Add(this.loggedInAs);
             tabUebersicht.Controls.Add(OTWeek);
             tabUebersicht.Controls.Add(PTWeek);
             tabUebersicht.Controls.Add(OTToday);
@@ -578,6 +590,7 @@ namespace Time4SellersApp
             tabAuslesen.Controls.Add(pictureBox1);
             tabAuslesen.Controls.Add(btnSettingsAuslesen);
             tabAuslesen.Controls.Add(btnNeuladenAuslesen);
+            tabAuslesen.Controls.Add(dgvEntries);
             tabAuslesen.Location = new Point(4, 24);
             tabAuslesen.Name = "tabAuslesen";
             tabAuslesen.Size = new Size(466, 533);
@@ -612,56 +625,58 @@ namespace Time4SellersApp
             // 
             // dgvEntries
             // 
-            this.dgvEntries = new System.Windows.Forms.DataGridView();
-            this.dgvEntries.Location = new System.Drawing.Point(20, 150);
-            this.dgvEntries.Name = "dgvEntries";
-            this.dgvEntries.Size = new System.Drawing.Size(424, 300);
-            this.dgvEntries.ReadOnly = true;
-            this.dgvEntries.AllowUserToAddRows = false;
-            this.dgvEntries.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvEntries.AutoGenerateColumns = false;
-
-            // Spalten definieren
-            var colStart = new System.Windows.Forms.DataGridViewTextBoxColumn()
-            {
-                DataPropertyName = "Startzeit",
-                HeaderText = "Startzeit",
-                Name = "colStartzeit"
-            };
-            var colEnd = new System.Windows.Forms.DataGridViewTextBoxColumn()
-            {
-                DataPropertyName = "Endzeit",
-                HeaderText = "Endzeit",
-                Name = "colEndzeit"
-            };
-            var colArt = new System.Windows.Forms.DataGridViewTextBoxColumn()
-            {
-                DataPropertyName = "Art",
-                HeaderText = "Art",
-                Name = "colArt"
-            };
-            var colKommentar = new System.Windows.Forms.DataGridViewTextBoxColumn()
-            {
-                DataPropertyName = "Kommentar",
-                HeaderText = "Kommentar",
-                Name = "colKommentar"
-            };
-            var colDauer = new System.Windows.Forms.DataGridViewTextBoxColumn()
-            {
-                DataPropertyName = "Dauer",
-                HeaderText = "Dauer",
-                Name = "colDauer"
-            };
-            this.dgvEntries.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            colStart, colEnd, colArt, colKommentar, colDauer
-});
-
-            // Event für Doppelklick (kann auch CellClick sein)
-            this.dgvEntries.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvEntries_CellDoubleClick);
-
-            // zum Tab hinzufügen
-            this.tabAuslesen.Controls.Add(this.dgvEntries);
-
+            dgvEntries.AllowUserToAddRows = false;
+            dgvEntries.Columns.AddRange(new DataGridViewColumn[] { this.colStart, this.colEnd, this.colArt, this.colKommentar, this.colDauer });
+            dgvEntries.Location = new Point(20, 150);
+            dgvEntries.Name = "dgvEntries";
+            dgvEntries.ReadOnly = true;
+            dgvEntries.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvEntries.Size = new Size(424, 300);
+            dgvEntries.TabIndex = 4;
+            dgvEntries.CellDoubleClick += dgvEntries_CellDoubleClick;
+            // 
+            // colStart
+            // 
+            this.colStart.Name = "colStart";
+            this.colStart.ReadOnly = true;
+            // 
+            // colEnd
+            // 
+            this.colEnd.Name = "colEnd";
+            this.colEnd.ReadOnly = true;
+            // 
+            // colArt
+            // 
+            this.colArt.Name = "colArt";
+            this.colArt.ReadOnly = true;
+            // 
+            // colKommentar
+            // 
+            this.colKommentar.Name = "colKommentar";
+            this.colKommentar.ReadOnly = true;
+            // 
+            // colDauer
+            // 
+            this.colDauer.Name = "colDauer";
+            this.colDauer.ReadOnly = true;
+            // 
+            // loggedInAs
+            // 
+            this.loggedInAs.AutoSize = true;
+            this.loggedInAs.Location = new Point(20, 240);
+            this.loggedInAs.Name = "loggedInAs";
+            this.loggedInAs.Size = new Size(84, 15);
+            this.loggedInAs.TabIndex = 18;
+            this.loggedInAs.Text = "Eingeloggt als:";
+            // 
+            // LogginName
+            // 
+            this.LogginName.AutoSize = true;
+            this.LogginName.Location = new Point(110, 240);
+            this.LogginName.Name = "LogginName";
+            this.LogginName.Size = new Size(76, 15);
+            this.LogginName.TabIndex = 19;
+            this.LogginName.Text = "LogginName";
             // 
             // MainForm
             // 
@@ -683,6 +698,7 @@ namespace Time4SellersApp
             ((System.ComponentModel.ISupportInitialize)StartzeitDauerStunden).EndInit();
             tabAuslesen.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvEntries).EndInit();
             ResumeLayout(false);
         }
 

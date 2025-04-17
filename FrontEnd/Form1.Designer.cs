@@ -42,6 +42,13 @@
         private Label PTToday;
         private Label WTWeek;
         private Label WTToday;
+        private Label LogginName;
+        private Label loggedInAs;
+        private DataGridViewTextBoxColumn colStart;
+        private DataGridViewTextBoxColumn colEnd;
+        private DataGridViewTextBoxColumn colArt;
+        private DataGridViewTextBoxColumn colKommentar;
+        private DataGridViewTextBoxColumn colDauer;
 
         /// <summary>
         /// Erforderliche Methode für die Designerunterstützung.

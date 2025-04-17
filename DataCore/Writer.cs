@@ -16,7 +16,7 @@ namespace _4Time.DataCore
             var connection = new SqlConnection(ConnectionString);
             var command = new SqlCommand(query, connection);
 
-            connection.OpenAsync();
+            connection.Open();
             command.ExecuteNonQuery();
             connection.Close();
         }
@@ -48,6 +48,7 @@ namespace _4Time.DataCore
                     [TimeStamp],
                 ) 
             ";
+            
         }
     }
 }

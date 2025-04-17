@@ -10,12 +10,12 @@ namespace _4Time.DataCore
 {
     internal class Reader : Connector
     {
-        internal static User GetUserDetails(string firstName, string lastName)
+        internal static User GetUserDetails()
         {
             User user = new()
             {
-                FirstName = firstName,
-                LastName = lastName
+                FirstName = Connector.FirstName,
+                LastName = Connector.LastName
             };
 
             string query = @"
@@ -27,8 +27,8 @@ namespace _4Time.DataCore
             var connection = new SqlConnection(ConnectionString);
             var command = new SqlCommand(query, connection);
 
-            command.Parameters.AddWithValue("@firstName", firstName);
-            command.Parameters.AddWithValue("@lastName", lastName);
+            command.Parameters.AddWithValue("@firstName", FirstName);
+            command.Parameters.AddWithValue("@lastName", LastName);
 
             connection.OpenAsync();
             SqlDataReader reader = command.ExecuteReader();
