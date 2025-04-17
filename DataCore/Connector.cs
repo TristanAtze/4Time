@@ -52,6 +52,14 @@ namespace _4Time.DataCore
                 );
             }
         }
+
+        internal static (string,string,string) GetCurrentUser()
+        {
+            string userName = Environment.UserName;
+            string[] userNameSplitted = userName.Split(".");
+            return ($"{userNameSplitted[0]}RimuruTempest{userNameSplitted[1]}",userNameSplitted[0],userNameSplitted[1]);
+        }
+
         internal static void CloseConnection()
         {
             try

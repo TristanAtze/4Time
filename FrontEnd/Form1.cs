@@ -7,6 +7,12 @@ namespace Time4SellersApp
 {
     public partial class MainForm : Form
     {
+        /// <summary>
+        /// Index des in dgvEntries zuletzt ausgewählten Eintrags.
+        /// null = es wurde kein bestehender Eintrag zum Bearbeiten geöffnet.
+        /// </summary>
+        private int? selectedBookingIndex = null;
+
         private TabControl tabControl;
         private TabPage tabUebersicht;
         private TabPage tabEintragen;
@@ -33,6 +39,9 @@ namespace Time4SellersApp
         private Button btnNeuladenEintragen;
         private Button btnSettingsAuslesen;
         private Button btnNeuladenAuslesen;
+        private System.Windows.Forms.DataGridView dgvEntries;
+        private List<BookingEntry> bookings;
+
 
         public MainForm()
         {
@@ -40,8 +49,33 @@ namespace Time4SellersApp
             if (Connector.isConnected)
             {
                 Thread.Sleep(222);
-                InitializeComponent();
             }
+
+            InitializeComponent();
+            // Beispiel-Daten befüllen und an das Grid binden
+            bookings = new List<BookingEntry>()
+{
+            new BookingEntry {
+                Startzeit = DateTime.Today.AddHours( 8).AddMinutes(  0),
+                Endzeit   = DateTime.Today.AddHours(12).AddMinutes(30),
+                Art       = "Arbeitszeit",
+                Kommentar = "Morgendliches Meeting"
+            },
+            new BookingEntry {
+                Startzeit = DateTime.Today.AddHours(13).AddMinutes(  0),
+                Endzeit   = DateTime.Today.AddHours(17).AddMinutes(15),
+                Art       = "Arbeitszeit",
+                Kommentar = "Projektarbeit"
+            },
+            new BookingEntry {
+                Startzeit = DateTime.Today.AddHours(12).AddMinutes(30),
+                Endzeit   = DateTime.Today.AddHours(13).AddMinutes(  0),
+                Art       = "Pause",
+                Kommentar = "Mittagessen"
+            }
+};
+
+            dgvEntries.DataSource = bookings;
 
             rbStartzeitEndzeit.Checked = true;
             BookingType.Text = "Arbeitszeit";
@@ -51,6 +85,10 @@ namespace Time4SellersApp
             WTWeek.Text = "42:00 std";
             OTToday.Text = "00:40 std";
             OTWeek.Text = "02:00 std";
+
+            // Testen der Verschlüsselung
+            //string encrypted = Crypto.Encrypt("Test Satz");
+            //string decrypted = Crypto.Decrypt(encrypted);
         }
 
         private void InitializeComponent()
@@ -215,7 +253,7 @@ namespace Time4SellersApp
             // 
             // pictureLogoUebersicht
             // 
-            pictureLogoUebersicht.ImageLocation = "Logo.png";
+            pictureLogoUebersicht.ImageLocation = "4TIMELogo.gif";
             pictureLogoUebersicht.Location = new Point(20, 14);
             pictureLogoUebersicht.Name = "pictureLogoUebersicht";
             pictureLogoUebersicht.Size = new Size(424, 122);
@@ -329,7 +367,7 @@ namespace Time4SellersApp
             // 
             // pictureBox2
             // 
-            pictureBox2.ImageLocation = "Logo.png";
+            pictureBox2.ImageLocation = "4TIMELogo.gif";
             pictureBox2.Location = new Point(20, 14);
             pictureBox2.Name = "pictureBox2";
             pictureBox2.Size = new Size(424, 122);
@@ -548,7 +586,7 @@ namespace Time4SellersApp
             // 
             // pictureBox1
             // 
-            pictureBox1.ImageLocation = "Logo.png";
+            pictureBox1.ImageLocation = "4TIMELogo.gif";
             pictureBox1.Location = new Point(20, 14);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(424, 122);
@@ -571,6 +609,59 @@ namespace Time4SellersApp
             btnNeuladenAuslesen.Size = new Size(100, 30);
             btnNeuladenAuslesen.TabIndex = 2;
             btnNeuladenAuslesen.Text = "Neuladen";
+            // 
+            // dgvEntries
+            // 
+            this.dgvEntries = new System.Windows.Forms.DataGridView();
+            this.dgvEntries.Location = new System.Drawing.Point(20, 150);
+            this.dgvEntries.Name = "dgvEntries";
+            this.dgvEntries.Size = new System.Drawing.Size(424, 300);
+            this.dgvEntries.ReadOnly = true;
+            this.dgvEntries.AllowUserToAddRows = false;
+            this.dgvEntries.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvEntries.AutoGenerateColumns = false;
+
+            // Spalten definieren
+            var colStart = new System.Windows.Forms.DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "Startzeit",
+                HeaderText = "Startzeit",
+                Name = "colStartzeit"
+            };
+            var colEnd = new System.Windows.Forms.DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "Endzeit",
+                HeaderText = "Endzeit",
+                Name = "colEndzeit"
+            };
+            var colArt = new System.Windows.Forms.DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "Art",
+                HeaderText = "Art",
+                Name = "colArt"
+            };
+            var colKommentar = new System.Windows.Forms.DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "Kommentar",
+                HeaderText = "Kommentar",
+                Name = "colKommentar"
+            };
+            var colDauer = new System.Windows.Forms.DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "Dauer",
+                HeaderText = "Dauer",
+                Name = "colDauer"
+            };
+            this.dgvEntries.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            colStart, colEnd, colArt, colKommentar, colDauer
+});
+
+            // Event für Doppelklick (kann auch CellClick sein)
+            this.dgvEntries.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvEntries_CellDoubleClick);
+
+            // zum Tab hinzufügen
+            this.tabAuslesen.Controls.Add(this.dgvEntries);
+
             // 
             // MainForm
             // 
@@ -633,43 +724,93 @@ namespace Time4SellersApp
 
         private void btnSpeichern_Click(object sender, EventArgs e)
         {
+            // 1) ermittle Start- & Endzeit aus den Controls
             DateTime startzeit = DateTime.Now;
             DateTime endzeit = DateTime.Now;
-            string bemerkung = txtBemerkung.Text;
-            string bookingType = BookingType.SelectedItem?.ToString() ?? string.Empty;
 
-            if (StartzeitDauerStart.Enabled && StartzeitDauerStunden.Enabled && StartzeitDauerMinuten.Enabled)
-            {
-                startzeit = StartzeitDauerStart.Value;
-                endzeit = startzeit.AddHours((double)StartzeitDauerStunden.Value).AddMinutes((double)StartzeitDauerMinuten.Value);
-            }
-            else if (EndzeitDauerStart.Enabled && EndzeitDauerStunden.Enabled && EndzeitDauerMinuten.Enabled)
-            {
-                endzeit = EndzeitDauerStart.Value;
-                startzeit = endzeit.AddHours(-(double)EndzeitDauerStunden.Value).AddMinutes(-(double)EndzeitDauerMinuten.Value);
-            }
-            else if (StartzeitEndzeitStart.Enabled && StartzeitEndzeitEnde.Enabled)
+            if (StartzeitEndzeitStart.Enabled && StartzeitEndzeitEnde.Enabled)
             {
                 startzeit = StartzeitEndzeitStart.Value;
                 endzeit = StartzeitEndzeitEnde.Value;
             }
-            string? error = Writer.WriteData(startzeit, endzeit, bookingType, bemerkung);
+            else if (StartzeitDauerStart.Enabled)
+            {
+                startzeit = StartzeitDauerStart.Value;
+                endzeit = startzeit
+                           .AddHours((double)StartzeitDauerStunden.Value)
+                           .AddMinutes((double)StartzeitDauerMinuten.Value);
+            }
+            else if (EndzeitDauerStart.Enabled)
+            {
+                endzeit = EndzeitDauerStart.Value;
+                startzeit = endzeit
+                           .AddHours(-(double)EndzeitDauerStunden.Value)
+                           .AddMinutes(-(double)EndzeitDauerMinuten.Value);
+            }
 
+            string art = BookingType.SelectedItem?.ToString() ?? "";
+            string bemerkung = txtBemerkung.Text;
+
+            string? error = Writer.WriteData(startzeit, endzeit, art, bemerkung);
             if (error != null)
             {
-                MessageBox.Show(
-                error,
-                "Fehler",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error
-                );
+                MessageBox.Show(error, "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
+            }
+
+            if (selectedBookingIndex.HasValue)
+            {
+                var idx = selectedBookingIndex.Value;
+                bookings[idx].Startzeit = startzeit;
+                bookings[idx].Endzeit = endzeit;
+                bookings[idx].Art = art;
+                bookings[idx].Kommentar = bemerkung;
             }
             else
             {
-                MessageBox.Show("Daten gespeichert!");
+                bookings.Add(new BookingEntry
+                {
+                    Startzeit = startzeit,
+                    Endzeit = endzeit,
+                    Art = art,
+                    Kommentar = bemerkung
+                });
             }
 
+            dgvEntries.Refresh();            // bei List<T> reicht das meistens
+                                             
+            selectedBookingIndex = null;
+
+            MessageBox.Show("Daten gespeichert!", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void dgvEntries_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            selectedBookingIndex = e.RowIndex;
+            var entry = bookings[e.RowIndex];
+
+            BookingType.SelectedItem = entry.Art;
+            txtBemerkung.Text = entry.Kommentar;
+            rbStartzeitEndzeit.Checked = true;
+            StartzeitEndzeitStart.Value = entry.Startzeit;
+            StartzeitEndzeitEnde.Value = entry.Endzeit;
+
+            tabControl.SelectedTab = tabEintragen;
         }
     }
+
+
+    public class BookingEntry
+    {
+        public DateTime Startzeit { get; set; }
+        public DateTime Endzeit { get; set; }
+        public string Art { get; set; }      // z.B. "Arbeitszeit" oder "Pause"
+        public string Kommentar { get; set; }
+
+        // berechnete Eigenschaft, Format z.B. "01:30"
+        public string Dauer => (Endzeit - Startzeit).ToString(@"hh\:mm");
+    }
+
 }

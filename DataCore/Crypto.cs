@@ -9,7 +9,8 @@ namespace _4Time.DataCore
 {
     internal static class Crypto
     {
-        internal static string Encrypt(string plainText, string key)
+        static string key = Connector.GetCurrentUser().Item1;
+        internal static string Encrypt(string plainText)
         {
             using var aes = Aes.Create();
             var keyBytes = Encoding.UTF8.GetBytes(key);
@@ -22,7 +23,7 @@ namespace _4Time.DataCore
             return Convert.ToBase64String(encryptedBytes);
         }
 
-        internal static string Decrypt(string cipherText, string key)
+        internal static string Decrypt(string cipherText)
         {
             using var aes = Aes.Create();
             var keyBytes = Encoding.UTF8.GetBytes(key);
