@@ -38,8 +38,6 @@ namespace _4Time.DataCore
 
         internal static void CreateEntry(DateTime start, DateTime end, string categoryName, string? comment)
         {
-
-
             string query = @"
                 INSERT INTO dbo.[Entries]
                 (
@@ -49,7 +47,7 @@ namespace _4Time.DataCore
                     [Comment],
                     [TimeStamp],
                 ) 
-            "
+            ";
         }
     }
 }
