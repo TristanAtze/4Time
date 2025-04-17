@@ -1,0 +1,205 @@
+﻿USE _LK_TestDB
+
+IF(NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Automatics'))
+BEGIN
+	CREATE TABLE dbo.[Automatics]
+	(
+		[AutomaticID] INT IDENTITY PRIMARY KEY,
+			CONSTRAINT PK_Automatics NOT NULL,
+		[Name] VARCHAR(50) NOT NULL,
+		[IsChangeable] BIT NOT NULL,
+		[IsActive] BIT NOT NULL
+	)
+END
+
+
+IF(NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'User'))
+BEGIN
+	CREATE TABLE dbo.[User]
+	(
+		[UserID] INT IDENTITY PRIMARY KEY
+			CONSTRAINT PK_User NOT NULL,
+		[FirstName] VARCHAR(50) NOT NULL,
+		[LastName] VARCHAR(50) NOT NULL,
+		[IsAdmin] BIT NOT NULL,
+	)
+END
+
+
+IF(NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Categories'))
+BEGIN
+	CREATE TABLE dbo.[Categories]
+	(
+		[CategoryID] INT IDENTITY PRIMARY KEY
+			CONSTRAINT PK_Categories NOT NULL,
+		[Description] VARCHAR(50) NOT NULL,
+		[IsWorkTime] BIT NOT NULL
+	)
+
+	INSERT INTO dbo.[Categories] VALUES
+		-- Pausen
+		('Mittagspause', 0),
+		('Raucherpause', 0),
+		('Pause', 0),
+		-- Abwesenheiten (keine Arbeitszeit)
+		('Unbezahlter Urlaub', 0),
+		-- Abwesenheiten (Arbeitszeit)
+		('Urlaub', 1),
+		('Krankheit', 1),
+		('Planmäßige Abwesenheit', 1),
+		('Berufsschule', 1),
+		-- Arbeitszeiten
+		('Vormittag', 1),
+		('Nachmittag', 1)
+END
+
+
+IF(NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Shutdown'))
+BEGIN
+	CREATE TABLE dbo.[Shutdown]
+	(
+		[Shutdown] BIT PRIMARY KEY
+			CONSTRAINT PK_Shutdown NOT NULL
+	)
+
+	INSERT INTO dbo.[Shutdown] VALUES (0)
+
+	EXEC('
+		CREATE TRIGGER dbo.[TRG_Shutdown_PreventInsert]
+		ON dbo.[Shutdown]
+		INSTEAD OF INSERT
+		AS
+		BEGIN
+			SET NOCOUNT ON;
+
+			THROW 50001, ''Einfügen von Datensätzen ist nicht erlaubt!'', 1
+		END
+	')
+
+	EXEC('
+		CREATE TRIGGER dbo.[TRG_Shutdown_AutoUpdate]
+		ON dbo.[Shutdown]
+		AFTER UPDATE
+		AS
+		BEGIN
+			SET NOCOUNT ON;
+
+			IF(SELECT [Shutdown] FROM dbo.[Shutdown] = 1)
+			BEGIN
+				EXEC dbo.sp_start_job @job_name = N''4TIME_ResetShutdown''
+			END
+		END
+	')
+END
+
+
+IF(NOT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Entries'))
+BEGIN
+	CREATE TABLE dbo.[Entries]
+	(
+		[EntryID] INT IDENTITY PRIMARY KEY
+			CONSTRAINT PK_Entries NOT NULL,
+		[UserID] INT
+			CONSTRAINT FK_Entries_User NOT NULL,
+		[CategoryID] INT
+			CONSTRAINT FK_Entries_Categories NOT NULL,
+		[Start_End] VARCHAR(255) NOT NULL,
+		[TimeStamp] TIMESTAMP NOT NULL,
+		[Comment] VARCHAR(MAX) NULL,
+
+		FOREIGN KEY ([UserID]) REFERENCES dbo.[User] ([UserID]),
+		FOREIGN KEY ([CategoryID]) REFERENCES dbo.[Categories] ([CategoryID])
+	)
+
+	EXEC('
+		CREATE TRIGGER dbo.[TRG_AfterUpdate_TimeStamp]
+		ON dbo.[Entries]
+		AFTER UPDATE
+		AS
+		BEGIN
+			SET NOCOUNT ON;
+
+			UPDATE dbo.[Entries]
+			SET [TimeStamp] = CURRENT_TIMESTAMP
+			FROM dbo.[Entries]
+			JOIN inserted
+				ON inserted.[EntryID] = [Entries].[EntryID]
+		END
+	')
+END
+
+
+IF(NOT EXISTS(SELECT 1 FROM msdb.dbo.sysjobs WHERE [name] = '4TIME_ResetShutdown'))
+BEGIN
+	USE [msdb]
+
+	EXEC('
+		/****** Object:  Job [4TIME_ResetShutdown]    Script Date: 17.04.2025 08:32:41 ******/
+		BEGIN TRANSACTION
+		DECLARE @ReturnCode INT
+		SELECT @ReturnCode = 0
+		/****** Object:  JobCategory [[Uncategorized (Local)]]    Script Date: 17.04.2025 08:32:41 ******/
+		IF NOT EXISTS (SELECT name FROM msdb.dbo.syscategories WHERE name=N''[Uncategorized (Local)]'' AND category_class=1)
+		BEGIN
+		EXEC @ReturnCode = msdb.dbo.sp_add_category @class=N''JOB'', @type=N''LOCAL'', @name=N''[Uncategorized (Local)]''
+		IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+
+		END
+
+		DECLARE @jobId BINARY(16)
+		EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name=N''4TIME_ResetShutdown'', 
+				@enabled=0, 
+				@notify_level_eventlog=0, 
+				@notify_level_email=0, 
+				@notify_level_netsend=0, 
+				@notify_level_page=0, 
+				@delete_level=0, 
+				@description=N''Resets the BIT-Value of the Shutdown-Table'', 
+				@category_name=N''[Uncategorized (Local)]'', 
+				@owner_login_name=N''Azubi'', @job_id = @jobId OUTPUT
+		IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+		/****** Object:  Step [WAIT]    Script Date: 17.04.2025 08:32:41 ******/
+		EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N''WAIT'', 
+				@step_id=1, 
+				@cmdexec_success_code=0, 
+				@on_success_action=3, 
+				@on_success_step_id=0, 
+				@on_fail_action=2, 
+				@on_fail_step_id=0, 
+				@retry_attempts=0, 
+				@retry_interval=0, 
+				@os_run_priority=0, @subsystem=N''TSQL'', 
+				@command=N''WAITFOR DELAY ''00:10:00'''', 
+				@database_name=N''_LK_TestDB'', 
+				@flags=0
+		IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+		/****** Object:  Step [RESET VALUE IF NECESSARY]    Script Date: 17.04.2025 08:32:41 ******/
+		EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N''RESET VALUE IF NECESSARY'', 
+				@step_id=2, 
+				@cmdexec_success_code=0, 
+				@on_success_action=1, 
+				@on_success_step_id=0, 
+				@on_fail_action=2, 
+				@on_fail_step_id=0, 
+				@retry_attempts=0, 
+				@retry_interval=0, 
+				@os_run_priority=0, @subsystem=N''TSQL'', 
+				@command=N''IF((SELECT [Shutdown] FROM dbo.[Shutdown]) = 1)
+		BEGIN
+			UPDATE dbo.[Shutdown]
+			SET [Shutdown] = 0
+		END'', 
+				@database_name=N''_LK_TestDB'', 
+				@flags=0
+		IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+		EXEC @ReturnCode = msdb.dbo.sp_update_job @job_id = @jobId, @start_step_id = 1
+		IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+		EXEC @ReturnCode = msdb.dbo.sp_add_jobserver @job_id = @jobId, @server_name = N''(local)''
+		IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+		COMMIT TRANSACTION
+		GOTO EndSave
+		QuitWithRollback:
+			IF (@@TRANCOUNT > 0) ROLLBACK TRANSACTION
+		EndSave:
+	')
+END
