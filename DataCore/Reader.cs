@@ -8,5 +8,6 @@ namespace _4Time.DataCore
 {
     internal class Reader : Connector
     {
+
     }
 }

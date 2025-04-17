@@ -36,10 +36,15 @@ namespace Time4SellersApp
 
         public MainForm()
         {
-            InitializeComponent();
+            Connector.OpenConnection();
+            if (Connector.isConnected)
+            {
+                Thread.Sleep(222);
+                InitializeComponent();
+            }
+
             rbStartzeitEndzeit.Checked = true;
             BookingType.Text = "Arbeitszeit";
-
             PTToday.Text = "01:00 std";
             PTWeek.Text = "05:00 std";
             WTToday.Text = "08:40 std";
@@ -52,6 +57,12 @@ namespace Time4SellersApp
         {
             tabControl = new TabControl();
             tabUebersicht = new TabPage();
+            OTWeek = new Label();
+            PTWeek = new Label();
+            OTToday = new Label();
+            PTToday = new Label();
+            WTWeek = new Label();
+            WTToday = new Label();
             button1 = new Button();
             pictureLogoUebersicht = new PictureBox();
             lblArbeitszeitHeute = new Label();
@@ -91,12 +102,6 @@ namespace Time4SellersApp
             pictureBox1 = new PictureBox();
             btnSettingsAuslesen = new Button();
             btnNeuladenAuslesen = new Button();
-            this.WTToday = new Label();
-            this.WTWeek = new Label();
-            this.PTToday = new Label();
-            this.OTToday = new Label();
-            this.OTWeek = new Label();
-            this.PTWeek = new Label();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureLogoUebersicht).BeginInit();
@@ -124,12 +129,12 @@ namespace Time4SellersApp
             // 
             // tabUebersicht
             // 
-            tabUebersicht.Controls.Add(this.OTWeek);
-            tabUebersicht.Controls.Add(this.PTWeek);
-            tabUebersicht.Controls.Add(this.OTToday);
-            tabUebersicht.Controls.Add(this.PTToday);
-            tabUebersicht.Controls.Add(this.WTWeek);
-            tabUebersicht.Controls.Add(this.WTToday);
+            tabUebersicht.Controls.Add(OTWeek);
+            tabUebersicht.Controls.Add(PTWeek);
+            tabUebersicht.Controls.Add(OTToday);
+            tabUebersicht.Controls.Add(PTToday);
+            tabUebersicht.Controls.Add(WTWeek);
+            tabUebersicht.Controls.Add(WTToday);
             tabUebersicht.Controls.Add(button1);
             tabUebersicht.Controls.Add(pictureLogoUebersicht);
             tabUebersicht.Controls.Add(lblArbeitszeitHeute);
@@ -145,6 +150,60 @@ namespace Time4SellersApp
             tabUebersicht.Size = new Size(466, 533);
             tabUebersicht.TabIndex = 0;
             tabUebersicht.Text = "Übersicht";
+            // 
+            // OTWeek
+            // 
+            OTWeek.AutoSize = true;
+            OTWeek.Location = new Point(392, 215);
+            OTWeek.Name = "OTWeek";
+            OTWeek.Size = new Size(50, 15);
+            OTWeek.TabIndex = 17;
+            OTWeek.Text = "OTWeek";
+            // 
+            // PTWeek
+            // 
+            PTWeek.AutoSize = true;
+            PTWeek.Location = new Point(392, 185);
+            PTWeek.Name = "PTWeek";
+            PTWeek.Size = new Size(49, 15);
+            PTWeek.TabIndex = 16;
+            PTWeek.Text = "PTWeek";
+            // 
+            // OTToday
+            // 
+            OTToday.AutoSize = true;
+            OTToday.Location = new Point(131, 215);
+            OTToday.Name = "OTToday";
+            OTToday.Size = new Size(52, 15);
+            OTToday.TabIndex = 15;
+            OTToday.Text = "OTToday";
+            // 
+            // PTToday
+            // 
+            PTToday.AutoSize = true;
+            PTToday.Location = new Point(131, 185);
+            PTToday.Name = "PTToday";
+            PTToday.Size = new Size(51, 15);
+            PTToday.TabIndex = 14;
+            PTToday.Text = "PTToday";
+            // 
+            // WTWeek
+            // 
+            WTWeek.AutoSize = true;
+            WTWeek.Location = new Point(392, 157);
+            WTWeek.Name = "WTWeek";
+            WTWeek.Size = new Size(53, 15);
+            WTWeek.TabIndex = 13;
+            WTWeek.Text = "WTWeek";
+            // 
+            // WTToday
+            // 
+            WTToday.AutoSize = true;
+            WTToday.Location = new Point(131, 157);
+            WTToday.Name = "WTToday";
+            WTToday.Size = new Size(55, 15);
+            WTToday.TabIndex = 12;
+            WTToday.Text = "WTToday";
             // 
             // button1
             // 
@@ -290,7 +349,7 @@ namespace Time4SellersApp
             // BookingType
             // 
             BookingType.FormattingEnabled = true;
-            BookingType.Items.AddRange(new object[] { "Pausenzeit", "Arbeitszeit" });
+            BookingType.Items.AddRange(new object[] { "Pausenzeit", "Arbeitszeit", "Abwesendheit" });
             BookingType.Location = new Point(3, 185);
             BookingType.Name = "BookingType";
             BookingType.Size = new Size(207, 23);
@@ -513,60 +572,6 @@ namespace Time4SellersApp
             btnNeuladenAuslesen.TabIndex = 2;
             btnNeuladenAuslesen.Text = "Neuladen";
             // 
-            // WTToday
-            // 
-            this.WTToday.AutoSize = true;
-            this.WTToday.Location = new Point(131, 157);
-            this.WTToday.Name = "WTToday";
-            this.WTToday.Size = new Size(55, 15);
-            this.WTToday.TabIndex = 12;
-            this.WTToday.Text = "WTToday";
-            // 
-            // WTWeek
-            // 
-            this.WTWeek.AutoSize = true;
-            this.WTWeek.Location = new Point(392, 157);
-            this.WTWeek.Name = "WTWeek";
-            this.WTWeek.Size = new Size(53, 15);
-            this.WTWeek.TabIndex = 13;
-            this.WTWeek.Text = "WTWeek";
-            // 
-            // PTToday
-            // 
-            this.PTToday.AutoSize = true;
-            this.PTToday.Location = new Point(131, 185);
-            this.PTToday.Name = "PTToday";
-            this.PTToday.Size = new Size(51, 15);
-            this.PTToday.TabIndex = 14;
-            this.PTToday.Text = "PTToday";
-            // 
-            // OTToday
-            // 
-            this.OTToday.AutoSize = true;
-            this.OTToday.Location = new Point(131, 215);
-            this.OTToday.Name = "OTToday";
-            this.OTToday.Size = new Size(52, 15);
-            this.OTToday.TabIndex = 15;
-            this.OTToday.Text = "OTToday";
-            // 
-            // OTWeek
-            // 
-            this.OTWeek.AutoSize = true;
-            this.OTWeek.Location = new Point(392, 215);
-            this.OTWeek.Name = "OTWeek";
-            this.OTWeek.Size = new Size(50, 15);
-            this.OTWeek.TabIndex = 17;
-            this.OTWeek.Text = "OTWeek";
-            // 
-            // PTWeek
-            // 
-            this.PTWeek.AutoSize = true;
-            this.PTWeek.Location = new Point(392, 185);
-            this.PTWeek.Name = "PTWeek";
-            this.PTWeek.Size = new Size(49, 15);
-            this.PTWeek.TabIndex = 16;
-            this.PTWeek.Text = "PTWeek";
-            // 
             // MainForm
             // 
             ClientSize = new Size(474, 561);
@@ -653,7 +658,7 @@ namespace Time4SellersApp
             if (error != null)
             {
                 MessageBox.Show(
-                error,  
+                error,
                 "Fehler",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error
@@ -664,7 +669,7 @@ namespace Time4SellersApp
             {
                 MessageBox.Show("Daten gespeichert!");
             }
-                
+
         }
     }
 }
