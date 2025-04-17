@@ -40,9 +40,9 @@ namespace Time4SellersApp
             if (Connector.isConnected)
             {
                 Thread.Sleep(222);
-                InitializeComponent();
             }
 
+            InitializeComponent();
             rbStartzeitEndzeit.Checked = true;
             BookingType.Text = "Arbeitszeit";
             PTToday.Text = "01:00 std";
@@ -215,7 +215,7 @@ namespace Time4SellersApp
             // 
             // pictureLogoUebersicht
             // 
-            pictureLogoUebersicht.ImageLocation = "Logo.png";
+            pictureLogoUebersicht.ImageLocation = "4TIMELogo.gif";
             pictureLogoUebersicht.Location = new Point(20, 14);
             pictureLogoUebersicht.Name = "pictureLogoUebersicht";
             pictureLogoUebersicht.Size = new Size(424, 122);
@@ -329,7 +329,7 @@ namespace Time4SellersApp
             // 
             // pictureBox2
             // 
-            pictureBox2.ImageLocation = "Logo.png";
+            pictureBox2.ImageLocation = "4TIMELogo.gif";
             pictureBox2.Location = new Point(20, 14);
             pictureBox2.Name = "pictureBox2";
             pictureBox2.Size = new Size(424, 122);
@@ -548,7 +548,7 @@ namespace Time4SellersApp
             // 
             // pictureBox1
             // 
-            pictureBox1.ImageLocation = "Logo.png";
+            pictureBox1.ImageLocation = "4TIMELogo.gif";
             pictureBox1.Location = new Point(20, 14);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(424, 122);
