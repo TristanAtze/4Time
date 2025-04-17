@@ -751,13 +751,8 @@ namespace Time4SellersApp
             string art = BookingType.SelectedItem?.ToString() ?? "";
             string bemerkung = txtBemerkung.Text;
 
-            string? error = Writer.WriteData(startzeit, endzeit, art, bemerkung);
-            if (error != null)
-            {
-                MessageBox.Show(error, "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
+            Writer.CreateEntry(startzeit, endzeit, art, bemerkung);
+           
             if (selectedBookingIndex.HasValue)
             {
                 var idx = selectedBookingIndex.Value;
