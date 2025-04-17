@@ -51,6 +51,10 @@ namespace Time4SellersApp
             WTWeek.Text = "42:00 std";
             OTToday.Text = "00:40 std";
             OTWeek.Text = "02:00 std";
+
+            // Testen der Verschlüsselung
+            //string encrypted = Crypto.Encrypt("Test Satz");
+            //string decrypted = Crypto.Decrypt(encrypted);
         }
 
         private void InitializeComponent()
