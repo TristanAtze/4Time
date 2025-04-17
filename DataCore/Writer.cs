@@ -11,7 +11,7 @@ namespace _4Time.DataCore
         internal static string? WriteData(DateTime? StartTime = null, DateTime? EndTime = null, string? bookingType = null, object? args = null)
         {
             //Implement Write Logic Here
-            return "Logic not Implemented!";
+            return null;
         }
     }
 }
