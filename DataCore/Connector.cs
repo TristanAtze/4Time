@@ -47,7 +47,7 @@ namespace _4Time.DataCore
         {
             if (IsDatabaseConnectionAvailable() && !isConnected)
             {
-                using var connection = new SqlConnection(ConnectionString);
+                connection = new SqlConnection(ConnectionString);
                 connection.OpenAsync();
                 Thread.Sleep(222);
                 isConnected = true;
