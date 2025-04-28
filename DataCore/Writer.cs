@@ -41,6 +41,28 @@ namespace _4Time.DataCore
             connection.Close();
         }
 
+        internal static void UserSetup()
+        {
+            //TODO Datenbank ändern!!!
+            string query = @"
+                IF(NOT EXISTS (SELECT 1 FROM [_LK_TestDB].[dbo].[User] WHERE [FirstName] = @firstName AND [LastName] = @lastName))
+                BEGIN
+                    INSERT INTO [_LK_TestDB].[dbo].[User] ([FirstName], [LastName], [IsAdmin])
+                    VALUES (@firstName, @lastName, @IsAdmin)
+                END
+            ";
+
+            var connection = new SqlConnection(ConnectionString);
+            var command = new SqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@firstName", Connector.FirstName.ToLower());
+            command.Parameters.AddWithValue("@lastName", Connector.LastName.ToLower());
+            command.Parameters.AddWithValue("@IsAdmin", false);
+
+            connection.Open();
+            command.ExecuteNonQuery();
+        }
+
         internal static void InitiateShutdown()
         {
             string query = @"
@@ -80,7 +102,7 @@ namespace _4Time.DataCore
                 using var command = new SqlCommand(query, Connector.connection);
                 command.Parameters.AddWithValue("@UserID", Reader.GetUserDetails().UserID);
                 command.Parameters.AddWithValue("@CategoryID", Reader.GetAllCategorysDetails().Where(x => x.Description == categoryName).Select(x => x.CategoryID).First());
-                command.Parameters.AddWithValue("@Start_End", $"{start} - {end}");
+                command.Parameters.AddWithValue("@Start_End", $"{Crypto.Encrypt(start.ToString())} - {Crypto.Encrypt(end.ToString())}");
                 command.Parameters.AddWithValue("@Comment", comment ?? string.Empty);
                 command.ExecuteNonQuery();
             }
@@ -88,11 +110,14 @@ namespace _4Time.DataCore
             {
                 string query = @"
                 UPDATE dbo.Entries
-                SET Start_End = @Start_End, Comment = @Comment
+                SET Start_End = @Start_End, Comment = @Comment, CategoryID = @CategoryID
                 WHERE EntryID = @EntryID
                 ";
+
+                var test = Reader.GetAllCategorysDetails().Where(x => x.Description == categoryName).Select(x => x.CategoryID).First();
                 using var command = new SqlCommand(query, Connector.connection);
                 command.Parameters.AddWithValue("@EntryID", entryId.Value);
+                command.Parameters.AddWithValue("@CategoryID", Reader.GetAllCategorysDetails().Where(x => x.Description == categoryName).Select(x => x.CategoryID).First());
                 command.Parameters.AddWithValue("@Start_End", $"{start} - {end}");
                 command.Parameters.AddWithValue("@Comment", comment ?? string.Empty);
                 command.ExecuteNonQuery();

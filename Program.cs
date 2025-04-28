@@ -13,6 +13,7 @@ namespace Time4SellersApp
         static void Main()
         {
             Writer.DatabaseSetup();
+            Writer.UserSetup();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
