@@ -20,25 +20,6 @@ namespace _4Time.DataCore
             connection.Open();
             command.ExecuteNonQuery();
             connection.Close();
-
-            string queryNewUser = @"
-                IF(NOT EXISTS (SELECT 1 FROM [dbo].[User] WHERE [FirstName] = @firstName AND [LastName] = @lastName))
-                BEGIN
-                    INSERT INTO [dbo].[User] ([FirstName], [LastName], [IsAdmin])
-                    VALUES (@firstName, @lastName, @IsAdmin)
-                END
-            ";
-
-            command.Parameters.AddWithValue("@firstName", Connector.FirstName.ToLower());
-            command.Parameters.AddWithValue("@lastName", Connector.LastName.ToLower());
-            command.Parameters.AddWithValue("@IsAdmin", false);
-
-            var connectionNewUser = new SqlConnection(ConnectionString);
-            var commandNewUser = new SqlCommand(query, connection);
-
-            connection.Open();
-            command.ExecuteNonQuery();
-            connection.Close();
         }
 
         internal static void UserSetup()
@@ -61,19 +42,30 @@ namespace _4Time.DataCore
 
             connection.Open();
             command.ExecuteNonQuery();
+            connection.Close();
         }
 
         internal static void InitiateShutdown()
         {
+            //TODO Datenbank ändern!!!
             string query = @"
-                UPDATE [dbo].[Shutdown]
+                UPDATE [_LK_TestDB].[dbo].[Shutdown]
                 SET [Shutdown] = 1
-            "; 
+            ";
+
+            var connection = new SqlConnection(ConnectionString);
+            var command = new SqlCommand(query, connection);
+
+            connection.Open();
+            command.ExecuteNonQuery();
+            connection.Close();
         }
+
         internal static void DeleteEntry(int entryId)
         {
+            //TODO Datenbank ändern!!!
             string query = @"
-                DELETE FROM [dbo].[Entries]
+                DELETE FROM [_LK_TestDB].[dbo].[Entries]
                 WHERE [EntryID] = @EntryID
             ";
             using var command = new SqlCommand(query, Connector.connection);
@@ -94,8 +86,9 @@ namespace _4Time.DataCore
         {
             if (!entryId.HasValue)
             {
+                //TODO Datenbank ändern!!!
                 string query = @"
-                INSERT INTO dbo.Entries (UserID, CategoryID, Start_End, Comment) VALUES (@UserID, @CategoryID, @Start_End, @Comment)
+                INSERT INTO [_LK_TestDB].[dbo].[Entries] (UserID, CategoryID, Start_End, Comment) VALUES (@UserID, @CategoryID, @Start_End, @Comment)
                 ";
 
                 
@@ -108,8 +101,9 @@ namespace _4Time.DataCore
             }
             else if (entryId.HasValue)
             {
+                //TODO Datenbank ändern!!!
                 string query = @"
-                UPDATE dbo.Entries
+                UPDATE [_LK_TestDB].[dbo].[Entries]
                 SET Start_End = @Start_End, Comment = @Comment, CategoryID = @CategoryID
                 WHERE EntryID = @EntryID
                 ";
