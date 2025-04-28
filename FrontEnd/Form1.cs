@@ -119,8 +119,6 @@ namespace Time4SellersApp
             PauseLabel.Text = $"Pause:           {WorktimePauseStartEnd} (gesetzl. Pausenzeiten für Auszubildende)" ?? $"Pause: 00:00";
 
             btnSpeichern.Enabled = false;
-            
-            var today = dateTimePickerOverview.Value.Date;
 
             var today = dateTimePickerOverview.Value.Date;
             int diff = (7 + (today.DayOfWeek - DayOfWeek.Monday)) % 7;
