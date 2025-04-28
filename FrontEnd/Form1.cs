@@ -43,6 +43,7 @@ namespace Time4SellersApp
         private System.Windows.Forms.DataGridView dgvEntries;
         private List<Entry> allEntrys = [];
         private List<Category> allCategorys = [];
+        private System.Timers.Timer timer = new System.Timers.Timer();
 
 
         public MainForm()
@@ -111,7 +112,7 @@ namespace Time4SellersApp
             {
                 NachmittagTimeSpan += l.End - l.Start;
             }
-            var WorktimeNachmittagStartEnd = $"{FirstEntryPause?.Start.Add(PauseTimeSpan).ToShortTimeString()} - {FirstEntryNachmittag?.Start.Add(NachmittagTimeSpan).ToShortTimeString()}";
+            var WorktimeNachmittagStartEnd = $"{FirstEntryPause?.Start.Add(PauseTimeSpan).ToShortTimeString()} - {FirstEntryPause?.Start.Add(PauseTimeSpan + NachmittagTimeSpan).ToShortTimeString()}";
 
             VormittagLabel.Text = $"Vormittag:    {WorktimeVormittagStartEnd} (Interne Buchung)" ?? $"Vormittag: 00:00";
             NachmittagLabel.Text = $"Nachmittag: {WorktimeNachmittagStartEnd} (Interne Buchung)" ?? $"Nachmittag: 00:00";
@@ -124,7 +125,7 @@ namespace Time4SellersApp
             var weekStart = today.AddDays(-diff);
 
             var entriesToday = allEntrys.Where(e => e.Start.Date == today);
-            var entriesWeek = allEntrys.Where(e => e.Start.Date >= weekStart && e.Start.Date <= weekStart.AddDays(5));
+            var entriesWeek = allEntrys.Where(e => e.Start.Date >= weekStart && e.Start.Date <= today.Date);
 
             var isWorkLookup = allCategorys.ToDictionary(c => c.CategoryID, c => c.IsWorkTime);
 
@@ -251,6 +252,7 @@ namespace Time4SellersApp
             colArt = new DataGridViewTextBoxColumn();
             colKommentar = new DataGridViewTextBoxColumn();
             colDauer = new DataGridViewTextBoxColumn();
+            Settings = new TabPage();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureLogoUebersicht).BeginInit();
@@ -270,6 +272,7 @@ namespace Time4SellersApp
             tabControl.Controls.Add(tabUebersicht);
             tabControl.Controls.Add(tabEintragen);
             tabControl.Controls.Add(tabAuslesen);
+            tabControl.Controls.Add(Settings);
             tabControl.Dock = DockStyle.Fill;
             tabControl.Location = new Point(0, 0);
             tabControl.Name = "tabControl";
@@ -518,6 +521,7 @@ namespace Time4SellersApp
             btnSettingsUebersicht.Size = new Size(100, 30);
             btnSettingsUebersicht.TabIndex = 8;
             btnSettingsUebersicht.Text = "Settings";
+            btnSettingsUebersicht.Click += btnSettingsUebersicht_Click;
             // 
             // tabEintragen
             // 
@@ -758,6 +762,7 @@ namespace Time4SellersApp
             btnSettingsEintragen.Size = new Size(100, 30);
             btnSettingsEintragen.TabIndex = 9;
             btnSettingsEintragen.Text = "Settings";
+            btnSettingsEintragen.Click += btnSettingsEintragen_Click;
             // 
             // tabAuslesen
             // 
@@ -798,6 +803,7 @@ namespace Time4SellersApp
             btnSettingsAuslesen.Size = new Size(100, 30);
             btnSettingsAuslesen.TabIndex = 1;
             btnSettingsAuslesen.Text = "Settings";
+            btnSettingsAuslesen.Click += btnSettingsAuslesen_Click;
             // 
             // btnNeuladenAuslesen
             // 
@@ -811,6 +817,9 @@ namespace Time4SellersApp
             // dgvEntries
             // 
             dgvEntries.AllowUserToAddRows = false;
+            dgvEntries.AllowUserToDeleteRows = false;
+            dgvEntries.AllowUserToResizeColumns = false;
+            dgvEntries.AllowUserToResizeRows = false;
             dgvEntries.Columns.AddRange(new DataGridViewColumn[] { colStart, colEnd, colArt, colKommentar, colDauer });
             dgvEntries.Location = new Point(20, 142);
             dgvEntries.Name = "dgvEntries";
@@ -844,6 +853,16 @@ namespace Time4SellersApp
             // 
             colDauer.Name = "colDauer";
             colDauer.ReadOnly = true;
+            // 
+            // Settings
+            // 
+            Settings.Location = new Point(4, 24);
+            Settings.Name = "Settings";
+            Settings.Padding = new Padding(3);
+            Settings.Size = new Size(466, 533);
+            Settings.TabIndex = 3;
+            Settings.Text = "Settings";
+            Settings.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -1055,9 +1074,34 @@ namespace Time4SellersApp
         {
             fillValues();
         }
+
         private void dateTimePickerOverview_ValueChanged(object sender, EventArgs e)
         {
             fillValues();
+        }
+
+        private void btnSettingsUebersicht_Click(object sender, EventArgs e)
+        {
+            Settings.Select();
+            Settings.Show();
+            Settings.BringToFront();
+            Settings.Focus();
+        }
+
+        private void btnSettingsEintragen_Click(object sender, EventArgs e)
+        {
+            Settings.Select();
+            Settings.Show();
+            Settings.BringToFront();
+            Settings.Focus();
+        }
+
+        private void btnSettingsAuslesen_Click(object sender, EventArgs e)
+        {
+            Settings.Select();
+            Settings.Show();
+            Settings.BringToFront();
+            Settings.Focus();
         }
     }
 }
