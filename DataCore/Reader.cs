@@ -57,6 +57,7 @@ namespace _4Time.DataCore
             command.Parameters.AddWithValue("@UserID", user.UserID);
 
             SqlDataReader reader = command.ExecuteReader();
+
             while (reader.Read())
             {
                 Entrys.Add(
@@ -65,8 +66,8 @@ namespace _4Time.DataCore
                         EntryID = reader.GetInt32(0),
                         UserID = reader.GetInt32(1),
                         CategoryID = reader.GetInt32(2),
-                        Start = DateTime.Parse(reader.GetString(3).Split("-")[0]),
-                        End = DateTime.Parse(reader.GetString(3).Split("-")[1]),
+                        Start = DateTime.Parse(Crypto.Decrypt(reader.GetString(3).Split("-")[0])),
+                        End = DateTime.Parse(Crypto.Decrypt(reader.GetString(3).Split("-")[1])),
                         Comment = reader.GetString(5),
                     }
                 );

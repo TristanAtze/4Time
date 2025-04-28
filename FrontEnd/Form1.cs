@@ -81,9 +81,43 @@ namespace Time4SellersApp
         private void fillValues()
         {
             DateTime My4SellersDateTime = dateTimePicker1.Value.Date;
-            VormittagLabel.Text = $"Vormittag: {allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CatergoryName == "Vormittag").Select(x => x.Duration).FirstOrDefault()}" ?? $"Vormittag: 00:00";
-            NachmittagLabel.Text = $"Nachmittag: {allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CatergoryName == "Nachmittag").Select(x => x.Duration).FirstOrDefault()}" ?? $"Nachmittag: 00:00";
-            PauseLabel.Text = $"Pause: {allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CatergoryName.Contains("ause")).Select(x => x.Duration).FirstOrDefault()}" ?? $"Pause: 00:00";
+
+            //Vormittag
+            List<Entry> WorktimeVormittag = [.. allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CatergoryName == "Vormittag")];
+            var FirstEntryVormittag = WorktimeVormittag.Where(x => x.Start.Date == My4SellersDateTime).OrderBy(x => x.Start).FirstOrDefault();
+
+            TimeSpan VormittagTimeSpan = TimeSpan.Zero;
+            foreach (var l in WorktimeVormittag)
+            {
+                VormittagTimeSpan += l.End - l.Start;
+            }
+            var WorktimeVormittagStartEnd = $"{FirstEntryVormittag?.Start.ToShortTimeString()} - {FirstEntryVormittag?.Start.Add(VormittagTimeSpan).ToShortTimeString()}";
+
+            //Pause
+            List<Entry> WorktimePause = [.. allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CatergoryName.Contains("ause"))];
+            var FirstEntryPause = WorktimePause.Where(x => x.Start.Date == My4SellersDateTime).OrderBy(x => x.Start).FirstOrDefault();
+            TimeSpan PauseTimeSpan = TimeSpan.Zero;
+            foreach (var l in WorktimePause)
+            {
+                PauseTimeSpan += l.End - l.Start;
+            }
+            var WorktimePauseStartEnd = $"{FirstEntryPause?.Start.ToShortTimeString()} - {FirstEntryPause?.Start.Add(PauseTimeSpan).ToShortTimeString()}";
+            
+            //Nachmittag
+            List<Entry> WorktimeNachmittag = [.. allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CatergoryName == "Nachmittag")];
+            var FirstEntryNachmittag = WorktimeNachmittag.Where(x => x.Start.Date == My4SellersDateTime).OrderBy(x => x.Start).FirstOrDefault();
+            TimeSpan NachmittagTimeSpan = TimeSpan.Zero;
+            foreach (var l in WorktimeNachmittag)
+            {
+                NachmittagTimeSpan += l.End - l.Start;
+            }
+            var WorktimeNachmittagStartEnd = $"{FirstEntryPause?.Start.Add(PauseTimeSpan).ToShortTimeString()} - {FirstEntryNachmittag?.Start.Add(NachmittagTimeSpan).ToShortTimeString()}";
+
+
+
+            VormittagLabel.Text = $"Vormittag:    {WorktimeVormittagStartEnd} (Interne Buchung)" ?? $"Vormittag: 00:00";
+            NachmittagLabel.Text = $"Nachmittag: {WorktimeNachmittagStartEnd} (Interne Buchung)" ?? $"Nachmittag: 00:00";
+            PauseLabel.Text = $"Pause:           {WorktimePauseStartEnd} (gesetzl. Pausenzeiten für Auszubildende)" ?? $"Pause: 00:00";
 
             btnSpeichern.Enabled = false;
             var today = DateTime.Today;
@@ -281,12 +315,13 @@ namespace Time4SellersApp
             dateTimePicker1.Name = "dateTimePicker1";
             dateTimePicker1.Size = new Size(101, 23);
             dateTimePicker1.TabIndex = 24;
+            dateTimePicker1.Value = new DateTime(2025, 4, 28, 0, 0, 0, 0);
             dateTimePicker1.ValueChanged += dateTimePicker1_ValueChanged;
             // 
             // PauseLabel
             // 
             PauseLabel.AutoSize = true;
-            PauseLabel.Location = new Point(20, 350);
+            PauseLabel.Location = new Point(20, 363);
             PauseLabel.Name = "PauseLabel";
             PauseLabel.Size = new Size(41, 15);
             PauseLabel.TabIndex = 23;
@@ -295,7 +330,7 @@ namespace Time4SellersApp
             // NachmittagLabel
             // 
             NachmittagLabel.AutoSize = true;
-            NachmittagLabel.Location = new Point(20, 365);
+            NachmittagLabel.Location = new Point(20, 393);
             NachmittagLabel.Name = "NachmittagLabel";
             NachmittagLabel.Size = new Size(73, 15);
             NachmittagLabel.TabIndex = 22;

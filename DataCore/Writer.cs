@@ -80,7 +80,7 @@ namespace _4Time.DataCore
                 using var command = new SqlCommand(query, Connector.connection);
                 command.Parameters.AddWithValue("@UserID", Reader.GetUserDetails().UserID);
                 command.Parameters.AddWithValue("@CategoryID", Reader.GetAllCategorysDetails().Where(x => x.Description == categoryName).Select(x => x.CategoryID).First());
-                command.Parameters.AddWithValue("@Start_End", $"{start} - {end}");
+                command.Parameters.AddWithValue("@Start_End", $"{Crypto.Encrypt(start.ToString())} - {Crypto.Encrypt(end.ToString())}");
                 command.Parameters.AddWithValue("@Comment", comment ?? string.Empty);
                 command.ExecuteNonQuery();
             }
