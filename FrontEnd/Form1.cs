@@ -907,8 +907,6 @@ namespace Time4SellersApp
             StartzeitEndzeitEnde.Enabled = false;
         }
 
-
-
         private void btnSpeichern_Click(object sender, EventArgs e)
         {
             DateTime startzeit = DateTime.Now, endzeit = DateTime.Now;
@@ -916,6 +914,7 @@ namespace Time4SellersApp
             {
                 startzeit = StartzeitEndzeitStart.Value;
                 endzeit = StartzeitEndzeitEnde.Value;
+                StartzeitEndzeitStart.Text = endzeit.ToString();
             }
             else if (StartzeitDauerStart.Enabled)
             {
@@ -923,6 +922,7 @@ namespace Time4SellersApp
                 endzeit = startzeit
                            .AddHours((double)StartzeitDauerStunden.Value)
                            .AddMinutes((double)StartzeitDauerMinuten.Value);
+                StartzeitEndzeitStart.Text = endzeit.ToString();
             }
             else if (EndzeitDauerStart.Enabled)
             {
@@ -1015,7 +1015,7 @@ namespace Time4SellersApp
             }
 
             var result = MessageBox.Show(
-                "Möchten Sie die ausgewählten Einträge wirklich löschen?",
+                "Möchten Sie den ausgewählten Eintrag wirklich löschen?",
                 "Einträge löschen",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question
