@@ -82,7 +82,7 @@ namespace Time4SellersApp
         private void fillValues()
         {
             DateTime My4SellersDateTime = dateTimePicker1.Value.Date;
-
+            Settings.Hide();
             //Vormittag
             List<Entry> WorktimeVormittag = [.. allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CatergoryName == "Vormittag")];
             var FirstEntryVormittag = WorktimeVormittag.Where(x => x.Start.Date == My4SellersDateTime).OrderBy(x => x.Start).FirstOrDefault();
@@ -253,6 +253,7 @@ namespace Time4SellersApp
             colKommentar = new DataGridViewTextBoxColumn();
             colDauer = new DataGridViewTextBoxColumn();
             Settings = new TabPage();
+            this.label6 = new Label();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureLogoUebersicht).BeginInit();
@@ -265,6 +266,7 @@ namespace Time4SellersApp
             tabAuslesen.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvEntries).BeginInit();
+            Settings.SuspendLayout();
             SuspendLayout();
             // 
             // tabControl
@@ -856,6 +858,7 @@ namespace Time4SellersApp
             // 
             // Settings
             // 
+            Settings.Controls.Add(this.label6);
             Settings.Location = new Point(4, 24);
             Settings.Name = "Settings";
             Settings.Padding = new Padding(3);
@@ -863,6 +866,16 @@ namespace Time4SellersApp
             Settings.TabIndex = 3;
             Settings.Text = "Settings";
             Settings.UseVisualStyleBackColor = true;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new Font("Segoe UI", 42F);
+            this.label6.Location = new Point(-3, 226);
+            this.label6.Name = "label6";
+            this.label6.Size = new Size(473, 74);
+            this.label6.TabIndex = 0;
+            this.label6.Text = "COMMING SOON";
             // 
             // MainForm
             // 
@@ -887,6 +900,8 @@ namespace Time4SellersApp
             tabAuslesen.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvEntries).EndInit();
+            Settings.ResumeLayout(false);
+            Settings.PerformLayout();
             ResumeLayout(false);
         }
 

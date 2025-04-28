@@ -56,6 +56,7 @@
         private DateTimePicker dateTimePicker1;
         private DateTimePicker dateTimePickerOverview;
         private TabPage Settings;
+        private Label label6;
 
         /// <summary>
         /// Erforderliche Methode für die Designerunterstützung.
