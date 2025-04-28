@@ -88,11 +88,14 @@ namespace _4Time.DataCore
             {
                 string query = @"
                 UPDATE dbo.Entries
-                SET Start_End = @Start_End, Comment = @Comment
+                SET Start_End = @Start_End, Comment = @Comment, CategoryID = @CategoryID
                 WHERE EntryID = @EntryID
                 ";
+
+                var test = Reader.GetAllCategorysDetails().Where(x => x.Description == categoryName).Select(x => x.CategoryID).First();
                 using var command = new SqlCommand(query, Connector.connection);
                 command.Parameters.AddWithValue("@EntryID", entryId.Value);
+                command.Parameters.AddWithValue("@CategoryID", Reader.GetAllCategorysDetails().Where(x => x.Description == categoryName).Select(x => x.CategoryID).First());
                 command.Parameters.AddWithValue("@Start_End", $"{start} - {end}");
                 command.Parameters.AddWithValue("@Comment", comment ?? string.Empty);
                 command.ExecuteNonQuery();
