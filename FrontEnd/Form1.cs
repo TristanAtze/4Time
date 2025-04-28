@@ -506,6 +506,7 @@ namespace Time4SellersApp
             // EndzeitDauerMinuten
             // 
             EndzeitDauerMinuten.Location = new Point(408, 370);
+            EndzeitDauerMinuten.Maximum = new decimal(new int[] { 59, 0, 0, 0 });
             EndzeitDauerMinuten.Name = "EndzeitDauerMinuten";
             EndzeitDauerMinuten.Size = new Size(38, 23);
             EndzeitDauerMinuten.TabIndex = 22;
@@ -513,6 +514,7 @@ namespace Time4SellersApp
             // EndzeitDauerStunden
             // 
             EndzeitDauerStunden.Location = new Point(282, 369);
+            EndzeitDauerStunden.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
             EndzeitDauerStunden.Name = "EndzeitDauerStunden";
             EndzeitDauerStunden.Size = new Size(38, 23);
             EndzeitDauerStunden.TabIndex = 21;
@@ -520,7 +522,8 @@ namespace Time4SellersApp
             // EndzeitDauerStart
             // 
             EndzeitDauerStart.AllowDrop = true;
-            EndzeitDauerStart.Format = DateTimePickerFormat.Time;
+            EndzeitDauerStart.CustomFormat = "HH:mm";
+            EndzeitDauerStart.Format = DateTimePickerFormat.Custom;
             EndzeitDauerStart.Location = new Point(3, 369);
             EndzeitDauerStart.Name = "EndzeitDauerStart";
             EndzeitDauerStart.Size = new Size(200, 23);
@@ -547,6 +550,7 @@ namespace Time4SellersApp
             // StartzeitDauerMinuten
             // 
             StartzeitDauerMinuten.Location = new Point(407, 307);
+            StartzeitDauerMinuten.Maximum = new decimal(new int[] { 59, 0, 0, 0 });
             StartzeitDauerMinuten.Name = "StartzeitDauerMinuten";
             StartzeitDauerMinuten.Size = new Size(38, 23);
             StartzeitDauerMinuten.TabIndex = 17;
@@ -554,6 +558,7 @@ namespace Time4SellersApp
             // StartzeitDauerStunden
             // 
             StartzeitDauerStunden.Location = new Point(282, 307);
+            StartzeitDauerStunden.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
             StartzeitDauerStunden.Name = "StartzeitDauerStunden";
             StartzeitDauerStunden.Size = new Size(38, 23);
             StartzeitDauerStunden.TabIndex = 16;
@@ -561,7 +566,8 @@ namespace Time4SellersApp
             // StartzeitDauerStart
             // 
             StartzeitDauerStart.AllowDrop = true;
-            StartzeitDauerStart.Format = DateTimePickerFormat.Time;
+            StartzeitDauerStart.CustomFormat = "HH:mm";
+            StartzeitDauerStart.Format = DateTimePickerFormat.Custom;
             StartzeitDauerStart.Location = new Point(3, 303);
             StartzeitDauerStart.Name = "StartzeitDauerStart";
             StartzeitDauerStart.Size = new Size(200, 23);
@@ -570,7 +576,8 @@ namespace Time4SellersApp
             // StartzeitEndzeitEnde
             // 
             StartzeitEndzeitEnde.AllowDrop = true;
-            StartzeitEndzeitEnde.Format = DateTimePickerFormat.Time;
+            StartzeitEndzeitEnde.CustomFormat = "HH:mm";
+            StartzeitEndzeitEnde.Format = DateTimePickerFormat.Custom;
             StartzeitEndzeitEnde.Location = new Point(246, 239);
             StartzeitEndzeitEnde.Name = "StartzeitEndzeitEnde";
             StartzeitEndzeitEnde.Size = new Size(200, 23);
@@ -579,7 +586,8 @@ namespace Time4SellersApp
             // StartzeitEndzeitStart
             // 
             StartzeitEndzeitStart.AllowDrop = true;
-            StartzeitEndzeitStart.Format = DateTimePickerFormat.Time;
+            StartzeitEndzeitStart.CustomFormat = "HH:mm";
+            StartzeitEndzeitStart.Format = DateTimePickerFormat.Custom;
             StartzeitEndzeitStart.Location = new Point(3, 239);
             StartzeitEndzeitStart.Name = "StartzeitEndzeitStart";
             StartzeitEndzeitStart.Size = new Size(200, 23);
