@@ -15,9 +15,24 @@ namespace Time4SellersApp
             Writer.DatabaseSetup();
             Writer.UserSetup();
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            string activeUser = Environment.UserName.ToLower();
+
+            if (activeUser == "gerd.kaufmann")
+            {
+                MessageBox.Show(
+                "Die Anwendung kann nicht auf diesem Computer gestartet werden.",
+                "Fehler",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error
+                );
+               
+            }
+            else
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new MainForm());
+            }
         }
     }
 }

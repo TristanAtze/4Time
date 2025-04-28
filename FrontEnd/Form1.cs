@@ -102,7 +102,7 @@ namespace Time4SellersApp
                 PauseTimeSpan += l.End - l.Start;
             }
             var WorktimePauseStartEnd = $"{FirstEntryPause?.Start.ToShortTimeString()} - {FirstEntryPause?.Start.Add(PauseTimeSpan).ToShortTimeString()}";
-            
+
             //Nachmittag
             List<Entry> WorktimeNachmittag = [.. allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CatergoryName == "Nachmittag")];
             var FirstEntryNachmittag = WorktimeNachmittag.Where(x => x.Start.Date == My4SellersDateTime).OrderBy(x => x.Start).FirstOrDefault();
@@ -120,12 +120,11 @@ namespace Time4SellersApp
             btnSpeichern.Enabled = false;
 
             var today = dateTimePickerOverview.Value.Date;
-
             int diff = (7 + (today.DayOfWeek - DayOfWeek.Monday)) % 7;
             var weekStart = today.AddDays(-diff);
 
             var entriesToday = allEntrys.Where(e => e.Start.Date == today);
-            var entriesWeek = allEntrys.Where(e => e.Start.Date >= weekStart && e.Start.Date <= today);
+            var entriesWeek = allEntrys.Where(e => e.Start.Date >= weekStart && e.Start.Date <= weekStart.AddDays(5));
 
             var isWorkLookup = allCategorys.ToDictionary(c => c.CategoryID, c => c.IsWorkTime);
 
@@ -180,9 +179,9 @@ namespace Time4SellersApp
                 var dauer = (entry.End - entry.Start).ToString(@"hh\:mm");
 
                 dgvEntries.Rows.Add(
-                    entry.Start.ToString("g"),   // Start
-                    entry.End.ToString("g"),   // Ende
-                    entry.CatergoryName,                          // Art
+                    entry.Start.ToString("g"),    // Start
+                    entry.End.ToString("g"),      // Ende
+                    entry.CatergoryName,          // Art
                     entry.Comment,                // Kommentar
                     dauer                         // Dauer
                 );
@@ -317,6 +316,7 @@ namespace Time4SellersApp
             dateTimePickerOverview.Size = new Size(101, 23);
             dateTimePickerOverview.TabIndex = 25;
             dateTimePickerOverview.Value = new DateTime(2025, 4, 28, 0, 0, 0, 0);
+            dateTimePickerOverview.ValueChanged += dateTimePickerOverview_ValueChanged;
             // 
             // dateTimePicker1
             // 
@@ -853,7 +853,7 @@ namespace Time4SellersApp
             MinimizeBox = false;
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "TIME 4Sellers";
+            Text = "4TIME";
             tabControl.ResumeLayout(false);
             tabUebersicht.ResumeLayout(false);
             tabUebersicht.PerformLayout();
@@ -979,7 +979,6 @@ namespace Time4SellersApp
             fillValues();
         }
 
-
         private void dgvEntries_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
@@ -1053,6 +1052,10 @@ namespace Time4SellersApp
         }
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            fillValues();
+        }
+        private void dateTimePickerOverview_ValueChanged(object sender, EventArgs e)
         {
             fillValues();
         }
