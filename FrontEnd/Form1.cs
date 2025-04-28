@@ -10,8 +10,8 @@ namespace Time4SellersApp
     public partial class MainForm : Form
     {
         /// <summary>
-        /// Index des in dgvEntries zuletzt ausgewählten Eintrags.
-        /// null = es wurde kein bestehender Eintrag zum Bearbeiten geöffnet.
+        /// Index des in dgvEntries zuletzt ausgewÃ¤hlten Eintrags.
+        /// null = es wurde kein bestehender Eintrag zum Bearbeiten geÃ¶ffnet.
         /// </summary>
         private int? selectedBookingIndex = null;
 
@@ -20,7 +20,7 @@ namespace Time4SellersApp
         private TabPage tabEintragen;
         private TabPage tabAuslesen;
 
-        // Übersicht-Controls
+        // Ãœbersicht-Controls
         private PictureBox pictureLogoUebersicht;
         private Label lblArbeitszeitHeute;
         private Label lblPausenzeitHeute;
@@ -43,6 +43,7 @@ namespace Time4SellersApp
         private System.Windows.Forms.DataGridView dgvEntries;
         private List<Entry> allEntrys = [];
         private List<Category> allCategorys = [];
+        private System.Timers.Timer timer = new System.Timers.Timer();
 
 
         public MainForm()
@@ -74,7 +75,7 @@ namespace Time4SellersApp
 
             LogginName.Text = Connector.FirstName + " " + Connector.LastName;
 
-            // Testen der Verschlüsselung
+            // Testen der VerschlÃ¼sselung
             //string encrypted = Crypto.Encrypt("Test Satz");
             //string decrypted = Crypto.Decrypt(encrypted);
         }
@@ -102,7 +103,7 @@ namespace Time4SellersApp
                 PauseTimeSpan += l.End - l.Start;
             }
             var WorktimePauseStartEnd = $"{FirstEntryPause?.Start.ToShortTimeString()} - {FirstEntryPause?.Start.Add(PauseTimeSpan).ToShortTimeString()}";
-            
+
             //Nachmittag
             List<Entry> WorktimeNachmittag = [.. allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CatergoryName == "Nachmittag")];
             var FirstEntryNachmittag = WorktimeNachmittag.Where(x => x.Start.Date == My4SellersDateTime).OrderBy(x => x.Start).FirstOrDefault();
@@ -111,22 +112,22 @@ namespace Time4SellersApp
             {
                 NachmittagTimeSpan += l.End - l.Start;
             }
-            var WorktimeNachmittagStartEnd = $"{FirstEntryPause?.Start.Add(PauseTimeSpan).ToShortTimeString()} - {FirstEntryNachmittag?.Start.Add(NachmittagTimeSpan).ToShortTimeString()}";
+            var WorktimeNachmittagStartEnd = $"{FirstEntryPause?.Start.Add(PauseTimeSpan).ToShortTimeString()} - {FirstEntryPause?.Start.Add(PauseTimeSpan + NachmittagTimeSpan).ToShortTimeString()}";
 
             VormittagLabel.Text = $"Vormittag:    {WorktimeVormittagStartEnd} (Interne Buchung)" ?? $"Vormittag: 00:00";
             NachmittagLabel.Text = $"Nachmittag: {WorktimeNachmittagStartEnd} (Interne Buchung)" ?? $"Nachmittag: 00:00";
-            PauseLabel.Text = $"Pause:           {WorktimePauseStartEnd} (gesetzl. Pausenzeiten für Auszubildende)" ?? $"Pause: 00:00";
+            PauseLabel.Text = $"Pause:           {WorktimePauseStartEnd} (gesetzl. Pausenzeiten fÃ¼r Auszubildende)" ?? $"Pause: 00:00";
 
             btnSpeichern.Enabled = false;
+            
+            var today = dateTimePickerOverview.Value.Date;
 
-            //var today = dateTimePickerOverview.Value.Date;
-            var today = DateTime.Today;
-
+            var today = dateTimePickerOverview.Value.Date;
             int diff = (7 + (today.DayOfWeek - DayOfWeek.Monday)) % 7;
             var weekStart = today.AddDays(-diff);
 
             var entriesToday = allEntrys.Where(e => e.Start.Date == today);
-            var entriesWeek = allEntrys.Where(e => e.Start.Date >= weekStart && e.Start.Date <= today);
+            var entriesWeek = allEntrys.Where(e => e.Start.Date >= weekStart && e.Start.Date <= today.Date);
 
             var isWorkLookup = allCategorys.ToDictionary(c => c.CategoryID, c => c.IsWorkTime);
 
@@ -154,12 +155,12 @@ namespace Time4SellersApp
             TimeSpan overtimeToday = workToday - TimeSpan.FromHours(8);
             TimeSpan overtimeWeek = workWeek - TimeSpan.FromHours(40);
 
-            PTToday.Text = $"{pauseToday:hh\\:mm} std";
-            PTWeek.Text = $"{pauseWeek:hh\\:mm} std";
-            WTToday.Text = $"{workToday:hh\\:mm} std";
-            WTWeek.Text = $"{workWeek:hh\\:mm} std";
-            OTToday.Text = $"{(overtimeToday > TimeSpan.Zero ? overtimeToday : TimeSpan.Zero):hh\\:mm} std";
-            OTWeek.Text = $"{(overtimeWeek > TimeSpan.Zero ? overtimeWeek : TimeSpan.Zero):hh\\:mm} std";
+            PTToday.Text = $"{pauseToday:hh\\:mm}Â std";
+            PTWeek.Text = $"{pauseWeek:hh\\:mm}Â std";
+            WTToday.Text = $"{workToday:hh\\:mm}Â std";
+            WTWeek.Text = $"{workWeek:hh\\:mm}Â std";
+            OTToday.Text = $"{(overtimeToday > TimeSpan.Zero ? overtimeToday : TimeSpan.Zero):hh\\:mm}Â std";
+            OTWeek.Text = $"{(overtimeWeek > TimeSpan.Zero ? overtimeWeek : TimeSpan.Zero):hh\\:mm}Â std";
         }
 
 
@@ -181,9 +182,9 @@ namespace Time4SellersApp
                 var dauer = (entry.End - entry.Start).ToString(@"hh\:mm");
 
                 dgvEntries.Rows.Add(
-                    entry.Start.ToString("g"),   // Start
-                    entry.End.ToString("g"),   // Ende
-                    entry.CatergoryName,                          // Art
+                    entry.Start.ToString("g"),    // Start
+                    entry.End.ToString("g"),      // Ende
+                    entry.CatergoryName,          // Art
                     entry.Comment,                // Kommentar
                     dauer                         // Dauer
                 );
@@ -243,7 +244,7 @@ namespace Time4SellersApp
             btnSpeichern = new Button();
             btnSettingsEintragen = new Button();
             tabAuslesen = new TabPage();
-            Löschen = new Button();
+            LÃ¶schen = new Button();
             pictureBox1 = new PictureBox();
             btnSettingsAuslesen = new Button();
             btnNeuladenAuslesen = new Button();
@@ -253,6 +254,7 @@ namespace Time4SellersApp
             colArt = new DataGridViewTextBoxColumn();
             colKommentar = new DataGridViewTextBoxColumn();
             colDauer = new DataGridViewTextBoxColumn();
+            Settings = new TabPage();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureLogoUebersicht).BeginInit();
@@ -272,6 +274,7 @@ namespace Time4SellersApp
             tabControl.Controls.Add(tabUebersicht);
             tabControl.Controls.Add(tabEintragen);
             tabControl.Controls.Add(tabAuslesen);
+            tabControl.Controls.Add(Settings);
             tabControl.Dock = DockStyle.Fill;
             tabControl.Location = new Point(0, 0);
             tabControl.Name = "tabControl";
@@ -308,21 +311,22 @@ namespace Time4SellersApp
             tabUebersicht.Name = "tabUebersicht";
             tabUebersicht.Size = new Size(466, 533);
             tabUebersicht.TabIndex = 0;
-            tabUebersicht.Text = "Übersicht";
+            tabUebersicht.Text = "Ãœbersicht";
             // 
             // dateTimePickerOverview
             // 
             dateTimePickerOverview.Format = DateTimePickerFormat.Short;
-            dateTimePickerOverview.Location = new Point(20, 151);
+            dateTimePickerOverview.Location = new Point(20, 152);
             dateTimePickerOverview.Name = "dateTimePickerOverview";
             dateTimePickerOverview.Size = new Size(101, 23);
             dateTimePickerOverview.TabIndex = 25;
-            dateTimePickerOverview.Value = new DateTime(2025, 4, 28, 10, 57, 35, 0);
+            dateTimePickerOverview.Value = new DateTime(2025, 4, 28, 0, 0, 0, 0);
+            dateTimePickerOverview.ValueChanged += dateTimePickerOverview_ValueChanged;
             // 
             // dateTimePicker1
             // 
             dateTimePicker1.Format = DateTimePickerFormat.Short;
-            dateTimePicker1.Location = new Point(339, 303);
+            dateTimePicker1.Location = new Point(338, 371);
             dateTimePicker1.Name = "dateTimePicker1";
             dateTimePicker1.Size = new Size(101, 23);
             dateTimePicker1.TabIndex = 24;
@@ -332,7 +336,7 @@ namespace Time4SellersApp
             // PauseLabel
             // 
             PauseLabel.AutoSize = true;
-            PauseLabel.Location = new Point(20, 363);
+            PauseLabel.Location = new Point(18, 433);
             PauseLabel.Name = "PauseLabel";
             PauseLabel.Size = new Size(41, 15);
             PauseLabel.TabIndex = 23;
@@ -341,7 +345,7 @@ namespace Time4SellersApp
             // NachmittagLabel
             // 
             NachmittagLabel.AutoSize = true;
-            NachmittagLabel.Location = new Point(20, 393);
+            NachmittagLabel.Location = new Point(18, 463);
             NachmittagLabel.Name = "NachmittagLabel";
             NachmittagLabel.Size = new Size(73, 15);
             NachmittagLabel.TabIndex = 22;
@@ -350,7 +354,7 @@ namespace Time4SellersApp
             // VormittagLabel
             // 
             VormittagLabel.AutoSize = true;
-            VormittagLabel.Location = new Point(20, 335);
+            VormittagLabel.Location = new Point(18, 405);
             VormittagLabel.Name = "VormittagLabel";
             VormittagLabel.Size = new Size(62, 15);
             VormittagLabel.TabIndex = 21;
@@ -368,7 +372,7 @@ namespace Time4SellersApp
             // LogginName
             // 
             LogginName.AutoSize = true;
-            LogginName.Location = new Point(109, 270);
+            LogginName.Location = new Point(108, 274);
             LogginName.Name = "LogginName";
             LogginName.Size = new Size(76, 15);
             LogginName.TabIndex = 19;
@@ -377,7 +381,7 @@ namespace Time4SellersApp
             // loggedInAs
             // 
             loggedInAs.AutoSize = true;
-            loggedInAs.Location = new Point(19, 270);
+            loggedInAs.Location = new Point(18, 274);
             loggedInAs.Name = "loggedInAs";
             loggedInAs.Size = new Size(84, 15);
             loggedInAs.TabIndex = 18;
@@ -386,7 +390,7 @@ namespace Time4SellersApp
             // OTWeek
             // 
             OTWeek.AutoSize = true;
-            OTWeek.Location = new Point(391, 245);
+            OTWeek.Location = new Point(390, 249);
             OTWeek.Name = "OTWeek";
             OTWeek.Size = new Size(50, 15);
             OTWeek.TabIndex = 17;
@@ -395,7 +399,7 @@ namespace Time4SellersApp
             // PTWeek
             // 
             PTWeek.AutoSize = true;
-            PTWeek.Location = new Point(391, 215);
+            PTWeek.Location = new Point(390, 219);
             PTWeek.Name = "PTWeek";
             PTWeek.Size = new Size(49, 15);
             PTWeek.TabIndex = 16;
@@ -404,7 +408,7 @@ namespace Time4SellersApp
             // OTToday
             // 
             OTToday.AutoSize = true;
-            OTToday.Location = new Point(130, 245);
+            OTToday.Location = new Point(129, 249);
             OTToday.Name = "OTToday";
             OTToday.Size = new Size(52, 15);
             OTToday.TabIndex = 15;
@@ -413,7 +417,7 @@ namespace Time4SellersApp
             // PTToday
             // 
             PTToday.AutoSize = true;
-            PTToday.Location = new Point(130, 215);
+            PTToday.Location = new Point(129, 219);
             PTToday.Name = "PTToday";
             PTToday.Size = new Size(51, 15);
             PTToday.TabIndex = 14;
@@ -422,7 +426,7 @@ namespace Time4SellersApp
             // WTWeek
             // 
             WTWeek.AutoSize = true;
-            WTWeek.Location = new Point(391, 187);
+            WTWeek.Location = new Point(390, 191);
             WTWeek.Name = "WTWeek";
             WTWeek.Size = new Size(53, 15);
             WTWeek.TabIndex = 13;
@@ -431,7 +435,7 @@ namespace Time4SellersApp
             // WTToday
             // 
             WTToday.AutoSize = true;
-            WTToday.Location = new Point(130, 187);
+            WTToday.Location = new Point(129, 191);
             WTToday.Name = "WTToday";
             WTToday.Size = new Size(55, 15);
             WTToday.TabIndex = 12;
@@ -451,7 +455,7 @@ namespace Time4SellersApp
             // lblArbeitszeitHeute
             // 
             lblArbeitszeitHeute.AutoSize = true;
-            lblArbeitszeitHeute.Location = new Point(19, 187);
+            lblArbeitszeitHeute.Location = new Point(18, 191);
             lblArbeitszeitHeute.Name = "lblArbeitszeitHeute";
             lblArbeitszeitHeute.Size = new Size(98, 15);
             lblArbeitszeitHeute.TabIndex = 1;
@@ -460,7 +464,7 @@ namespace Time4SellersApp
             // lblPausenzeitHeute
             // 
             lblPausenzeitHeute.AutoSize = true;
-            lblPausenzeitHeute.Location = new Point(19, 215);
+            lblPausenzeitHeute.Location = new Point(18, 219);
             lblPausenzeitHeute.Name = "lblPausenzeitHeute";
             lblPausenzeitHeute.Size = new Size(99, 15);
             lblPausenzeitHeute.TabIndex = 2;
@@ -469,16 +473,16 @@ namespace Time4SellersApp
             // lblUeberstundenHeute
             // 
             lblUeberstundenHeute.AutoSize = true;
-            lblUeberstundenHeute.Location = new Point(19, 245);
+            lblUeberstundenHeute.Location = new Point(18, 249);
             lblUeberstundenHeute.Name = "lblUeberstundenHeute";
             lblUeberstundenHeute.Size = new Size(111, 15);
             lblUeberstundenHeute.TabIndex = 3;
-            lblUeberstundenHeute.Text = "Überstunden heute:";
+            lblUeberstundenHeute.Text = "Ãœberstunden heute:";
             // 
             // lblArbeitszeitWoche
             // 
             lblArbeitszeitWoche.AutoSize = true;
-            lblArbeitszeitWoche.Location = new Point(267, 187);
+            lblArbeitszeitWoche.Location = new Point(266, 191);
             lblArbeitszeitWoche.Name = "lblArbeitszeitWoche";
             lblArbeitszeitWoche.Size = new Size(105, 15);
             lblArbeitszeitWoche.TabIndex = 4;
@@ -487,7 +491,7 @@ namespace Time4SellersApp
             // lblPausenzeitWoche
             // 
             lblPausenzeitWoche.AutoSize = true;
-            lblPausenzeitWoche.Location = new Point(267, 215);
+            lblPausenzeitWoche.Location = new Point(266, 219);
             lblPausenzeitWoche.Name = "lblPausenzeitWoche";
             lblPausenzeitWoche.Size = new Size(106, 15);
             lblPausenzeitWoche.TabIndex = 5;
@@ -496,17 +500,17 @@ namespace Time4SellersApp
             // lblUeberstundenWoche
             // 
             lblUeberstundenWoche.AutoSize = true;
-            lblUeberstundenWoche.Location = new Point(267, 245);
+            lblUeberstundenWoche.Location = new Point(266, 249);
             lblUeberstundenWoche.Name = "lblUeberstundenWoche";
             lblUeberstundenWoche.Size = new Size(118, 15);
             lblUeberstundenWoche.TabIndex = 6;
-            lblUeberstundenWoche.Text = "Überstunden Woche:";
+            lblUeberstundenWoche.Text = "Ãœberstunden Woche:";
             // 
             // lblMy4SellersAusgabe
             // 
             lblMy4SellersAusgabe.AutoSize = true;
             lblMy4SellersAusgabe.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold);
-            lblMy4SellersAusgabe.Location = new Point(20, 303);
+            lblMy4SellersAusgabe.Location = new Point(18, 373);
             lblMy4SellersAusgabe.Name = "lblMy4SellersAusgabe";
             lblMy4SellersAusgabe.Size = new Size(177, 20);
             lblMy4SellersAusgabe.TabIndex = 7;
@@ -519,6 +523,7 @@ namespace Time4SellersApp
             btnSettingsUebersicht.Size = new Size(100, 30);
             btnSettingsUebersicht.TabIndex = 8;
             btnSettingsUebersicht.Text = "Settings";
+            btnSettingsUebersicht.Click += btnSettingsUebersicht_Click;
             // 
             // tabEintragen
             // 
@@ -725,7 +730,7 @@ namespace Time4SellersApp
             lblInfoEintragen.Name = "lblInfoEintragen";
             lblInfoEintragen.Size = new Size(329, 15);
             lblInfoEintragen.TabIndex = 4;
-            lblInfoEintragen.Text = "Info: Es kann nur eine von den drei Optionen gewählt werden";
+            lblInfoEintragen.Text = "Info: Es kann nur eine von den drei Optionen gewÃ¤hlt werden";
             // 
             // lblBemerkung
             // 
@@ -759,10 +764,11 @@ namespace Time4SellersApp
             btnSettingsEintragen.Size = new Size(100, 30);
             btnSettingsEintragen.TabIndex = 9;
             btnSettingsEintragen.Text = "Settings";
+            btnSettingsEintragen.Click += btnSettingsEintragen_Click;
             // 
             // tabAuslesen
             // 
-            tabAuslesen.Controls.Add(Löschen);
+            tabAuslesen.Controls.Add(LÃ¶schen);
             tabAuslesen.Controls.Add(pictureBox1);
             tabAuslesen.Controls.Add(btnSettingsAuslesen);
             tabAuslesen.Controls.Add(btnNeuladenAuslesen);
@@ -773,14 +779,14 @@ namespace Time4SellersApp
             tabAuslesen.TabIndex = 2;
             tabAuslesen.Text = "Auslesen";
             // 
-            // Löschen
+            // LÃ¶schen
             // 
-            Löschen.Location = new Point(190, 500);
-            Löschen.Name = "Löschen";
-            Löschen.Size = new Size(100, 30);
-            Löschen.TabIndex = 5;
-            Löschen.Text = "Löschen";
-            Löschen.Click += Löschen_Click;
+            LÃ¶schen.Location = new Point(190, 500);
+            LÃ¶schen.Name = "LÃ¶schen";
+            LÃ¶schen.Size = new Size(100, 30);
+            LÃ¶schen.TabIndex = 5;
+            LÃ¶schen.Text = "LÃ¶schen";
+            LÃ¶schen.Click += LÃ¶schen_Click;
             // 
             // pictureBox1
             // 
@@ -799,6 +805,7 @@ namespace Time4SellersApp
             btnSettingsAuslesen.Size = new Size(100, 30);
             btnSettingsAuslesen.TabIndex = 1;
             btnSettingsAuslesen.Text = "Settings";
+            btnSettingsAuslesen.Click += btnSettingsAuslesen_Click;
             // 
             // btnNeuladenAuslesen
             // 
@@ -812,6 +819,9 @@ namespace Time4SellersApp
             // dgvEntries
             // 
             dgvEntries.AllowUserToAddRows = false;
+            dgvEntries.AllowUserToDeleteRows = false;
+            dgvEntries.AllowUserToResizeColumns = false;
+            dgvEntries.AllowUserToResizeRows = false;
             dgvEntries.Columns.AddRange(new DataGridViewColumn[] { colStart, colEnd, colArt, colKommentar, colDauer });
             dgvEntries.Location = new Point(20, 142);
             dgvEntries.Name = "dgvEntries";
@@ -846,6 +856,16 @@ namespace Time4SellersApp
             colDauer.Name = "colDauer";
             colDauer.ReadOnly = true;
             // 
+            // Settings
+            // 
+            Settings.Location = new Point(4, 24);
+            Settings.Name = "Settings";
+            Settings.Padding = new Padding(3);
+            Settings.Size = new Size(466, 533);
+            Settings.TabIndex = 3;
+            Settings.Text = "Settings";
+            Settings.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             ClientSize = new Size(474, 561);
@@ -854,7 +874,7 @@ namespace Time4SellersApp
             MinimizeBox = false;
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "TIME 4Sellers";
+            Text = "4TIME";
             tabControl.ResumeLayout(false);
             tabUebersicht.ResumeLayout(false);
             tabUebersicht.PerformLayout();
@@ -908,8 +928,6 @@ namespace Time4SellersApp
             StartzeitEndzeitEnde.Enabled = false;
         }
 
-
-
         private void btnSpeichern_Click(object sender, EventArgs e)
         {
             DateTime startzeit = DateTime.Now, endzeit = DateTime.Now;
@@ -917,6 +935,7 @@ namespace Time4SellersApp
             {
                 startzeit = StartzeitEndzeitStart.Value;
                 endzeit = StartzeitEndzeitEnde.Value;
+                StartzeitEndzeitStart.Text = endzeit.ToString();
             }
             else if (StartzeitDauerStart.Enabled)
             {
@@ -924,6 +943,7 @@ namespace Time4SellersApp
                 endzeit = startzeit
                            .AddHours((double)StartzeitDauerStunden.Value)
                            .AddMinutes((double)StartzeitDauerMinuten.Value);
+                StartzeitEndzeitStart.Text = endzeit.ToString();
             }
             else if (EndzeitDauerStart.Enabled)
             {
@@ -980,7 +1000,6 @@ namespace Time4SellersApp
             fillValues();
         }
 
-
         private void dgvEntries_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
@@ -1002,13 +1021,13 @@ namespace Time4SellersApp
             fillDataGridView();
         }
 
-        private void Löschen_Click(object sender, EventArgs e)
+        private void LÃ¶schen_Click(object sender, EventArgs e)
         {
             if (dgvEntries.SelectedRows.Count == 0)
             {
                 MessageBox.Show(
-                    "Bitte wählen Sie mindestens einen Eintrag aus.",
-                    "Löschen",
+                    "Bitte wÃ¤hlen Sie mindestens einen Eintrag aus.",
+                    "LÃ¶schen",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning
                 );
@@ -1016,8 +1035,8 @@ namespace Time4SellersApp
             }
 
             var result = MessageBox.Show(
-                "Möchten Sie die ausgewählten Einträge wirklich löschen?",
-                "Einträge löschen",
+                "MÃ¶chten Sie den ausgewÃ¤hlten Eintrag wirklich lÃ¶schen?",
+                "EintrÃ¤ge lÃ¶schen",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question
             );
@@ -1056,6 +1075,35 @@ namespace Time4SellersApp
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
             fillValues();
+        }
+
+        private void dateTimePickerOverview_ValueChanged(object sender, EventArgs e)
+        {
+            fillValues();
+        }
+
+        private void btnSettingsUebersicht_Click(object sender, EventArgs e)
+        {
+            Settings.Select();
+            Settings.Show();
+            Settings.BringToFront();
+            Settings.Focus();
+        }
+
+        private void btnSettingsEintragen_Click(object sender, EventArgs e)
+        {
+            Settings.Select();
+            Settings.Show();
+            Settings.BringToFront();
+            Settings.Focus();
+        }
+
+        private void btnSettingsAuslesen_Click(object sender, EventArgs e)
+        {
+            Settings.Select();
+            Settings.Show();
+            Settings.BringToFront();
+            Settings.Focus();
         }
     }
 }

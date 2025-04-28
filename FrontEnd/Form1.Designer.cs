@@ -55,6 +55,8 @@
         private Label VormittagLabel;
         private DateTimePicker dateTimePicker1;
         private DateTimePicker dateTimePickerOverview;
+        private TabPage Settings;
+
 
         /// <summary>
         /// Erforderliche Methode für die Designerunterstützung.
