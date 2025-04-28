@@ -20,6 +20,25 @@ namespace _4Time.DataCore
             connection.Open();
             command.ExecuteNonQuery();
             connection.Close();
+
+            string queryNewUser = @"
+                IF(NOT EXISTS (SELECT 1 FROM [dbo].[User] WHERE [FirstName] = @firstName AND [LastName] = @lastName))
+                BEGIN
+                    INSERT INTO [dbo].[User] ([FirstName], [LastName], [IsAdmin])
+                    VALUES (@firstName, @lastName, @IsAdmin)
+                END
+            ";
+
+            command.Parameters.AddWithValue("@firstName", Connector.FirstName.ToLower());
+            command.Parameters.AddWithValue("@lastName", Connector.LastName.ToLower());
+            command.Parameters.AddWithValue("@IsAdmin", false);
+
+            var connectionNewUser = new SqlConnection(ConnectionString);
+            var commandNewUser = new SqlCommand(query, connection);
+
+            connection.Open();
+            command.ExecuteNonQuery();
+            connection.Close();
         }
 
         internal static void UserSetup()
@@ -42,7 +61,6 @@ namespace _4Time.DataCore
 
             connection.Open();
             command.ExecuteNonQuery();
-            connection.Close();
         }
 
         internal static void InitiateShutdown()

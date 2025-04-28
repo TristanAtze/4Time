@@ -10,39 +10,97 @@ namespace _4Time.DataCore
 {
     internal class Reader : Connector
     {
-        internal static User GetUserDetails(string firstName, string lastName)
+        internal static User GetUserDetails()
         {
             User user = new()
             {
-                FirstName = firstName,
-                LastName = lastName
+                FirstName = Connector.FirstName,
+                LastName = Connector.LastName
             };
 
             string query = @"
-                SELECT ([UserID], [IsAdmin])
-                FROM [dbo].[Users]
+                SELECT [UserID], [IsAdmin]
+                FROM [dbo].[User]
                 WHERE [FirstName] = @firstName AND [LastName] = @lastName
             ";
 
-            var connection = new SqlConnection(ConnectionString);
-            var command = new SqlCommand(query, connection);
+            var command = new SqlCommand(query, Connector.connection);
 
-            command.Parameters.AddWithValue("@firstName", firstName);
-            command.Parameters.AddWithValue("@lastName", lastName);
+            command.Parameters.AddWithValue("@firstName", FirstName.ToLower());
+            command.Parameters.AddWithValue("@lastName", LastName.ToLower());
 
-            connection.OpenAsync();
             SqlDataReader reader = command.ExecuteReader();
-            if (reader.Read())
+            while (reader.Read())
             {
                 user.UserID = reader.GetInt32(0);
                 user.IsAdmin = reader.GetBoolean(1);
-                return user;
             }
-            else
+            reader.Close();
+            return user;
+        }
+
+
+        internal static List<Entry> GetAllEntrysOfUser()
+        {
+            List<Entry> Entrys = [];
+
+            string query = @"
+                SELECT *
+                FROM [dbo].[Entries]
+                WHERE [UserID] = @UserID
+            ";
+
+            User user = GetUserDetails();
+
+            var command = new SqlCommand(query, Connector.connection);
+
+            command.Parameters.AddWithValue("@UserID", user.UserID);
+
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
             {
-                connection.Close();
-                return user;
+                Entrys.Add(
+                    new Entry
+                    {
+                        EntryID = reader.GetInt32(0),
+                        UserID = reader.GetInt32(1),
+                        CategoryID = reader.GetInt32(2),
+                        Start = DateTime.Parse(reader.GetString(3).Split("-")[0]),
+                        End = DateTime.Parse(reader.GetString(3).Split("-")[1]),
+                        Comment = reader.GetString(5),
+                    }
+                );
             }
+            reader.Close();
+
+            return Entrys;
+        }
+
+        internal static List<Category> GetAllCategorysDetails()
+        {
+            List<Category> categories = [];
+
+            string query = @"
+                SELECT *
+                FROM [dbo].[Categories]
+            ";
+
+            var command = new SqlCommand(query, Connector.connection);
+
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                categories.Add(
+                    new Category
+                    {
+                        CategoryID = reader.GetInt32(0),
+                        Description = reader.GetString(1),
+                        IsWorkTime = reader.GetBoolean(2)
+                    }
+                );
+            }
+            reader.Close();
+            return categories;
         }
     }
 }

@@ -1,5 +1,7 @@
 using _4Time.DataCore;
+using _4Time.DataCore.Models;
 using System;
+using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -7,6 +9,12 @@ namespace Time4SellersApp
 {
     public partial class MainForm : Form
     {
+        /// <summary>
+        /// Index des in dgvEntries zuletzt ausgewählten Eintrags.
+        /// null = es wurde kein bestehender Eintrag zum Bearbeiten geöffnet.
+        /// </summary>
+        private int? selectedBookingIndex = null;
+
         private TabControl tabControl;
         private TabPage tabUebersicht;
         private TabPage tabEintragen;
@@ -30,9 +38,12 @@ namespace Time4SellersApp
         private Label lblBemerkung;
         private Button btnSpeichern;
         private Button btnSettingsEintragen;
-        private Button btnNeuladenEintragen;
         private Button btnSettingsAuslesen;
         private Button btnNeuladenAuslesen;
+        private System.Windows.Forms.DataGridView dgvEntries;
+        private List<Entry> allEntrys = [];
+        private List<Category> allCategorys = [];
+
 
         public MainForm()
         {
@@ -40,30 +51,129 @@ namespace Time4SellersApp
             if (Connector.isConnected)
             {
                 Thread.Sleep(222);
-                InitializeComponent();
+            }
+            allCategorys = Reader.GetAllCategorysDetails();
+            allEntrys = Reader.GetAllEntrysOfUser();
+            InitializeComponent();
+            MaximumSize = Size;
+            MinimumSize = Size;
+
+            foreach (var e in allCategorys)
+            {
+                BookingType.Items.Add(e.Description);
             }
 
+            colArt.HeaderText = "Art";
+            colStart.HeaderText = "Start";
+            colEnd.HeaderText = "Ende";
+            colKommentar.HeaderText = "Kommentar";
+            colDauer.HeaderText = "Dauer";
+            fillDataGridView();
             rbStartzeitEndzeit.Checked = true;
-            BookingType.Text = "Arbeitszeit";
-            PTToday.Text = "01:00 std";
-            PTWeek.Text = "05:00 std";
-            WTToday.Text = "08:40 std";
-            WTWeek.Text = "42:00 std";
-            OTToday.Text = "00:40 std";
-            OTWeek.Text = "02:00 std";
+            fillValues();
+
+            LogginName.Text = Connector.FirstName + " " + Connector.LastName;
+
+            // Testen der Verschlüsselung
+            //string encrypted = Crypto.Encrypt("Test Satz");
+            //string decrypted = Crypto.Decrypt(encrypted);
+        }
+        private void fillValues()
+        {
+            DateTime My4SellersDateTime = dateTimePicker1.Value.Date;
+            VormittagLabel.Text = $"Vormittag: {allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CatergoryName == "Vormittag").Select(x => x.Duration).FirstOrDefault()}" ?? $"Vormittag: 00:00";
+            NachmittagLabel.Text = $"Nachmittag: {allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CatergoryName == "Nachmittag").Select(x => x.Duration).FirstOrDefault()}" ?? $"Nachmittag: 00:00";
+            PauseLabel.Text = $"Pause: {allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CatergoryName.Contains("ause")).Select(x => x.Duration).FirstOrDefault()}" ?? $"Pause: 00:00";
+
+            btnSpeichern.Enabled = false;
+            var today = DateTime.Today;
+
+            int diff = (7 + (today.DayOfWeek - DayOfWeek.Monday)) % 7;
+            var weekStart = today.AddDays(-diff);
+
+            var entriesToday = allEntrys.Where(e => e.Start.Date == today);
+            var entriesWeek = allEntrys.Where(e => e.Start.Date >= weekStart && e.Start.Date <= today);
+
+            var isWorkLookup = allCategorys.ToDictionary(c => c.CategoryID, c => c.IsWorkTime);
+
+            TimeSpan pauseToday = TimeSpan.Zero, workToday = TimeSpan.Zero;
+            TimeSpan pauseWeek = TimeSpan.Zero, workWeek = TimeSpan.Zero;
+
+            foreach (var e in entriesToday)
+            {
+                var dur = e.End - e.Start;
+                if (isWorkLookup.TryGetValue(e.CategoryID, out var isWork) && isWork)
+                    workToday += dur;
+                else
+                    pauseToday += dur;
+            }
+
+            foreach (var e in entriesWeek)
+            {
+                var dur = e.End - e.Start;
+                if (isWorkLookup.TryGetValue(e.CategoryID, out var isWork) && isWork)
+                    workWeek += dur;
+                else
+                    pauseWeek += dur;
+            }
+
+            TimeSpan overtimeToday = workToday - TimeSpan.FromHours(8);
+            TimeSpan overtimeWeek = workWeek - TimeSpan.FromHours(40);
+
+            PTToday.Text = $"{pauseToday:hh\\:mm} std";
+            PTWeek.Text = $"{pauseWeek:hh\\:mm} std";
+            WTToday.Text = $"{workToday:hh\\:mm} std";
+            WTWeek.Text = $"{workWeek:hh\\:mm} std";
+            OTToday.Text = $"{(overtimeToday > TimeSpan.Zero ? overtimeToday : TimeSpan.Zero):hh\\:mm} std";
+            OTWeek.Text = $"{(overtimeWeek > TimeSpan.Zero ? overtimeWeek : TimeSpan.Zero):hh\\:mm} std";
+        }
+
+
+        private void fillDataGridView()
+        {
+            dgvEntries.DataSource = null;
+
+            dgvEntries.Rows.Clear();
+
+            foreach (var entry in allEntrys)
+            {
+                if (entry.CatergoryName == "")
+                {
+                    entry.CatergoryName = allCategorys
+                        .First(x => x.CategoryID == entry.CategoryID)
+                        ?.Description;
+                }
+
+                var dauer = (entry.End - entry.Start).ToString(@"hh\:mm");
+
+                dgvEntries.Rows.Add(
+                    entry.Start.ToString("g"),   // Start
+                    entry.End.ToString("g"),   // Ende
+                    entry.CatergoryName,                          // Art
+                    entry.Comment,                // Kommentar
+                    dauer                         // Dauer
+                );
+            }
         }
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             tabControl = new TabControl();
             tabUebersicht = new TabPage();
+            dateTimePicker1 = new DateTimePicker();
+            PauseLabel = new Label();
+            NachmittagLabel = new Label();
+            VormittagLabel = new Label();
+            Neuladen = new Button();
+            LogginName = new Label();
+            loggedInAs = new Label();
             OTWeek = new Label();
             PTWeek = new Label();
             OTToday = new Label();
             PTToday = new Label();
             WTWeek = new Label();
             WTToday = new Label();
-            button1 = new Button();
             pictureLogoUebersicht = new PictureBox();
             lblArbeitszeitHeute = new Label();
             lblPausenzeitHeute = new Label();
@@ -97,11 +207,17 @@ namespace Time4SellersApp
             txtBemerkung = new TextBox();
             btnSpeichern = new Button();
             btnSettingsEintragen = new Button();
-            btnNeuladenEintragen = new Button();
             tabAuslesen = new TabPage();
+            Löschen = new Button();
             pictureBox1 = new PictureBox();
             btnSettingsAuslesen = new Button();
             btnNeuladenAuslesen = new Button();
+            dgvEntries = new DataGridView();
+            colStart = new DataGridViewTextBoxColumn();
+            colEnd = new DataGridViewTextBoxColumn();
+            colArt = new DataGridViewTextBoxColumn();
+            colKommentar = new DataGridViewTextBoxColumn();
+            colDauer = new DataGridViewTextBoxColumn();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureLogoUebersicht).BeginInit();
@@ -113,6 +229,7 @@ namespace Time4SellersApp
             ((System.ComponentModel.ISupportInitialize)StartzeitDauerStunden).BeginInit();
             tabAuslesen.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvEntries).BeginInit();
             SuspendLayout();
             // 
             // tabControl
@@ -129,13 +246,19 @@ namespace Time4SellersApp
             // 
             // tabUebersicht
             // 
+            tabUebersicht.Controls.Add(dateTimePicker1);
+            tabUebersicht.Controls.Add(PauseLabel);
+            tabUebersicht.Controls.Add(NachmittagLabel);
+            tabUebersicht.Controls.Add(VormittagLabel);
+            tabUebersicht.Controls.Add(Neuladen);
+            tabUebersicht.Controls.Add(LogginName);
+            tabUebersicht.Controls.Add(loggedInAs);
             tabUebersicht.Controls.Add(OTWeek);
             tabUebersicht.Controls.Add(PTWeek);
             tabUebersicht.Controls.Add(OTToday);
             tabUebersicht.Controls.Add(PTToday);
             tabUebersicht.Controls.Add(WTWeek);
             tabUebersicht.Controls.Add(WTToday);
-            tabUebersicht.Controls.Add(button1);
             tabUebersicht.Controls.Add(pictureLogoUebersicht);
             tabUebersicht.Controls.Add(lblArbeitszeitHeute);
             tabUebersicht.Controls.Add(lblPausenzeitHeute);
@@ -150,6 +273,69 @@ namespace Time4SellersApp
             tabUebersicht.Size = new Size(466, 533);
             tabUebersicht.TabIndex = 0;
             tabUebersicht.Text = "Übersicht";
+            // 
+            // dateTimePicker1
+            // 
+            dateTimePicker1.Format = DateTimePickerFormat.Short;
+            dateTimePicker1.Location = new Point(340, 301);
+            dateTimePicker1.Name = "dateTimePicker1";
+            dateTimePicker1.Size = new Size(101, 23);
+            dateTimePicker1.TabIndex = 24;
+            dateTimePicker1.ValueChanged += dateTimePicker1_ValueChanged;
+            // 
+            // PauseLabel
+            // 
+            PauseLabel.AutoSize = true;
+            PauseLabel.Location = new Point(20, 350);
+            PauseLabel.Name = "PauseLabel";
+            PauseLabel.Size = new Size(41, 15);
+            PauseLabel.TabIndex = 23;
+            PauseLabel.Text = "Pause:";
+            // 
+            // NachmittagLabel
+            // 
+            NachmittagLabel.AutoSize = true;
+            NachmittagLabel.Location = new Point(20, 365);
+            NachmittagLabel.Name = "NachmittagLabel";
+            NachmittagLabel.Size = new Size(73, 15);
+            NachmittagLabel.TabIndex = 22;
+            NachmittagLabel.Text = "Nachmittag:";
+            // 
+            // VormittagLabel
+            // 
+            VormittagLabel.AutoSize = true;
+            VormittagLabel.Location = new Point(20, 335);
+            VormittagLabel.Name = "VormittagLabel";
+            VormittagLabel.Size = new Size(62, 15);
+            VormittagLabel.TabIndex = 21;
+            VormittagLabel.Text = "Vormittag:";
+            // 
+            // Neuladen
+            // 
+            Neuladen.Location = new Point(363, 500);
+            Neuladen.Name = "Neuladen";
+            Neuladen.Size = new Size(100, 30);
+            Neuladen.TabIndex = 20;
+            Neuladen.Text = "Neuladen";
+            Neuladen.Click += Neuladen_Click;
+            // 
+            // LogginName
+            // 
+            LogginName.AutoSize = true;
+            LogginName.Location = new Point(110, 240);
+            LogginName.Name = "LogginName";
+            LogginName.Size = new Size(76, 15);
+            LogginName.TabIndex = 19;
+            LogginName.Text = "LogginName";
+            // 
+            // loggedInAs
+            // 
+            loggedInAs.AutoSize = true;
+            loggedInAs.Location = new Point(20, 240);
+            loggedInAs.Name = "loggedInAs";
+            loggedInAs.Size = new Size(84, 15);
+            loggedInAs.TabIndex = 18;
+            loggedInAs.Text = "Eingeloggt als:";
             // 
             // OTWeek
             // 
@@ -205,17 +391,10 @@ namespace Time4SellersApp
             WTToday.TabIndex = 12;
             WTToday.Text = "WTToday";
             // 
-            // button1
-            // 
-            button1.Location = new Point(363, 500);
-            button1.Name = "button1";
-            button1.Size = new Size(100, 30);
-            button1.TabIndex = 11;
-            button1.Text = "Neuladen";
-            // 
             // pictureLogoUebersicht
             // 
-            pictureLogoUebersicht.ImageLocation = "Logo.png";
+            pictureLogoUebersicht.ErrorImage = (Image)resources.GetObject("pictureLogoUebersicht.ErrorImage");
+            pictureLogoUebersicht.ImageLocation = "4TIMELogo.gif";
             pictureLogoUebersicht.Location = new Point(20, 14);
             pictureLogoUebersicht.Name = "pictureLogoUebersicht";
             pictureLogoUebersicht.Size = new Size(424, 122);
@@ -281,7 +460,7 @@ namespace Time4SellersApp
             // 
             lblMy4SellersAusgabe.AutoSize = true;
             lblMy4SellersAusgabe.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold);
-            lblMy4SellersAusgabe.Location = new Point(131, 345);
+            lblMy4SellersAusgabe.Location = new Point(20, 303);
             lblMy4SellersAusgabe.Name = "lblMy4SellersAusgabe";
             lblMy4SellersAusgabe.Size = new Size(177, 20);
             lblMy4SellersAusgabe.TabIndex = 7;
@@ -320,7 +499,6 @@ namespace Time4SellersApp
             tabEintragen.Controls.Add(txtBemerkung);
             tabEintragen.Controls.Add(btnSpeichern);
             tabEintragen.Controls.Add(btnSettingsEintragen);
-            tabEintragen.Controls.Add(btnNeuladenEintragen);
             tabEintragen.Location = new Point(4, 24);
             tabEintragen.Name = "tabEintragen";
             tabEintragen.Size = new Size(466, 533);
@@ -329,7 +507,7 @@ namespace Time4SellersApp
             // 
             // pictureBox2
             // 
-            pictureBox2.ImageLocation = "Logo.png";
+            pictureBox2.ImageLocation = "4TIMELogo.gif";
             pictureBox2.Location = new Point(20, 14);
             pictureBox2.Name = "pictureBox2";
             pictureBox2.Size = new Size(424, 122);
@@ -348,12 +526,13 @@ namespace Time4SellersApp
             // 
             // BookingType
             // 
+            BookingType.DropDownStyle = ComboBoxStyle.DropDownList;
             BookingType.FormattingEnabled = true;
-            BookingType.Items.AddRange(new object[] { "Pausenzeit", "Arbeitszeit", "Abwesendheit" });
             BookingType.Location = new Point(3, 185);
             BookingType.Name = "BookingType";
             BookingType.Size = new Size(207, 23);
             BookingType.TabIndex = 25;
+            BookingType.SelectionChangeCommitted += BookingType_SelectionChangeCommitted;
             // 
             // label3
             // 
@@ -376,6 +555,7 @@ namespace Time4SellersApp
             // EndzeitDauerMinuten
             // 
             EndzeitDauerMinuten.Location = new Point(408, 370);
+            EndzeitDauerMinuten.Maximum = new decimal(new int[] { 59, 0, 0, 0 });
             EndzeitDauerMinuten.Name = "EndzeitDauerMinuten";
             EndzeitDauerMinuten.Size = new Size(38, 23);
             EndzeitDauerMinuten.TabIndex = 22;
@@ -383,6 +563,7 @@ namespace Time4SellersApp
             // EndzeitDauerStunden
             // 
             EndzeitDauerStunden.Location = new Point(282, 369);
+            EndzeitDauerStunden.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
             EndzeitDauerStunden.Name = "EndzeitDauerStunden";
             EndzeitDauerStunden.Size = new Size(38, 23);
             EndzeitDauerStunden.TabIndex = 21;
@@ -390,7 +571,8 @@ namespace Time4SellersApp
             // EndzeitDauerStart
             // 
             EndzeitDauerStart.AllowDrop = true;
-            EndzeitDauerStart.Format = DateTimePickerFormat.Time;
+            EndzeitDauerStart.CustomFormat = "HH:mm";
+            EndzeitDauerStart.Format = DateTimePickerFormat.Custom;
             EndzeitDauerStart.Location = new Point(3, 369);
             EndzeitDauerStart.Name = "EndzeitDauerStart";
             EndzeitDauerStart.Size = new Size(200, 23);
@@ -417,6 +599,7 @@ namespace Time4SellersApp
             // StartzeitDauerMinuten
             // 
             StartzeitDauerMinuten.Location = new Point(407, 307);
+            StartzeitDauerMinuten.Maximum = new decimal(new int[] { 59, 0, 0, 0 });
             StartzeitDauerMinuten.Name = "StartzeitDauerMinuten";
             StartzeitDauerMinuten.Size = new Size(38, 23);
             StartzeitDauerMinuten.TabIndex = 17;
@@ -424,6 +607,7 @@ namespace Time4SellersApp
             // StartzeitDauerStunden
             // 
             StartzeitDauerStunden.Location = new Point(282, 307);
+            StartzeitDauerStunden.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
             StartzeitDauerStunden.Name = "StartzeitDauerStunden";
             StartzeitDauerStunden.Size = new Size(38, 23);
             StartzeitDauerStunden.TabIndex = 16;
@@ -431,7 +615,8 @@ namespace Time4SellersApp
             // StartzeitDauerStart
             // 
             StartzeitDauerStart.AllowDrop = true;
-            StartzeitDauerStart.Format = DateTimePickerFormat.Time;
+            StartzeitDauerStart.CustomFormat = "HH:mm";
+            StartzeitDauerStart.Format = DateTimePickerFormat.Custom;
             StartzeitDauerStart.Location = new Point(3, 303);
             StartzeitDauerStart.Name = "StartzeitDauerStart";
             StartzeitDauerStart.Size = new Size(200, 23);
@@ -440,7 +625,8 @@ namespace Time4SellersApp
             // StartzeitEndzeitEnde
             // 
             StartzeitEndzeitEnde.AllowDrop = true;
-            StartzeitEndzeitEnde.Format = DateTimePickerFormat.Time;
+            StartzeitEndzeitEnde.CustomFormat = "HH:mm";
+            StartzeitEndzeitEnde.Format = DateTimePickerFormat.Custom;
             StartzeitEndzeitEnde.Location = new Point(246, 239);
             StartzeitEndzeitEnde.Name = "StartzeitEndzeitEnde";
             StartzeitEndzeitEnde.Size = new Size(200, 23);
@@ -449,7 +635,8 @@ namespace Time4SellersApp
             // StartzeitEndzeitStart
             // 
             StartzeitEndzeitStart.AllowDrop = true;
-            StartzeitEndzeitStart.Format = DateTimePickerFormat.Time;
+            StartzeitEndzeitStart.CustomFormat = "HH:mm";
+            StartzeitEndzeitStart.Format = DateTimePickerFormat.Custom;
             StartzeitEndzeitStart.Location = new Point(3, 239);
             StartzeitEndzeitStart.Name = "StartzeitEndzeitStart";
             StartzeitEndzeitStart.Size = new Size(200, 23);
@@ -512,7 +699,7 @@ namespace Time4SellersApp
             // 
             // btnSpeichern
             // 
-            btnSpeichern.Location = new Point(187, 500);
+            btnSpeichern.Location = new Point(363, 500);
             btnSpeichern.Name = "btnSpeichern";
             btnSpeichern.Size = new Size(100, 30);
             btnSpeichern.TabIndex = 7;
@@ -527,28 +714,31 @@ namespace Time4SellersApp
             btnSettingsEintragen.TabIndex = 9;
             btnSettingsEintragen.Text = "Settings";
             // 
-            // btnNeuladenEintragen
-            // 
-            btnNeuladenEintragen.Location = new Point(363, 500);
-            btnNeuladenEintragen.Name = "btnNeuladenEintragen";
-            btnNeuladenEintragen.Size = new Size(100, 30);
-            btnNeuladenEintragen.TabIndex = 10;
-            btnNeuladenEintragen.Text = "Neuladen";
-            // 
             // tabAuslesen
             // 
+            tabAuslesen.Controls.Add(Löschen);
             tabAuslesen.Controls.Add(pictureBox1);
             tabAuslesen.Controls.Add(btnSettingsAuslesen);
             tabAuslesen.Controls.Add(btnNeuladenAuslesen);
+            tabAuslesen.Controls.Add(dgvEntries);
             tabAuslesen.Location = new Point(4, 24);
             tabAuslesen.Name = "tabAuslesen";
             tabAuslesen.Size = new Size(466, 533);
             tabAuslesen.TabIndex = 2;
             tabAuslesen.Text = "Auslesen";
             // 
+            // Löschen
+            // 
+            Löschen.Location = new Point(190, 500);
+            Löschen.Name = "Löschen";
+            Löschen.Size = new Size(100, 30);
+            Löschen.TabIndex = 5;
+            Löschen.Text = "Löschen";
+            Löschen.Click += Löschen_Click;
+            // 
             // pictureBox1
             // 
-            pictureBox1.ImageLocation = "Logo.png";
+            pictureBox1.ImageLocation = "4TIMELogo.gif";
             pictureBox1.Location = new Point(20, 14);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(424, 122);
@@ -571,11 +761,51 @@ namespace Time4SellersApp
             btnNeuladenAuslesen.Size = new Size(100, 30);
             btnNeuladenAuslesen.TabIndex = 2;
             btnNeuladenAuslesen.Text = "Neuladen";
+            btnNeuladenAuslesen.Click += btnNeuladenAuslesen_Click;
+            // 
+            // dgvEntries
+            // 
+            dgvEntries.AllowUserToAddRows = false;
+            dgvEntries.Columns.AddRange(new DataGridViewColumn[] { colStart, colEnd, colArt, colKommentar, colDauer });
+            dgvEntries.Location = new Point(20, 142);
+            dgvEntries.Name = "dgvEntries";
+            dgvEntries.ReadOnly = true;
+            dgvEntries.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvEntries.Size = new Size(424, 300);
+            dgvEntries.TabIndex = 4;
+            dgvEntries.CellDoubleClick += dgvEntries_CellDoubleClick;
+            // 
+            // colStart
+            // 
+            colStart.Name = "colStart";
+            colStart.ReadOnly = true;
+            // 
+            // colEnd
+            // 
+            colEnd.Name = "colEnd";
+            colEnd.ReadOnly = true;
+            // 
+            // colArt
+            // 
+            colArt.Name = "colArt";
+            colArt.ReadOnly = true;
+            // 
+            // colKommentar
+            // 
+            colKommentar.Name = "colKommentar";
+            colKommentar.ReadOnly = true;
+            // 
+            // colDauer
+            // 
+            colDauer.Name = "colDauer";
+            colDauer.ReadOnly = true;
             // 
             // MainForm
             // 
             ClientSize = new Size(474, 561);
             Controls.Add(tabControl);
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "TIME 4Sellers";
@@ -592,6 +822,7 @@ namespace Time4SellersApp
             ((System.ComponentModel.ISupportInitialize)StartzeitDauerStunden).EndInit();
             tabAuslesen.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvEntries).EndInit();
             ResumeLayout(false);
         }
 
@@ -631,45 +862,154 @@ namespace Time4SellersApp
             StartzeitEndzeitEnde.Enabled = false;
         }
 
+
+
         private void btnSpeichern_Click(object sender, EventArgs e)
         {
-            DateTime startzeit = DateTime.Now;
-            DateTime endzeit = DateTime.Now;
-            string bemerkung = txtBemerkung.Text;
-            string bookingType = BookingType.SelectedItem?.ToString() ?? string.Empty;
-
-            if (StartzeitDauerStart.Enabled && StartzeitDauerStunden.Enabled && StartzeitDauerMinuten.Enabled)
-            {
-                startzeit = StartzeitDauerStart.Value;
-                endzeit = startzeit.AddHours((double)StartzeitDauerStunden.Value).AddMinutes((double)StartzeitDauerMinuten.Value);
-            }
-            else if (EndzeitDauerStart.Enabled && EndzeitDauerStunden.Enabled && EndzeitDauerMinuten.Enabled)
-            {
-                endzeit = EndzeitDauerStart.Value;
-                startzeit = endzeit.AddHours(-(double)EndzeitDauerStunden.Value).AddMinutes(-(double)EndzeitDauerMinuten.Value);
-            }
-            else if (StartzeitEndzeitStart.Enabled && StartzeitEndzeitEnde.Enabled)
+            DateTime startzeit = DateTime.Now, endzeit = DateTime.Now;
+            if (StartzeitEndzeitStart.Enabled && StartzeitEndzeitEnde.Enabled)
             {
                 startzeit = StartzeitEndzeitStart.Value;
                 endzeit = StartzeitEndzeitEnde.Value;
             }
-            string? error = Writer.WriteData(startzeit, endzeit, bookingType, bemerkung);
-
-            if (error != null)
+            else if (StartzeitDauerStart.Enabled)
             {
-                MessageBox.Show(
-                error,
-                "Fehler",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error
-                );
-                return;
+                startzeit = StartzeitDauerStart.Value;
+                endzeit = startzeit
+                           .AddHours((double)StartzeitDauerStunden.Value)
+                           .AddMinutes((double)StartzeitDauerMinuten.Value);
+            }
+            else if (EndzeitDauerStart.Enabled)
+            {
+                endzeit = EndzeitDauerStart.Value;
+                startzeit = endzeit
+                           .AddHours(-(double)EndzeitDauerStunden.Value)
+                           .AddMinutes(-(double)EndzeitDauerMinuten.Value);
+            }
+
+            string art = BookingType.SelectedItem?.ToString();
+
+            string bemerkung = txtBemerkung.Text;
+
+            int? oldId = selectedBookingIndex.HasValue
+                         ? allEntrys[selectedBookingIndex.Value].EntryID
+                         : (int?)null;
+
+            Writer.CreateOrUpdateEntry(
+                oldId,
+                startzeit,
+                endzeit,
+                art,
+                bemerkung
+            );
+
+            if (selectedBookingIndex.HasValue)
+            {
+                var idx = selectedBookingIndex.Value;
+                var k = allEntrys[idx];
+                k.CategoryID = allCategorys.Where(x => x.Description == art).Select(x => x.CategoryID).First();
+                k.Start = startzeit;
+                k.End = endzeit;
+                k.CatergoryName = art;
+                k.Comment = bemerkung;
             }
             else
             {
-                MessageBox.Show("Daten gespeichert!");
+                allEntrys.Add(new Entry
+                {
+                    CategoryID = allCategorys.Where(x => x.Description == art).Select(x => x.CategoryID).First(),
+                    Start = startzeit,
+                    End = endzeit,
+                    CatergoryName = art,
+                    Comment = bemerkung
+                });
             }
 
+            dgvEntries.Refresh();
+
+            selectedBookingIndex = null;
+            MessageBox.Show("Daten gespeichert!", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            fillDataGridView();
+            btnSpeichern.Enabled = false;
+            fillValues();
+        }
+
+
+        private void dgvEntries_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            selectedBookingIndex = e.RowIndex;
+            var entry = allEntrys[e.RowIndex];
+
+            BookingType.SelectedItem = entry.CatergoryName;
+            txtBemerkung.Text = entry.Comment;
+            rbStartzeitEndzeit.Checked = true;
+            StartzeitEndzeitStart.Value = entry.Start;
+            StartzeitEndzeitEnde.Value = entry.End;
+
+            tabControl.SelectedTab = tabEintragen;
+        }
+
+        private void btnNeuladenAuslesen_Click(object sender, EventArgs e)
+        {
+            fillDataGridView();
+        }
+
+        private void Löschen_Click(object sender, EventArgs e)
+        {
+            if (dgvEntries.SelectedRows.Count == 0)
+            {
+                MessageBox.Show(
+                    "Bitte wählen Sie mindestens einen Eintrag aus.",
+                    "Löschen",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                return;
+            }
+
+            var result = MessageBox.Show(
+                "Möchten Sie die ausgewählten Einträge wirklich löschen?",
+                "Einträge löschen",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+            if (result != DialogResult.Yes)
+                return;
+
+            var indices = dgvEntries.SelectedRows
+               .Cast<DataGridViewRow>()
+               .Select(r => r.Index)
+               .OrderByDescending(i => i)
+               .ToList();
+
+            foreach (int rowIndex in indices)
+            {
+                var entry = allEntrys[rowIndex];
+                Writer.DeleteEntry(entry.EntryID);
+
+                allEntrys.RemoveAt(rowIndex);
+            }
+
+            dgvEntries.Refresh();
+            fillValues();
+            fillDataGridView();
+        }
+
+        private void Neuladen_Click(object sender, EventArgs e)
+        {
+            fillValues();
+        }
+
+        private void BookingType_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            btnSpeichern.Enabled = true;
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            fillValues();
         }
     }
 }
