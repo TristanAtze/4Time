@@ -80,6 +80,11 @@ namespace Time4SellersApp
         }
         private void fillValues()
         {
+            DateTime My4SellersDateTime = dateTimePicker1.Value.Date;
+            VormittagLabel.Text = $"Vormittag: {allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CatergoryName == "Vormittag").Select(x => x.Duration).FirstOrDefault()}" ?? $"Vormittag: 00:00";
+            NachmittagLabel.Text = $"Nachmittag: {allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CatergoryName == "Nachmittag").Select(x => x.Duration).FirstOrDefault()}" ?? $"Nachmittag: 00:00";
+            PauseLabel.Text = $"Pause: {allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CatergoryName.Contains("ause")).Select(x => x.Duration).FirstOrDefault()}" ?? $"Pause: 00:00";
+
             btnSpeichern.Enabled = false;
             var today = DateTime.Today;
 
@@ -156,6 +161,10 @@ namespace Time4SellersApp
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             tabControl = new TabControl();
             tabUebersicht = new TabPage();
+            dateTimePicker1 = new DateTimePicker();
+            PauseLabel = new Label();
+            NachmittagLabel = new Label();
+            VormittagLabel = new Label();
             Neuladen = new Button();
             LogginName = new Label();
             loggedInAs = new Label();
@@ -237,6 +246,10 @@ namespace Time4SellersApp
             // 
             // tabUebersicht
             // 
+            tabUebersicht.Controls.Add(dateTimePicker1);
+            tabUebersicht.Controls.Add(PauseLabel);
+            tabUebersicht.Controls.Add(NachmittagLabel);
+            tabUebersicht.Controls.Add(VormittagLabel);
             tabUebersicht.Controls.Add(Neuladen);
             tabUebersicht.Controls.Add(LogginName);
             tabUebersicht.Controls.Add(loggedInAs);
@@ -260,6 +273,42 @@ namespace Time4SellersApp
             tabUebersicht.Size = new Size(466, 533);
             tabUebersicht.TabIndex = 0;
             tabUebersicht.Text = "Übersicht";
+            // 
+            // dateTimePicker1
+            // 
+            dateTimePicker1.Format = DateTimePickerFormat.Short;
+            dateTimePicker1.Location = new Point(340, 301);
+            dateTimePicker1.Name = "dateTimePicker1";
+            dateTimePicker1.Size = new Size(101, 23);
+            dateTimePicker1.TabIndex = 24;
+            dateTimePicker1.ValueChanged += dateTimePicker1_ValueChanged;
+            // 
+            // PauseLabel
+            // 
+            PauseLabel.AutoSize = true;
+            PauseLabel.Location = new Point(20, 350);
+            PauseLabel.Name = "PauseLabel";
+            PauseLabel.Size = new Size(41, 15);
+            PauseLabel.TabIndex = 23;
+            PauseLabel.Text = "Pause:";
+            // 
+            // NachmittagLabel
+            // 
+            NachmittagLabel.AutoSize = true;
+            NachmittagLabel.Location = new Point(20, 365);
+            NachmittagLabel.Name = "NachmittagLabel";
+            NachmittagLabel.Size = new Size(73, 15);
+            NachmittagLabel.TabIndex = 22;
+            NachmittagLabel.Text = "Nachmittag:";
+            // 
+            // VormittagLabel
+            // 
+            VormittagLabel.AutoSize = true;
+            VormittagLabel.Location = new Point(20, 335);
+            VormittagLabel.Name = "VormittagLabel";
+            VormittagLabel.Size = new Size(62, 15);
+            VormittagLabel.TabIndex = 21;
+            VormittagLabel.Text = "Vormittag:";
             // 
             // Neuladen
             // 
@@ -411,7 +460,7 @@ namespace Time4SellersApp
             // 
             lblMy4SellersAusgabe.AutoSize = true;
             lblMy4SellersAusgabe.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold);
-            lblMy4SellersAusgabe.Location = new Point(131, 345);
+            lblMy4SellersAusgabe.Location = new Point(20, 303);
             lblMy4SellersAusgabe.Name = "lblMy4SellersAusgabe";
             lblMy4SellersAusgabe.Size = new Size(177, 20);
             lblMy4SellersAusgabe.TabIndex = 7;
@@ -948,6 +997,11 @@ namespace Time4SellersApp
         private void BookingType_SelectionChangeCommitted(object sender, EventArgs e)
         {
             btnSpeichern.Enabled = true;
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            fillValues();
         }
     }
 }

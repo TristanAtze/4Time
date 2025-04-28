@@ -50,6 +50,10 @@
         private DataGridViewTextBoxColumn colDauer;
         private Button Löschen;
         private Button Neuladen;
+        private Label PauseLabel;
+        private Label NachmittagLabel;
+        private Label VormittagLabel;
+        private DateTimePicker dateTimePicker1;
 
         /// <summary>
         /// Erforderliche Methode für die Designerunterstützung.
