@@ -65,9 +65,20 @@ namespace _4Time.DataCore
 
         internal static (string,string,string) GetCurrentUser()
         {
+            CreateKey();
             string userName = Environment.UserName;
             string[] userNameSplitted = userName.Split(".");
-            return ($"{userNameSplitted[0]}D209135{userNameSplitted[1]}",userNameSplitted[0],userNameSplitted[1]);
+            return ($"{userNameSplitted[0]}{File.ReadAllText("Key.txt")}{userNameSplitted[1]}",userNameSplitted[0],userNameSplitted[1]);
+        }
+
+        private static void CreateKey()
+        {
+            if (File.Exists("Key.txt"))
+            {
+                return;
+            }
+            File.Create("Key.txt").Close();
+            File.WriteAllText($"{DateTime.Now}{Environment.OSVersion}{Environment.TickCount64}{Environment.TickCount64 * DateTime.Now.Millisecond}", Guid.NewGuid().ToString());
         }
 
         internal static void CloseConnection()
