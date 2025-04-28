@@ -14,6 +14,16 @@ namespace _4Time.DataCore
         internal static bool isConnected = false;
         internal static SqlConnection? connection = null;
 
+        static Connector()
+        {
+           (string, string, string) FirstLastName = GetCurrentUser();
+           FirstName = FirstLastName.Item2;
+           LastName = FirstLastName.Item3;
+        }
+
+        public static string FirstName { get; set; }
+        public static string LastName { get; set; }
+
         internal static bool IsDatabaseConnectionAvailable()
         {
             try
@@ -37,7 +47,7 @@ namespace _4Time.DataCore
         {
             if (IsDatabaseConnectionAvailable() && !isConnected)
             {
-                using var connection = new SqlConnection(ConnectionString);
+                connection = new SqlConnection(ConnectionString);
                 connection.OpenAsync();
                 Thread.Sleep(222);
                 isConnected = true;
@@ -52,6 +62,14 @@ namespace _4Time.DataCore
                 );
             }
         }
+
+        internal static (string,string,string) GetCurrentUser()
+        {
+            string userName = Environment.UserName;
+            string[] userNameSplitted = userName.Split(".");
+            return ($"{userNameSplitted[0]}D209135{userNameSplitted[1]}",userNameSplitted[0],userNameSplitted[1]);
+        }
+
         internal static void CloseConnection()
         {
             try

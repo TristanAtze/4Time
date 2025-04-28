@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,30 @@ namespace _4Time.DataCore
             var connection = new SqlConnection(ConnectionString);
             var command = new SqlCommand(query, connection);
 
-            connection.OpenAsync();
+            connection.Open();
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+
+        internal static void UserSetup()
+        {
+            //TODO Datenbank ändern!!!
+            string query = @"
+                IF(NOT EXISTS (SELECT 1 FROM [_LK_TestDB].[dbo].[User] WHERE [FirstName] = @firstName AND [LastName] = @lastName))
+                BEGIN
+                    INSERT INTO [_LK_TestDB].[dbo].[User] ([FirstName], [LastName], [IsAdmin])
+                    VALUES (@firstName, @lastName, @IsAdmin)
+                END
+            ";
+
+            var connection = new SqlConnection(ConnectionString);
+            var command = new SqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@firstName", Connector.FirstName.ToLower());
+            command.Parameters.AddWithValue("@lastName", Connector.LastName.ToLower());
+            command.Parameters.AddWithValue("@IsAdmin", false);
+
+            connection.Open();
             command.ExecuteNonQuery();
             connection.Close();
         }
@@ -26,30 +50,60 @@ namespace _4Time.DataCore
             string query = @"
                 UPDATE [dbo].[Shutdown]
                 SET [Shutdown] = 1
+            "; 
+        }
+        internal static void DeleteEntry(int entryId)
+        {
+            string query = @"
+                DELETE FROM [dbo].[Entries]
+                WHERE [EntryID] = @EntryID
             ";
-
-            var connection = new SqlConnection(ConnectionString);
-            var command = new SqlCommand(query, connection);
-
-            connection.OpenAsync();
+            using var command = new SqlCommand(query, Connector.connection);
+            command.Parameters.AddWithValue("@EntryID", entryId);
             command.ExecuteNonQuery();
-            connection.Close();
         }
 
-        internal static void CreateEntry(DateTime start, DateTime end, string categoryName, string? comment)
+        /// <summary>
+        /// Legt einen neuen Eintrag an oder updated einen vorhandenen (wenn entryId != null).
+        /// Gibt die ID des Eintrags zurück (neu angelegt oder geupdatet).
+        /// </summary>
+        internal static void CreateOrUpdateEntry(
+            int? entryId,
+            DateTime start,
+            DateTime end,
+            string categoryName,
+            string? comment)
         {
+            if (!entryId.HasValue)
+            {
+                string query = @"
+                INSERT INTO dbo.Entries (UserID, CategoryID, Start_End, Comment) VALUES (@UserID, @CategoryID, @Start_End, @Comment)
+                ";
 
+                
+                using var command = new SqlCommand(query, Connector.connection);
+                command.Parameters.AddWithValue("@UserID", Reader.GetUserDetails().UserID);
+                command.Parameters.AddWithValue("@CategoryID", Reader.GetAllCategorysDetails().Where(x => x.Description == categoryName).Select(x => x.CategoryID).First());
+                command.Parameters.AddWithValue("@Start_End", $"{start} - {end}");
+                command.Parameters.AddWithValue("@Comment", comment ?? string.Empty);
+                command.ExecuteNonQuery();
+            }
+            else if (entryId.HasValue)
+            {
+                string query = @"
+                UPDATE dbo.Entries
+                SET Start_End = @Start_End, Comment = @Comment, CategoryID = @CategoryID
+                WHERE EntryID = @EntryID
+                ";
 
-            string query = @"
-                INSERT INTO dbo.[Entries]
-                (
-                    [UserID],
-                    [CategoryID],
-                    [Start_End],
-                    [Comment],
-                    [TimeStamp],
-                ) 
-            "
+                var test = Reader.GetAllCategorysDetails().Where(x => x.Description == categoryName).Select(x => x.CategoryID).First();
+                using var command = new SqlCommand(query, Connector.connection);
+                command.Parameters.AddWithValue("@EntryID", entryId.Value);
+                command.Parameters.AddWithValue("@CategoryID", Reader.GetAllCategorysDetails().Where(x => x.Description == categoryName).Select(x => x.CategoryID).First());
+                command.Parameters.AddWithValue("@Start_End", $"{start} - {end}");
+                command.Parameters.AddWithValue("@Comment", comment ?? string.Empty);
+                command.ExecuteNonQuery();
+            }
         }
     }
 }
