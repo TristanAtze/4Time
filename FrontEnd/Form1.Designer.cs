@@ -57,6 +57,7 @@
         private DateTimePicker dateTimePickerOverview;
         private TabPage Settings;
 
+
         /// <summary>
         /// Erforderliche Methode für die Designerunterstützung.
         /// Der Inhalt der Methode darf nicht mit dem Code-Editor geändert werden.
