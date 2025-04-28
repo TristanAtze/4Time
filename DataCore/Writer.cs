@@ -41,6 +41,28 @@ namespace _4Time.DataCore
             connection.Close();
         }
 
+        internal static void UserSetup()
+        {
+            //TODO Datenbank ändern!!!
+            string query = @"
+                IF(NOT EXISTS (SELECT 1 FROM [_LK_TestDB].[dbo].[User] WHERE [FirstName] = @firstName AND [LastName] = @lastName))
+                BEGIN
+                    INSERT INTO [_LK_TestDB].[dbo].[User] ([FirstName], [LastName], [IsAdmin])
+                    VALUES (@firstName, @lastName, @IsAdmin)
+                END
+            ";
+
+            var connection = new SqlConnection(ConnectionString);
+            var command = new SqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@firstName", Connector.FirstName.ToLower());
+            command.Parameters.AddWithValue("@lastName", Connector.LastName.ToLower());
+            command.Parameters.AddWithValue("@IsAdmin", false);
+
+            connection.Open();
+            command.ExecuteNonQuery();
+        }
+
         internal static void InitiateShutdown()
         {
             string query = @"

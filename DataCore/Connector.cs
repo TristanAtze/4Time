@@ -67,7 +67,7 @@ namespace _4Time.DataCore
         {
             string userName = Environment.UserName;
             string[] userNameSplitted = userName.Split(".");
-            return ($"{userNameSplitted[0]}RimuruTempest{userNameSplitted[1]}",userNameSplitted[0],userNameSplitted[1]);
+            return ($"{userNameSplitted[0]}D209135{userNameSplitted[1]}",userNameSplitted[0],userNameSplitted[1]);
         }
 
         internal static void CloseConnection()
