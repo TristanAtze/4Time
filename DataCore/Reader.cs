@@ -18,9 +18,10 @@ namespace _4Time.DataCore
                 LastName = Connector.LastName
             };
 
+            //TODO Datenbank ändern!!!
             string query = @"
                 SELECT [UserID], [IsAdmin]
-                FROM [dbo].[User]
+                FROM [_LK_TestDB].[dbo].[User]
                 WHERE [FirstName] = @firstName AND [LastName] = @lastName
             ";
 
@@ -44,9 +45,10 @@ namespace _4Time.DataCore
         {
             List<Entry> Entrys = [];
 
+            //TODO Datenbank ändern!!!
             string query = @"
                 SELECT *
-                FROM [dbo].[Entries]
+                FROM [_LK_TestDB].[dbo].[Entries]
                 WHERE [UserID] = @UserID
             ";
 
@@ -80,9 +82,10 @@ namespace _4Time.DataCore
         {
             List<Category> categories = [];
 
+            //TODO Datenbank ändern!!!
             string query = @"
                 SELECT *
-                FROM [dbo].[Categories]
+                FROM [_LK_TestDB].[dbo].[Categories]
             ";
 
             var command = new SqlCommand(query, Connector.connection);
