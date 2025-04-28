@@ -58,6 +58,7 @@
         private TabPage Settings;
         private Label label6;
 
+
         /// <summary>
         /// Erforderliche Methode für die Designerunterstützung.
         /// Der Inhalt der Methode darf nicht mit dem Code-Editor geändert werden.

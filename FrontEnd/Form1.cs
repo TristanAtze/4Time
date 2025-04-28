@@ -10,8 +10,8 @@ namespace Time4SellersApp
     public partial class MainForm : Form
     {
         /// <summary>
-        /// Index des in dgvEntries zuletzt ausgewählten Eintrags.
-        /// null = es wurde kein bestehender Eintrag zum Bearbeiten geöffnet.
+        /// Index des in dgvEntries zuletzt ausgewÃ¤hlten Eintrags.
+        /// null = es wurde kein bestehender Eintrag zum Bearbeiten geÃ¶ffnet.
         /// </summary>
         private int? selectedBookingIndex = null;
 
@@ -20,7 +20,7 @@ namespace Time4SellersApp
         private TabPage tabEintragen;
         private TabPage tabAuslesen;
 
-        // Übersicht-Controls
+        // Ãœbersicht-Controls
         private PictureBox pictureLogoUebersicht;
         private Label lblArbeitszeitHeute;
         private Label lblPausenzeitHeute;
@@ -75,7 +75,7 @@ namespace Time4SellersApp
 
             LogginName.Text = Connector.FirstName + " " + Connector.LastName;
 
-            // Testen der Verschlüsselung
+            // Testen der VerschlÃ¼sselung
             //string encrypted = Crypto.Encrypt("Test Satz");
             //string decrypted = Crypto.Decrypt(encrypted);
         }
@@ -116,9 +116,11 @@ namespace Time4SellersApp
 
             VormittagLabel.Text = $"Vormittag:    {WorktimeVormittagStartEnd} (Interne Buchung)" ?? $"Vormittag: 00:00";
             NachmittagLabel.Text = $"Nachmittag: {WorktimeNachmittagStartEnd} (Interne Buchung)" ?? $"Nachmittag: 00:00";
-            PauseLabel.Text = $"Pause:           {WorktimePauseStartEnd} (gesetzl. Pausenzeiten für Auszubildende)" ?? $"Pause: 00:00";
+            PauseLabel.Text = $"Pause:           {WorktimePauseStartEnd} (gesetzl. Pausenzeiten fÃ¼r Auszubildende)" ?? $"Pause: 00:00";
 
             btnSpeichern.Enabled = false;
+            
+            var today = dateTimePickerOverview.Value.Date;
 
             var today = dateTimePickerOverview.Value.Date;
             int diff = (7 + (today.DayOfWeek - DayOfWeek.Monday)) % 7;
@@ -153,12 +155,12 @@ namespace Time4SellersApp
             TimeSpan overtimeToday = workToday - TimeSpan.FromHours(8);
             TimeSpan overtimeWeek = workWeek - TimeSpan.FromHours(40);
 
-            PTToday.Text = $"{pauseToday:hh\\:mm} std";
-            PTWeek.Text = $"{pauseWeek:hh\\:mm} std";
-            WTToday.Text = $"{workToday:hh\\:mm} std";
-            WTWeek.Text = $"{workWeek:hh\\:mm} std";
-            OTToday.Text = $"{(overtimeToday > TimeSpan.Zero ? overtimeToday : TimeSpan.Zero):hh\\:mm} std";
-            OTWeek.Text = $"{(overtimeWeek > TimeSpan.Zero ? overtimeWeek : TimeSpan.Zero):hh\\:mm} std";
+            PTToday.Text = $"{pauseToday:hh\\:mm}Â std";
+            PTWeek.Text = $"{pauseWeek:hh\\:mm}Â std";
+            WTToday.Text = $"{workToday:hh\\:mm}Â std";
+            WTWeek.Text = $"{workWeek:hh\\:mm}Â std";
+            OTToday.Text = $"{(overtimeToday > TimeSpan.Zero ? overtimeToday : TimeSpan.Zero):hh\\:mm}Â std";
+            OTWeek.Text = $"{(overtimeWeek > TimeSpan.Zero ? overtimeWeek : TimeSpan.Zero):hh\\:mm}Â std";
         }
 
 
@@ -242,7 +244,7 @@ namespace Time4SellersApp
             btnSpeichern = new Button();
             btnSettingsEintragen = new Button();
             tabAuslesen = new TabPage();
-            Löschen = new Button();
+            LÃ¶schen = new Button();
             pictureBox1 = new PictureBox();
             btnSettingsAuslesen = new Button();
             btnNeuladenAuslesen = new Button();
@@ -311,7 +313,7 @@ namespace Time4SellersApp
             tabUebersicht.Name = "tabUebersicht";
             tabUebersicht.Size = new Size(466, 533);
             tabUebersicht.TabIndex = 0;
-            tabUebersicht.Text = "Übersicht";
+            tabUebersicht.Text = "Ãœbersicht";
             // 
             // dateTimePickerOverview
             // 
@@ -477,7 +479,7 @@ namespace Time4SellersApp
             lblUeberstundenHeute.Name = "lblUeberstundenHeute";
             lblUeberstundenHeute.Size = new Size(111, 15);
             lblUeberstundenHeute.TabIndex = 3;
-            lblUeberstundenHeute.Text = "Überstunden heute:";
+            lblUeberstundenHeute.Text = "Ãœberstunden heute:";
             // 
             // lblArbeitszeitWoche
             // 
@@ -504,7 +506,7 @@ namespace Time4SellersApp
             lblUeberstundenWoche.Name = "lblUeberstundenWoche";
             lblUeberstundenWoche.Size = new Size(118, 15);
             lblUeberstundenWoche.TabIndex = 6;
-            lblUeberstundenWoche.Text = "Überstunden Woche:";
+            lblUeberstundenWoche.Text = "Ãœberstunden Woche:";
             // 
             // lblMy4SellersAusgabe
             // 
@@ -730,7 +732,7 @@ namespace Time4SellersApp
             lblInfoEintragen.Name = "lblInfoEintragen";
             lblInfoEintragen.Size = new Size(329, 15);
             lblInfoEintragen.TabIndex = 4;
-            lblInfoEintragen.Text = "Info: Es kann nur eine von den drei Optionen gewählt werden";
+            lblInfoEintragen.Text = "Info: Es kann nur eine von den drei Optionen gewÃ¤hlt werden";
             // 
             // lblBemerkung
             // 
@@ -768,7 +770,7 @@ namespace Time4SellersApp
             // 
             // tabAuslesen
             // 
-            tabAuslesen.Controls.Add(Löschen);
+            tabAuslesen.Controls.Add(LÃ¶schen);
             tabAuslesen.Controls.Add(pictureBox1);
             tabAuslesen.Controls.Add(btnSettingsAuslesen);
             tabAuslesen.Controls.Add(btnNeuladenAuslesen);
@@ -779,14 +781,14 @@ namespace Time4SellersApp
             tabAuslesen.TabIndex = 2;
             tabAuslesen.Text = "Auslesen";
             // 
-            // Löschen
+            // LÃ¶schen
             // 
-            Löschen.Location = new Point(190, 500);
-            Löschen.Name = "Löschen";
-            Löschen.Size = new Size(100, 30);
-            Löschen.TabIndex = 5;
-            Löschen.Text = "Löschen";
-            Löschen.Click += Löschen_Click;
+            LÃ¶schen.Location = new Point(190, 500);
+            LÃ¶schen.Name = "LÃ¶schen";
+            LÃ¶schen.Size = new Size(100, 30);
+            LÃ¶schen.TabIndex = 5;
+            LÃ¶schen.Text = "LÃ¶schen";
+            LÃ¶schen.Click += LÃ¶schen_Click;
             // 
             // pictureBox1
             // 
@@ -1034,13 +1036,13 @@ namespace Time4SellersApp
             fillDataGridView();
         }
 
-        private void Löschen_Click(object sender, EventArgs e)
+        private void LÃ¶schen_Click(object sender, EventArgs e)
         {
             if (dgvEntries.SelectedRows.Count == 0)
             {
                 MessageBox.Show(
-                    "Bitte wählen Sie mindestens einen Eintrag aus.",
-                    "Löschen",
+                    "Bitte wÃ¤hlen Sie mindestens einen Eintrag aus.",
+                    "LÃ¶schen",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning
                 );
@@ -1048,8 +1050,8 @@ namespace Time4SellersApp
             }
 
             var result = MessageBox.Show(
-                "Möchten Sie den ausgewählten Eintrag wirklich löschen?",
-                "Einträge löschen",
+                "MÃ¶chten Sie den ausgewÃ¤hlten Eintrag wirklich lÃ¶schen?",
+                "EintrÃ¤ge lÃ¶schen",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question
             );
