@@ -54,6 +54,7 @@
         private Label NachmittagLabel;
         private Label VormittagLabel;
         private DateTimePicker dateTimePicker1;
+        private DateTimePicker dateTimePickerOverview;
 
         /// <summary>
         /// Erforderliche Methode für die Designerunterstützung.
