@@ -118,7 +118,8 @@ namespace Time4SellersApp
             PauseLabel.Text = $"Pause:           {WorktimePauseStartEnd} (gesetzl. Pausenzeiten für Auszubildende)" ?? $"Pause: 00:00";
 
             btnSpeichern.Enabled = false;
-            var today = DateTime.Today;
+
+            var today = dateTimePickerOverview.Value.Date;
 
             int diff = (7 + (today.DayOfWeek - DayOfWeek.Monday)) % 7;
             var weekStart = today.AddDays(-diff);
@@ -193,6 +194,7 @@ namespace Time4SellersApp
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             tabControl = new TabControl();
             tabUebersicht = new TabPage();
+            dateTimePickerOverview = new DateTimePicker();
             dateTimePicker1 = new DateTimePicker();
             PauseLabel = new Label();
             NachmittagLabel = new Label();
@@ -278,6 +280,7 @@ namespace Time4SellersApp
             // 
             // tabUebersicht
             // 
+            tabUebersicht.Controls.Add(dateTimePickerOverview);
             tabUebersicht.Controls.Add(dateTimePicker1);
             tabUebersicht.Controls.Add(PauseLabel);
             tabUebersicht.Controls.Add(NachmittagLabel);
@@ -306,10 +309,19 @@ namespace Time4SellersApp
             tabUebersicht.TabIndex = 0;
             tabUebersicht.Text = "Übersicht";
             // 
+            // dateTimePickerOverview
+            // 
+            dateTimePickerOverview.Format = DateTimePickerFormat.Short;
+            dateTimePickerOverview.Location = new Point(20, 152);
+            dateTimePickerOverview.Name = "dateTimePickerOverview";
+            dateTimePickerOverview.Size = new Size(101, 23);
+            dateTimePickerOverview.TabIndex = 25;
+            dateTimePickerOverview.Value = new DateTime(2025, 4, 28, 0, 0, 0, 0);
+            // 
             // dateTimePicker1
             // 
             dateTimePicker1.Format = DateTimePickerFormat.Short;
-            dateTimePicker1.Location = new Point(340, 301);
+            dateTimePicker1.Location = new Point(338, 371);
             dateTimePicker1.Name = "dateTimePicker1";
             dateTimePicker1.Size = new Size(101, 23);
             dateTimePicker1.TabIndex = 24;
@@ -319,7 +331,7 @@ namespace Time4SellersApp
             // PauseLabel
             // 
             PauseLabel.AutoSize = true;
-            PauseLabel.Location = new Point(20, 363);
+            PauseLabel.Location = new Point(18, 433);
             PauseLabel.Name = "PauseLabel";
             PauseLabel.Size = new Size(41, 15);
             PauseLabel.TabIndex = 23;
@@ -328,7 +340,7 @@ namespace Time4SellersApp
             // NachmittagLabel
             // 
             NachmittagLabel.AutoSize = true;
-            NachmittagLabel.Location = new Point(20, 393);
+            NachmittagLabel.Location = new Point(18, 463);
             NachmittagLabel.Name = "NachmittagLabel";
             NachmittagLabel.Size = new Size(73, 15);
             NachmittagLabel.TabIndex = 22;
@@ -337,7 +349,7 @@ namespace Time4SellersApp
             // VormittagLabel
             // 
             VormittagLabel.AutoSize = true;
-            VormittagLabel.Location = new Point(20, 335);
+            VormittagLabel.Location = new Point(18, 405);
             VormittagLabel.Name = "VormittagLabel";
             VormittagLabel.Size = new Size(62, 15);
             VormittagLabel.TabIndex = 21;
@@ -355,7 +367,7 @@ namespace Time4SellersApp
             // LogginName
             // 
             LogginName.AutoSize = true;
-            LogginName.Location = new Point(110, 240);
+            LogginName.Location = new Point(108, 274);
             LogginName.Name = "LogginName";
             LogginName.Size = new Size(76, 15);
             LogginName.TabIndex = 19;
@@ -364,7 +376,7 @@ namespace Time4SellersApp
             // loggedInAs
             // 
             loggedInAs.AutoSize = true;
-            loggedInAs.Location = new Point(20, 240);
+            loggedInAs.Location = new Point(18, 274);
             loggedInAs.Name = "loggedInAs";
             loggedInAs.Size = new Size(84, 15);
             loggedInAs.TabIndex = 18;
@@ -373,7 +385,7 @@ namespace Time4SellersApp
             // OTWeek
             // 
             OTWeek.AutoSize = true;
-            OTWeek.Location = new Point(392, 215);
+            OTWeek.Location = new Point(390, 249);
             OTWeek.Name = "OTWeek";
             OTWeek.Size = new Size(50, 15);
             OTWeek.TabIndex = 17;
@@ -382,7 +394,7 @@ namespace Time4SellersApp
             // PTWeek
             // 
             PTWeek.AutoSize = true;
-            PTWeek.Location = new Point(392, 185);
+            PTWeek.Location = new Point(390, 219);
             PTWeek.Name = "PTWeek";
             PTWeek.Size = new Size(49, 15);
             PTWeek.TabIndex = 16;
@@ -391,7 +403,7 @@ namespace Time4SellersApp
             // OTToday
             // 
             OTToday.AutoSize = true;
-            OTToday.Location = new Point(131, 215);
+            OTToday.Location = new Point(129, 249);
             OTToday.Name = "OTToday";
             OTToday.Size = new Size(52, 15);
             OTToday.TabIndex = 15;
@@ -400,7 +412,7 @@ namespace Time4SellersApp
             // PTToday
             // 
             PTToday.AutoSize = true;
-            PTToday.Location = new Point(131, 185);
+            PTToday.Location = new Point(129, 219);
             PTToday.Name = "PTToday";
             PTToday.Size = new Size(51, 15);
             PTToday.TabIndex = 14;
@@ -409,7 +421,7 @@ namespace Time4SellersApp
             // WTWeek
             // 
             WTWeek.AutoSize = true;
-            WTWeek.Location = new Point(392, 157);
+            WTWeek.Location = new Point(390, 191);
             WTWeek.Name = "WTWeek";
             WTWeek.Size = new Size(53, 15);
             WTWeek.TabIndex = 13;
@@ -418,7 +430,7 @@ namespace Time4SellersApp
             // WTToday
             // 
             WTToday.AutoSize = true;
-            WTToday.Location = new Point(131, 157);
+            WTToday.Location = new Point(129, 191);
             WTToday.Name = "WTToday";
             WTToday.Size = new Size(55, 15);
             WTToday.TabIndex = 12;
@@ -438,7 +450,7 @@ namespace Time4SellersApp
             // lblArbeitszeitHeute
             // 
             lblArbeitszeitHeute.AutoSize = true;
-            lblArbeitszeitHeute.Location = new Point(20, 157);
+            lblArbeitszeitHeute.Location = new Point(18, 191);
             lblArbeitszeitHeute.Name = "lblArbeitszeitHeute";
             lblArbeitszeitHeute.Size = new Size(98, 15);
             lblArbeitszeitHeute.TabIndex = 1;
@@ -447,7 +459,7 @@ namespace Time4SellersApp
             // lblPausenzeitHeute
             // 
             lblPausenzeitHeute.AutoSize = true;
-            lblPausenzeitHeute.Location = new Point(20, 185);
+            lblPausenzeitHeute.Location = new Point(18, 219);
             lblPausenzeitHeute.Name = "lblPausenzeitHeute";
             lblPausenzeitHeute.Size = new Size(99, 15);
             lblPausenzeitHeute.TabIndex = 2;
@@ -456,7 +468,7 @@ namespace Time4SellersApp
             // lblUeberstundenHeute
             // 
             lblUeberstundenHeute.AutoSize = true;
-            lblUeberstundenHeute.Location = new Point(20, 215);
+            lblUeberstundenHeute.Location = new Point(18, 249);
             lblUeberstundenHeute.Name = "lblUeberstundenHeute";
             lblUeberstundenHeute.Size = new Size(111, 15);
             lblUeberstundenHeute.TabIndex = 3;
@@ -465,7 +477,7 @@ namespace Time4SellersApp
             // lblArbeitszeitWoche
             // 
             lblArbeitszeitWoche.AutoSize = true;
-            lblArbeitszeitWoche.Location = new Point(268, 157);
+            lblArbeitszeitWoche.Location = new Point(266, 191);
             lblArbeitszeitWoche.Name = "lblArbeitszeitWoche";
             lblArbeitszeitWoche.Size = new Size(105, 15);
             lblArbeitszeitWoche.TabIndex = 4;
@@ -474,7 +486,7 @@ namespace Time4SellersApp
             // lblPausenzeitWoche
             // 
             lblPausenzeitWoche.AutoSize = true;
-            lblPausenzeitWoche.Location = new Point(268, 185);
+            lblPausenzeitWoche.Location = new Point(266, 219);
             lblPausenzeitWoche.Name = "lblPausenzeitWoche";
             lblPausenzeitWoche.Size = new Size(106, 15);
             lblPausenzeitWoche.TabIndex = 5;
@@ -483,7 +495,7 @@ namespace Time4SellersApp
             // lblUeberstundenWoche
             // 
             lblUeberstundenWoche.AutoSize = true;
-            lblUeberstundenWoche.Location = new Point(268, 215);
+            lblUeberstundenWoche.Location = new Point(266, 249);
             lblUeberstundenWoche.Name = "lblUeberstundenWoche";
             lblUeberstundenWoche.Size = new Size(118, 15);
             lblUeberstundenWoche.TabIndex = 6;
@@ -493,7 +505,7 @@ namespace Time4SellersApp
             // 
             lblMy4SellersAusgabe.AutoSize = true;
             lblMy4SellersAusgabe.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold);
-            lblMy4SellersAusgabe.Location = new Point(20, 303);
+            lblMy4SellersAusgabe.Location = new Point(18, 373);
             lblMy4SellersAusgabe.Name = "lblMy4SellersAusgabe";
             lblMy4SellersAusgabe.Size = new Size(177, 20);
             lblMy4SellersAusgabe.TabIndex = 7;
