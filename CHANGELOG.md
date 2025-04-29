@@ -1,4 +1,4 @@
-﻿- Added Autostart
+- Added Autostart
 - Added Version Controll
 - Added AutoUpdater
 - Fixed an Bug where the datetimepickers on the Überischt Page had the standart value of 20.04.2025. Now Changed to the current Date 
