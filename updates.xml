@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<item>
+  <version>2.0.0.0</version>        <!-- Pflicht: Version im X.X.X.X-Format -->
+  <url>https://example.com/MyApp.zip</url>       <!-- Pflicht: Download-URL -->
+  <changelog>https://example.com/changelog.html</changelog> <!-- Optional -->
+  <mandatory>false</mandatory>    <!-- Optional: true = kein Überspringen erlaubt -->
+  <releaseNotes>https://example.com/release-notes.md</releaseNotes> <!-- Optional -->
+  <hash>SHA256-Hash-der-Datei</hash> <!-- Optional: Integritätsprüfung -->
+</item>
