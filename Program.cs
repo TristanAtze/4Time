@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics;
 using System.IO.Packaging;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace Time4SellersApp
 {
@@ -38,11 +39,16 @@ namespace Time4SellersApp
             }
         }
 
+
         static void Updater()
         {
+            // Titel & Buttons nach Wunsch
+            AutoUpdater.AppTitle = "4Time";
             AutoUpdater.ShowRemindLaterButton = true;
-            AutoUpdater.UpdateMode = Mode.Forced; // oder Mode.Normal
-            AutoUpdater.ShowSkipButton = true;
+            AutoUpdater.ShowSkipButton = false;
+            AutoUpdater.ReportErrors = true;
+
+            // hier die URL zu deiner Pages-XML
             AutoUpdater.Start("https://tristanatze.github.io/4Time/updates.xml");
         }
 
