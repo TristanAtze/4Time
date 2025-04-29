@@ -36,10 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DataCore\Services\" />
     <Folder Include="Properties\PublishProfiles\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="FrontEnd\Form1Files\Components.cs" />
   </ItemGroup>
 </Project>
