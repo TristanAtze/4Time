@@ -73,7 +73,8 @@ namespace _4Time.DataCore
 
         private static void CreateKey()
         {
-            if (File.Exists("Key.txt"))
+            string? keyContent = File.ReadAllText("Key.txt");
+            if (File.Exists("Key.txt") || keyContent != "")
             {
                 return;
             }
