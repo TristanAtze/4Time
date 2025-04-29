@@ -1,7 +1,7 @@
 <item>
 <version>2.0.0.0</version>
 <!--  Pflicht: Version im X.X.X.X-Format  -->
-<url>https://github.com/TristanAtze/4Time/archive/refs/tags/v1.0.0.1.zip</url>
+<url>https://tristanatze.github.io/4Time/archive/refs/tags/v1.0.0.1.zip</url>
 <!--  Pflicht: Download-URL  -->
 <mandatory>false</mandatory>
 <!--  Optional: true = kein Überspringen erlaubt  -->
