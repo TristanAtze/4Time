@@ -263,7 +263,7 @@ namespace Time4SellersApp
             colKommentar = new DataGridViewTextBoxColumn();
             colDauer = new DataGridViewTextBoxColumn();
             Settings = new TabPage();
-            this.label6 = new Label();
+            label6 = new Label();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureLogoUebersicht).BeginInit();
@@ -740,7 +740,7 @@ namespace Time4SellersApp
             lblInfoEintragen.Name = "lblInfoEintragen";
             lblInfoEintragen.Size = new Size(329, 15);
             lblInfoEintragen.TabIndex = 4;
-            lblInfoEintragen.Text = "Info: Es kann nur eine von den drei Optionen gewählt werden";
+            lblInfoEintragen.Text = "Info: Es kann nur eine von der drei Optionen gewählt werden.";
             // 
             // lblBemerkung
             // 
@@ -868,7 +868,7 @@ namespace Time4SellersApp
             // 
             // Settings
             // 
-            Settings.Controls.Add(this.label6);
+            Settings.Controls.Add(label6);
             Settings.Location = new Point(4, 24);
             Settings.Name = "Settings";
             Settings.Padding = new Padding(3);
@@ -879,20 +879,19 @@ namespace Time4SellersApp
             // 
             // label6
             // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new Font("Segoe UI", 42F);
-            this.label6.Location = new Point(-3, 226);
-            this.label6.Name = "label6";
-            this.label6.Size = new Size(473, 74);
-            this.label6.TabIndex = 0;
-            this.label6.Text = "COMMING SOON";
+            label6.AutoSize = true;
+            label6.Font = new Font("Segoe UI", 42F);
+            label6.Location = new Point(-3, 226);
+            label6.Name = "label6";
+            label6.Size = new Size(473, 74);
+            label6.TabIndex = 0;
+            label6.Text = "COMMING SOON";
             // 
             // MainForm
             // 
             ClientSize = new Size(474, 561);
             Controls.Add(tabControl);
             MaximizeBox = false;
-            MinimizeBox = false;
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "4TIME";
