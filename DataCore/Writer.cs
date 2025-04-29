@@ -1,4 +1,6 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using _4Time.DataCore.Models;
+using Microsoft.Data.SqlClient;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +12,13 @@ namespace _4Time.DataCore
 {
     internal class Writer : Connector
     {
+        private static readonly Dictionary<Type, string[]> UNSETTABLE_COLUMNS = new()
+        {
+            {typeof(User), ["UserID"] },
+            {typeof(Entry), ["EntryID", "TimeStamp"] },
+            {typeof(Category), ["CategoryID"] },
+        };
+
         internal static void DatabaseSetup()
         {
             string query = File.ReadAllText("Setup.txt");
@@ -45,13 +54,53 @@ namespace _4Time.DataCore
             connection.Close();
         }
 
-        internal static void InitiateShutdown()
+        internal static void Insert(string table, object obj)
         {
+            Dictionary<string,object?> columns = [];
+
+            //Alle Spalten ermitteln
             //TODO Datenbank ändern!!!
-            string query = @"
-                UPDATE [_LK_TestDB].[dbo].[Shutdown]
-                SET [Shutdown] = 1
-            ";
+            string schemaQuery = $"SELECT COLUMN_NAME FROM [_LK_TestDB].INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}'";
+            var schemaConnection = new SqlConnection(ConnectionString);
+            var schemaCommand = new SqlCommand(schemaQuery, schemaConnection);
+
+            schemaConnection.Open();
+            var schemaReader = schemaCommand.ExecuteReader();
+
+            while(schemaReader.Read())
+            {
+                if (!UNSETTABLE_COLUMNS[obj.GetType()].Contains(schemaReader.GetString(0)))
+                    columns.Add(schemaReader.GetString(0), null);
+            }
+            schemaConnection.Close();
+
+            //Spalten mit Werten füllen
+            foreach (var prop in obj.GetType().GetProperties())
+            {
+                if (columns.ContainsKey(prop.Name))
+                {
+                    columns[prop.Name] = prop.GetValue(obj);
+                }
+            }
+
+            //INSERT-Statement erstellen
+            string query = $"INSERT INTO [_LK_TestDB].[dbo].[{table}] ";
+
+            if(columns.Count > 0)
+            {
+                if (columns.ContainsKey("Start_End") && obj.GetType() == typeof(Entry))
+                {
+                    Entry entry = (Entry)obj;
+                    columns["Start_End"] = Crypto.Encrypt(entry.Start.ToString()) + " - " + Crypto.Encrypt(entry.End.ToString());
+                }
+
+                query += "(" + string.Join(", ", columns.Keys) + ") VALUES (";
+                query += string.Join(", ", columns.Values.Select(v => v == null ? "NULL" : $"'{v}'")) + ")";
+            }
+            else
+            {
+                query += "DEFAULT VALUES";
+            }
 
             var connection = new SqlConnection(ConnectionString);
             var command = new SqlCommand(query, connection);
@@ -61,16 +110,74 @@ namespace _4Time.DataCore
             connection.Close();
         }
 
-        internal static void DeleteEntry(int entryId)
+        internal static void Update(string table, object obj, string[] condition)
         {
+            Dictionary<string, object?> columns = [];
+            //Alle Spalten ermitteln
             //TODO Datenbank ändern!!!
-            string query = @"
-                DELETE FROM [_LK_TestDB].[dbo].[Entries]
-                WHERE [EntryID] = @EntryID
-            ";
-            using var command = new SqlCommand(query, Connector.connection);
-            command.Parameters.AddWithValue("@EntryID", entryId);
+            string schemaQuery = $"SELECT COLUMN_NAME FROM [_LK_TestDB].INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}'";
+            var schemaConnection = new SqlConnection(ConnectionString);
+
+            using (var schemaCommand = new SqlCommand(schemaQuery, schemaConnection))
+            {
+                schemaConnection.Open();
+                var schemaReader = schemaCommand.ExecuteReader();
+                while (schemaReader.Read())
+                {
+                    if (!UNSETTABLE_COLUMNS[obj.GetType()].Contains(schemaReader.GetString(0)))
+                    {
+                        columns.Add(schemaReader.GetString(0), null);
+                    }
+                }
+                schemaConnection.Close();
+            };
+
+            //Spalten mit Werten füllen
+            foreach (var prop in obj.GetType().GetProperties())
+            {
+                if (columns.ContainsKey(prop.Name))
+                {
+                    columns[prop.Name] = prop.GetValue(obj);
+                }
+            }
+            //UPDATE-Statement erstellen
+            string query = "";
+            if (columns.Count > 0)
+            {
+                if(columns.ContainsKey("Start_End") && obj.GetType() == typeof(Entry))
+                {
+                    Entry entry = (Entry) obj;
+                    columns["Start_End"] = Crypto.Encrypt(entry.Start.ToString()) + " - " + Crypto.Encrypt(entry.End.ToString());
+                }
+
+                query = $"UPDATE [_LK_TestDB].[dbo].[{table}] SET ";
+                query += string.Join(", ", columns.Select(kvp => $"{kvp.Key} = {(kvp.Value == null ? "NULL" : $"'{kvp.Value}'")}"));
+                query += $" WHERE ";
+                query += string.Join(" AND ", condition);
+            }
+
+            var connection = new SqlConnection(ConnectionString);
+            var command = new SqlCommand(query, connection);
+            connection.Open();
             command.ExecuteNonQuery();
+            connection.Close();
+        }
+
+        internal static void Delete(string table, params string[] conditions)
+        {
+            string query = $"DELETE FROM [_LK_TestDB].[dbo].[{table}]";
+
+            if (conditions.Length > 0)
+            {
+                query += " WHERE " + string.Join(" AND ", conditions);
+            }
+
+            var connection = new SqlConnection(ConnectionString);
+            var command = new SqlCommand(query, connection);
+
+            connection.Open();
+            command.ExecuteNonQuery();
+            connection.Close();
         }
 
         /// <summary>
@@ -91,10 +198,23 @@ namespace _4Time.DataCore
                 INSERT INTO [_LK_TestDB].[dbo].[Entries] (UserID, CategoryID, Start_End, Comment) VALUES (@UserID, @CategoryID, @Start_End, @Comment)
                 ";
 
-                
+
                 using var command = new SqlCommand(query, Connector.connection);
-                command.Parameters.AddWithValue("@UserID", Reader.GetUserDetails().UserID);
-                command.Parameters.AddWithValue("@CategoryID", Reader.GetAllCategorysDetails().Where(x => x.Description == categoryName).Select(x => x.CategoryID).First());
+                command.Parameters.AddWithValue("@UserID", Reader.Read<User>("User",
+                [
+                    "[UserID]"
+                ],
+                [
+                    $"[FirstName] = '{FirstName}'",
+                    $"[LastName] = '{LastName}'"
+                ]).First().UserID);
+                command.Parameters.AddWithValue("@CategoryID", Reader.Read<Category>("Categories",
+                [
+                    "[CategoryID]"
+                ],
+                [
+                    $"[Description] = '{categoryName}'"
+                ]).First().CategoryID);
                 command.Parameters.AddWithValue("@Start_End", $"{Crypto.Encrypt(start.ToString())} - {Crypto.Encrypt(end.ToString())}");
                 command.Parameters.AddWithValue("@Comment", comment ?? string.Empty);
                 command.ExecuteNonQuery();
@@ -108,10 +228,15 @@ namespace _4Time.DataCore
                 WHERE EntryID = @EntryID
                 ";
 
-                var test = Reader.GetAllCategorysDetails().Where(x => x.Description == categoryName).Select(x => x.CategoryID).First();
                 using var command = new SqlCommand(query, Connector.connection);
                 command.Parameters.AddWithValue("@EntryID", entryId.Value);
-                command.Parameters.AddWithValue("@CategoryID", Reader.GetAllCategorysDetails().Where(x => x.Description == categoryName).Select(x => x.CategoryID).First());
+                command.Parameters.AddWithValue("@CategoryID", Reader.Read<Category>("Categories",
+                [
+                    "[CategoryID]"
+                ],
+                [
+                    $"[Description] = '{categoryName}'"
+                ]).First());
                 command.Parameters.AddWithValue("@Start_End", $"{start} - {end}");
                 command.Parameters.AddWithValue("@Comment", comment ?? string.Empty);
                 command.ExecuteNonQuery();

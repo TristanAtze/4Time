@@ -11,7 +11,7 @@ namespace _4Time.DataCore.Models
         public int EntryID { get; set; }
         public int UserID { get; set; }
         public int CategoryID { get; set; }
-        public string CatergoryName { get; set; } = string.Empty;
+        public string CategoryName { get; set; } = string.Empty;
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public string? Comment { get; set; }

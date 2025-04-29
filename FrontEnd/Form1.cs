@@ -43,7 +43,7 @@ namespace Time4SellersApp
         private System.Windows.Forms.DataGridView dgvEntries;
         private List<Entry> allEntrys = [];
         private List<Category> allCategorys = [];
-        private System.Timers.Timer timer = new System.Timers.Timer();
+        private System.Timers.Timer timer;
 
 
         public MainForm()
@@ -53,8 +53,18 @@ namespace Time4SellersApp
             {
                 Thread.Sleep(222);
             }
-            allCategorys = Reader.GetAllCategorysDetails();
-            allEntrys = Reader.GetAllEntrysOfUser();
+            allCategorys = Reader.Read<Category>("Categories");
+            allEntrys = Reader.Read<Entry>("Entries", null,
+            [
+                $"[UserID] = {Reader.Read<User>("User",
+                [
+                    "[UserID]"
+                ],
+                [
+                    $"[FirstName] = '{Connector.FirstName}'",
+                    $"[LastName] = '{Connector.LastName}'"    
+                ]).First().UserID}",
+            ]);
             InitializeComponent();
             MaximumSize = Size;
             MinimumSize = Size;
@@ -88,7 +98,7 @@ namespace Time4SellersApp
 
 
             //Vormittag
-            List<Entry> WorktimeVormittag = [.. allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CatergoryName == "Vormittag")];
+            List<Entry> WorktimeVormittag = [.. allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CategoryName == "Vormittag")];
             var FirstEntryVormittag = WorktimeVormittag.Where(x => x.Start.Date == My4SellersDateTime).OrderBy(x => x.Start).FirstOrDefault();
 
             TimeSpan VormittagTimeSpan = TimeSpan.Zero;
@@ -99,7 +109,7 @@ namespace Time4SellersApp
             var WorktimeVormittagStartEnd = $"{FirstEntryVormittag?.Start.ToShortTimeString()} - {FirstEntryVormittag?.Start.Add(VormittagTimeSpan).ToShortTimeString()}";
 
             //Pause
-            List<Entry> WorktimePause = [.. allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CatergoryName.Contains("ause"))];
+            List<Entry> WorktimePause = [.. allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CategoryName.Contains("ause"))];
             var FirstEntryPause = WorktimePause.Where(x => x.Start.Date == My4SellersDateTime).OrderBy(x => x.Start).FirstOrDefault();
             TimeSpan PauseTimeSpan = TimeSpan.Zero;
             foreach (var l in WorktimePause)
@@ -109,7 +119,7 @@ namespace Time4SellersApp
             var WorktimePauseStartEnd = $"{FirstEntryPause?.Start.ToShortTimeString()} - {FirstEntryPause?.Start.Add(PauseTimeSpan).ToShortTimeString()}";
 
             //Nachmittag
-            List<Entry> WorktimeNachmittag = [.. allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CatergoryName == "Nachmittag")];
+            List<Entry> WorktimeNachmittag = [.. allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CategoryName == "Nachmittag")];
             var FirstEntryNachmittag = WorktimeNachmittag.Where(x => x.Start.Date == My4SellersDateTime).OrderBy(x => x.Start).FirstOrDefault();
             TimeSpan NachmittagTimeSpan = TimeSpan.Zero;
             foreach (var l in WorktimeNachmittag)
@@ -174,9 +184,9 @@ namespace Time4SellersApp
 
             foreach (var entry in allEntrys)
             {
-                if (entry.CatergoryName == "")
+                if (entry.CategoryName == "")
                 {
-                    entry.CatergoryName = allCategorys
+                    entry.CategoryName = allCategorys
                         .First(x => x.CategoryID == entry.CategoryID)
                         ?.Description;
                 }
@@ -186,7 +196,7 @@ namespace Time4SellersApp
                 dgvEntries.Rows.Add(
                     entry.Start.ToString("g"),    // Start
                     entry.End.ToString("g"),      // Ende
-                    entry.CatergoryName,          // Art
+                    entry.CategoryName,          // Art
                     entry.Comment,                // Kommentar
                     dauer                         // Dauer
                 );
@@ -952,7 +962,6 @@ namespace Time4SellersApp
             {
                 startzeit = StartzeitEndzeitStart.Value;
                 endzeit = StartzeitEndzeitEnde.Value;
-                StartzeitEndzeitStart.Text = endzeit.ToString();
             }
             else if (StartzeitDauerStart.Enabled)
             {
@@ -960,7 +969,6 @@ namespace Time4SellersApp
                 endzeit = startzeit
                            .AddHours((double)StartzeitDauerStunden.Value)
                            .AddMinutes((double)StartzeitDauerMinuten.Value);
-                StartzeitEndzeitStart.Text = endzeit.ToString();
             }
             else if (EndzeitDauerStart.Enabled)
             {
@@ -969,6 +977,9 @@ namespace Time4SellersApp
                            .AddHours(-(double)EndzeitDauerStunden.Value)
                            .AddMinutes(-(double)EndzeitDauerMinuten.Value);
             }
+            StartzeitEndzeitStart.Text = endzeit.ToString();
+            StartzeitDauerStart.Text = endzeit.ToString();
+            EndzeitDauerStart.Text = endzeit.ToString();
 
             string art = BookingType.SelectedItem?.ToString();
 
@@ -978,13 +989,24 @@ namespace Time4SellersApp
                          ? allEntrys[selectedBookingIndex.Value].EntryID
                          : (int?)null;
 
-            Writer.CreateOrUpdateEntry(
-                oldId,
-                startzeit,
-                endzeit,
-                art,
-                bemerkung
-            );
+            Entry entry = new()
+            {
+                EntryID = 0,
+                Start = startzeit,
+                End = endzeit,
+                CategoryName = art,
+                Comment = bemerkung,
+                UserID = Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).First().UserID,
+            };
+            entry.CategoryID = Reader.Read<Category>("Categories", ["[CategoryID]"], [$"[Description] = '{entry.CategoryName}'"]).First().CategoryID;
+
+            if (oldId.HasValue)
+            {
+                entry.EntryID = oldId.Value;
+                Writer.Update("Entries", entry, [$"[EntryID] = {entry.EntryID}"]);
+            }
+            else
+                Writer.Insert("Entries", entry);
 
             if (selectedBookingIndex.HasValue)
             {
@@ -993,7 +1015,7 @@ namespace Time4SellersApp
                 k.CategoryID = allCategorys.Where(x => x.Description == art).Select(x => x.CategoryID).First();
                 k.Start = startzeit;
                 k.End = endzeit;
-                k.CatergoryName = art;
+                k.CategoryName = art;
                 k.Comment = bemerkung;
             }
             else
@@ -1003,7 +1025,7 @@ namespace Time4SellersApp
                     CategoryID = allCategorys.Where(x => x.Description == art).Select(x => x.CategoryID).First(),
                     Start = startzeit,
                     End = endzeit,
-                    CatergoryName = art,
+                    CategoryName = art,
                     Comment = bemerkung
                 });
             }
@@ -1024,7 +1046,7 @@ namespace Time4SellersApp
             selectedBookingIndex = e.RowIndex;
             var entry = allEntrys[e.RowIndex];
 
-            BookingType.SelectedItem = entry.CatergoryName;
+            BookingType.SelectedItem = entry.CategoryName;
             txtBemerkung.Text = entry.Comment;
             rbStartzeitEndzeit.Checked = true;
             StartzeitEndzeitStart.Value = entry.Start;
@@ -1069,7 +1091,7 @@ namespace Time4SellersApp
             foreach (int rowIndex in indices)
             {
                 var entry = allEntrys[rowIndex];
-                Writer.DeleteEntry(entry.EntryID);
+                Writer.Delete("Entries", [$"[EntryID] = {entry.EntryID}"]);
 
                 allEntrys.RemoveAt(rowIndex);
             }
@@ -1081,7 +1103,7 @@ namespace Time4SellersApp
 
         private void Neuladen_Click(object sender, EventArgs e)
         {
-            fillValues();
+            fillDataGridView();
         }
 
         private void BookingType_SelectionChangeCommitted(object sender, EventArgs e)
