@@ -77,7 +77,7 @@ namespace _4Time.DataCore
             {
                 return;
             }
-            File.Create("Key.txt").Close();
+            File.Create("Key.txt");
             File.WriteAllText($"{DateTime.Now}{Environment.OSVersion}{Environment.TickCount64}{Environment.TickCount64 * DateTime.Now.Millisecond}", Guid.NewGuid().ToString());
         }
 
