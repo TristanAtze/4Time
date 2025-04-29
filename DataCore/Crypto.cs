@@ -33,7 +33,7 @@ namespace _4Time.DataCore
             try
             {
                 using var aes = Aes.Create();
-                var keyBytes = Encoding.UTF8.GetBytes(key);
+                var keyBytes = Encoding.UTF8.GetBytes(key2);
                 Array.Resize(ref keyBytes, 32);
                 aes.Key = keyBytes;
                 aes.IV = new byte[16];
@@ -41,11 +41,12 @@ namespace _4Time.DataCore
                 var cipherBytes = Convert.FromBase64String(cipherText);
                 var plainBytes = decryptor.TransformFinalBlock(cipherBytes, 0, cipherBytes.Length);
                 return Encoding.UTF8.GetString(plainBytes);
+
             }
             catch
             {
                 using var aes = Aes.Create();
-                var keyBytes = Encoding.UTF8.GetBytes(key2);
+                var keyBytes = Encoding.UTF8.GetBytes(key);
                 Array.Resize(ref keyBytes, 32);
                 aes.Key = keyBytes;
                 aes.IV = new byte[16];

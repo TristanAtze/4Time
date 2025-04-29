@@ -73,12 +73,13 @@ namespace _4Time.DataCore
 
         private static void CreateKey()
         {
-            if (File.Exists("Key.txt"))
+            string? keyContent = File.ReadAllText("Key.txt");
+            if (File.Exists("Key.txt") || keyContent != "")
             {
                 return;
             }
-            File.Create("Key.txt").Close();
-            File.WriteAllText($"{DateTime.Now}{Environment.OSVersion}{Environment.TickCount64}{Environment.TickCount64 * DateTime.Now.Millisecond}", Guid.NewGuid().ToString());
+            File.Create("Key.txt");
+            File.WriteAllText("Key.txt", Guid.NewGuid().ToString());
         }
 
         internal static void CloseConnection()

@@ -29,6 +29,8 @@ namespace Time4SellersApp
                 ]).First().UserID}",
             ]);
             InitializeComponent();
+            dateTimePicker1.Value = DateTime.Now.Date;
+            dateTimePickerOverview.Value = DateTime.Now.Date;
             MaximumSize = Size;
             MinimumSize = Size;
 
@@ -51,10 +53,8 @@ namespace Time4SellersApp
 
         private void fillValues()
         {
-            DateTime My4SellersDateTime = dateTimePicker1.Value.Date;
             Settings.Hide();
-            dateTimePicker1.Value = DateTime.Now.Date;
-            dateTimePickerOverview.Value = DateTime.Now.Date;
+            DateTime My4SellersDateTime = dateTimePicker1.Value.Date;
 
 
             //Vormittag
