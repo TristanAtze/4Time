@@ -24,7 +24,7 @@ namespace Time4SellersApp
             Writer.UserSetup();
             
             string activeUser = Environment.UserName.ToLower();
-            Updater();
+            //Updater();
             if (activeUser == "gerd.kaufmann")
             {
                 Application.EnableVisualStyles();
