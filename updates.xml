@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <item>
   <!-- 4-stellige Assembly-Version, die du in AssemblyInfo festlegst -->
-  <version>2.0.1.0</version>
+  <version>2.0.1.1</version>
 
   <!-- Hier muss die ZIP liegen, die du in docs/ hochgeladen hast -->
   <url>https://tristanatze.github.io/4Time/4Time.zip</url>
