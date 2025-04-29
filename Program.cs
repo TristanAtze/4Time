@@ -17,7 +17,7 @@ namespace Time4SellersApp
         [STAThread]
         static void Main()
         {
-            CheckForUpdates();
+            Updater();
             DoAutoStart();
             Writer.DatabaseSetup();
             Writer.UserSetup();
@@ -38,19 +38,13 @@ namespace Time4SellersApp
             }
         }
 
-        static void CheckForUpdates()
+        static void Updater()
         {
-            AutoUpdater.AppTitle = "4Time";
-            AutoUpdater.ReportErrors = true;                         // Logs anzeigen
-            AutoUpdater.Mandatory = true;                        // global erzwingen
-            AutoUpdater.RemindLaterAt = 2;                            // Wieder erinnern
-            AutoUpdater.RemindLaterTimeSpan = RemindLaterFormat.Hours;      // Einheit: Hours / Days / Minutes
-            AutoUpdater.UpdateMode = Mode.Forced;                  // Normal / Forced / BackgroundDownload
-            AutoUpdater.Start("https://github.com/TristanAtze/4TimeRelease/blob/main/updates.xml");
+            AutoUpdater.ShowRemindLaterButton = true;
+            AutoUpdater.UpdateMode = Mode.Forced; // oder Mode.Normal
+            AutoUpdater.ShowSkipButton = true;
+            AutoUpdater.Start("https://tristanatze.github.io/4Time/updates.xml");
         }
-
-
-
 
         static void DoAutoStart()
         {
