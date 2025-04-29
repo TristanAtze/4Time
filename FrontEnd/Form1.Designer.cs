@@ -4,6 +4,86 @@ namespace Time4SellersApp
 {
     partial class MainForm
     {
+
+
+        /// <summary>
+        /// Index des in dgvEntries zuletzt ausgewählten Eintrags.
+        /// null = es wurde kein bestehender Eintrag zum Bearbeiten geöffnet.
+        /// </summary>
+        private int? selectedBookingIndex = null;
+
+        private TabControl tabControl;
+        private TabPage tabUebersicht;
+        private TabPage tabEintragen;
+        private TabPage tabAuslesen;
+
+        // Übersicht-Controls
+        private PictureBox pictureLogoUebersicht;
+        private Label lblArbeitszeitHeute;
+        private Label lblPausenzeitHeute;
+        private Label lblUeberstundenHeute;
+        private Label lblArbeitszeitWoche;
+        private Label lblPausenzeitWoche;
+        private Label lblUeberstundenWoche;
+        private Label lblMy4SellersAusgabe;
+        private Button btnSettingsUebersicht;
+        private RadioButton rbStartzeitEndzeit;
+        private RadioButton rbStartzeitDauer;
+        private RadioButton rbEndzeitDauer;
+        private Label lblInfoEintragen;
+        private TextBox txtBemerkung;
+        private Label lblBemerkung;
+        private Button btnSpeichern;
+        private Button btnSettingsEintragen;
+        private Button btnSettingsAuslesen;
+        private Button btnNeuladenAuslesen;
+        private DataGridView dgvEntries;
+        private List<Entry> allEntrys = [];
+        private List<Category> allCategorys = [];
+
+        /// <summary>
+        /// Erforderliche Designervariable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        private DateTimePicker StartzeitEndzeitEnde;
+        private DateTimePicker StartzeitEndzeitStart;
+        private NumericUpDown StartzeitDauerMinuten;
+        private NumericUpDown StartzeitDauerStunden;
+        private DateTimePicker StartzeitDauerStart;
+        private Label label1;
+        private Label label3;
+        private Label label4;
+        private NumericUpDown EndzeitDauerMinuten;
+        private NumericUpDown EndzeitDauerStunden;
+        private DateTimePicker EndzeitDauerStart;
+        private Label label2;
+        private Label label5;
+        private ComboBox BookingType;
+        private PictureBox pictureBox2;
+        private PictureBox pictureBox1;
+        private Label OTWeek;
+        private Label PTWeek;
+        private Label OTToday;
+        private Label PTToday;
+        private Label WTWeek;
+        private Label WTToday;
+        private Label LogginName;
+        private Label loggedInAs;
+        private DataGridViewTextBoxColumn colStart;
+        private DataGridViewTextBoxColumn colEnd;
+        private DataGridViewTextBoxColumn colArt;
+        private DataGridViewTextBoxColumn colKommentar;
+        private DataGridViewTextBoxColumn colDauer;
+        private Button Löschen;
+        private Button Neuladen;
+        private Label PauseLabel;
+        private Label NachmittagLabel;
+        private Label VormittagLabel;
+        private DateTimePicker dateTimePicker1;
+        private DateTimePicker dateTimePickerOverview;
+        private TabPage Settings;
+        private Label label6;
         /// <summary>
         /// Verwendete Ressourcen bereinigen.
         /// </summary>
@@ -289,27 +369,27 @@ namespace Time4SellersApp
             lblArbeitszeitHeute.AutoSize = true;
             lblArbeitszeitHeute.Location = new Point(18, 191);
             lblArbeitszeitHeute.Name = "lblArbeitszeitHeute";
-            lblArbeitszeitHeute.Size = new Size(98, 15);
+            lblArbeitszeitHeute.Size = new Size(100, 15);
             lblArbeitszeitHeute.TabIndex = 1;
-            lblArbeitszeitHeute.Text = "Arbeitszeit heute:";
+            lblArbeitszeitHeute.Text = "Arbeitszeit Heute:";
             // 
             // lblPausenzeitHeute
             // 
             lblPausenzeitHeute.AutoSize = true;
             lblPausenzeitHeute.Location = new Point(18, 219);
             lblPausenzeitHeute.Name = "lblPausenzeitHeute";
-            lblPausenzeitHeute.Size = new Size(99, 15);
+            lblPausenzeitHeute.Size = new Size(101, 15);
             lblPausenzeitHeute.TabIndex = 2;
-            lblPausenzeitHeute.Text = "Pausenzeit heute:";
+            lblPausenzeitHeute.Text = "Pausenzeit Heute:";
             // 
             // lblUeberstundenHeute
             // 
             lblUeberstundenHeute.AutoSize = true;
             lblUeberstundenHeute.Location = new Point(18, 249);
             lblUeberstundenHeute.Name = "lblUeberstundenHeute";
-            lblUeberstundenHeute.Size = new Size(111, 15);
+            lblUeberstundenHeute.Size = new Size(113, 15);
             lblUeberstundenHeute.TabIndex = 3;
-            lblUeberstundenHeute.Text = "Überstunden heute:";
+            lblUeberstundenHeute.Text = "Überstunden Heute:";
             // 
             // lblArbeitszeitWoche
             // 
@@ -560,9 +640,9 @@ namespace Time4SellersApp
             lblInfoEintragen.AutoSize = true;
             lblInfoEintragen.Location = new Point(3, 402);
             lblInfoEintragen.Name = "lblInfoEintragen";
-            lblInfoEintragen.Size = new Size(329, 15);
+            lblInfoEintragen.Size = new Size(303, 15);
             lblInfoEintragen.TabIndex = 4;
-            lblInfoEintragen.Text = "Info: Es kann nur eine von den drei Optionen gewählt werden";
+            lblInfoEintragen.Text = "Info: Es kann nur eine der drei Optionen gewählt werden";
             // 
             // lblBemerkung
             // 
