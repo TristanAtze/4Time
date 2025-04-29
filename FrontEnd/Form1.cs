@@ -740,7 +740,7 @@ namespace Time4SellersApp
             lblInfoEintragen.Name = "lblInfoEintragen";
             lblInfoEintragen.Size = new Size(329, 15);
             lblInfoEintragen.TabIndex = 4;
-            lblInfoEintragen.Text = "Info: Es kann nur eine von der drei Optionen gewählt werden.";
+            lblInfoEintragen.Text = "Info: Es kann nur eine der drei Optionen gewählt werden.";
             // 
             // lblBemerkung
             // 
