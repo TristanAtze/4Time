@@ -18,13 +18,13 @@ namespace Time4SellersApp
         [STAThread]
         static void Main()
         {
-            Updater();
+            
             DoAutoStart();
             Writer.DatabaseSetup();
             Writer.UserSetup();
             
             string activeUser = Environment.UserName.ToLower();
-
+            Updater();
             if (activeUser == "gerd.kaufmann")
             {
                 Application.EnableVisualStyles();
@@ -41,7 +41,7 @@ namespace Time4SellersApp
 
         static void Updater()
         {
-           
+            Process.Start("K:\\Team Academy\\Azubi_Jahrgang_2024\\Ben Sowieja\\4TimeUpdater\\Updater\\bin\\Debug\\net9.0\\Updater.exe");
         }
 
         static void DoAutoStart()
