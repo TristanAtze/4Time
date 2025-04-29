@@ -1,12 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
 <item>
-<version>2.0.0.1</version>
-<!--  Pflicht: Version im X.X.X.X-Format  -->
-<url>https://tristanatze.github.io/4Time/archive/refs/tags/v1.0.0.1.zip</url>
-<!--  Pflicht: Download-URL  -->
-<mandatory>false</mandatory>
-<!--  Optional: true = kein Überspringen erlaubt  -->
-<releaseNotes>https://tristanatze.github.io/4Time/Changelog.txt</releaseNotes>
-<!--  Optional  -->
-<hash>SHA256-Hash-der-Datei</hash>
-<!--  Optional: Integritätsprüfung  -->
+  <!-- 4-stellige Assembly-Version, die du in AssemblyInfo festlegst -->
+  <version>2.0.1.0</version>
+
+  <!-- Hier muss die ZIP liegen, die du in docs/ hochgeladen hast -->
+  <url>https://tristanatze.github.io/4Time/4Time.zip</url>
+
+  <!-- optional: Link zu deinem Changelog -->
+  <changelog>https://raw.githubusercontent.com/tristanatze/4Time/dev/CHANGELOG.md</changelog>
+
+  <!-- optional: erzwungenes Update -->
+  <mandatory>false</mandatory>
+
+  <!-- optional: SHA256-Hash deiner ZIP -->
+  <!--<hash>DEIN_SHA256_HASH</hash>-->
 </item>
