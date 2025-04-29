@@ -467,27 +467,27 @@ namespace Time4SellersApp
             lblArbeitszeitHeute.AutoSize = true;
             lblArbeitszeitHeute.Location = new Point(18, 191);
             lblArbeitszeitHeute.Name = "lblArbeitszeitHeute";
-            lblArbeitszeitHeute.Size = new Size(98, 15);
+            lblArbeitszeitHeute.Size = new Size(100, 15);
             lblArbeitszeitHeute.TabIndex = 1;
-            lblArbeitszeitHeute.Text = "Arbeitszeit heute:";
+            lblArbeitszeitHeute.Text = "Arbeitszeit Heute:";
             // 
             // lblPausenzeitHeute
             // 
             lblPausenzeitHeute.AutoSize = true;
             lblPausenzeitHeute.Location = new Point(18, 219);
             lblPausenzeitHeute.Name = "lblPausenzeitHeute";
-            lblPausenzeitHeute.Size = new Size(99, 15);
+            lblPausenzeitHeute.Size = new Size(101, 15);
             lblPausenzeitHeute.TabIndex = 2;
-            lblPausenzeitHeute.Text = "Pausenzeit heute:";
+            lblPausenzeitHeute.Text = "Pausenzeit Heute:";
             // 
             // lblUeberstundenHeute
             // 
             lblUeberstundenHeute.AutoSize = true;
             lblUeberstundenHeute.Location = new Point(18, 249);
             lblUeberstundenHeute.Name = "lblUeberstundenHeute";
-            lblUeberstundenHeute.Size = new Size(111, 15);
+            lblUeberstundenHeute.Size = new Size(113, 15);
             lblUeberstundenHeute.TabIndex = 3;
-            lblUeberstundenHeute.Text = "Überstunden heute:";
+            lblUeberstundenHeute.Text = "Überstunden Heute:";
             // 
             // lblArbeitszeitWoche
             // 
@@ -738,7 +738,7 @@ namespace Time4SellersApp
             lblInfoEintragen.AutoSize = true;
             lblInfoEintragen.Location = new Point(3, 402);
             lblInfoEintragen.Name = "lblInfoEintragen";
-            lblInfoEintragen.Size = new Size(329, 15);
+            lblInfoEintragen.Size = new Size(306, 15);
             lblInfoEintragen.TabIndex = 4;
             lblInfoEintragen.Text = "Info: Es kann nur eine der drei Optionen gewählt werden.";
             // 
