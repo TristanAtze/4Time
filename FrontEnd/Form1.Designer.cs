@@ -4,8 +4,6 @@ namespace Time4SellersApp
 {
     partial class MainForm
     {
-
-
         /// <summary>
         /// Index des in dgvEntries zuletzt ausgewählten Eintrags.
         /// null = es wurde kein bestehender Eintrag zum Bearbeiten geöffnet.
@@ -84,6 +82,7 @@ namespace Time4SellersApp
         private DateTimePicker dateTimePickerOverview;
         private TabPage Settings;
         private Label label6;
+
         /// <summary>
         /// Verwendete Ressourcen bereinigen.
         /// </summary>
