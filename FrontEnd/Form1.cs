@@ -83,6 +83,10 @@ namespace Time4SellersApp
         {
             DateTime My4SellersDateTime = dateTimePicker1.Value.Date;
             Settings.Hide();
+            dateTimePicker1.Value = DateTime.Now.Date;
+            dateTimePickerOverview.Value = DateTime.Now.Date;
+
+
             //Vormittag
             List<Entry> WorktimeVormittag = [.. allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CatergoryName == "Vormittag")];
             var FirstEntryVormittag = WorktimeVormittag.Where(x => x.Start.Date == My4SellersDateTime).OrderBy(x => x.Start).FirstOrDefault();
