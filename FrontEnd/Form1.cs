@@ -84,17 +84,14 @@ namespace Time4SellersApp
             fillValues();
 
             LogginName.Text = Connector.FirstName + " " + Connector.LastName;
-
-            // Testen der Verschlüsselung
-            //string encrypted = Crypto.Encrypt("Test Satz");
-            //string decrypted = Crypto.Decrypt(encrypted);
         }
         private void fillValues()
         {
-            DateTime My4SellersDateTime = dateTimePicker1.Value.Date;
+            
             Settings.Hide();
             dateTimePicker1.Value = DateTime.Now.Date;
             dateTimePickerOverview.Value = DateTime.Now.Date;
+            DateTime My4SellersDateTime = dateTimePicker1.Value.Date;
 
 
             //Vormittag
