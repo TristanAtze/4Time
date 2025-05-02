@@ -42,4 +42,8 @@
 			<DependentUpon>Form1.cs</DependentUpon>
 		</Compile>
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="FrontEnd\Form1CustomCode\" />
+	</ItemGroup>
 </Project>

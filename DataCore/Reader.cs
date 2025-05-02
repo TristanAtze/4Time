@@ -35,18 +35,13 @@ internal class Reader : Connector
             {
                 if (typeof(T) == typeof(Entry))
                 {
-                    //TEST-CODE
-                    string startEnd = reader.GetString(3);
-                    var start = DateTime.Parse(Crypto.Decrypt(startEnd.Split("-")[0]));
-                    var ende = DateTime.Parse(Crypto.Decrypt(startEnd.Split("-")[1]));
-
                     entries.Add((T)(object)new Entry()
                     {
                         EntryID = reader.GetInt32(0),
                         UserID = reader.GetInt32(1),
                         CategoryID = reader.GetInt32(2),
-                        Start = DateTime.Parse(Crypto.Decrypt(startEnd.Split("-")[0])),
-                        End = DateTime.Parse(Crypto.Decrypt(startEnd.Split("-")[1])),
+                        Start = DateTime.Parse(Crypto.Decrypt(reader.GetString(3).Split("-")[0])),
+                        End = DateTime.Parse(Crypto.Decrypt(reader.GetString(3).Split("-")[1])),
                         Comment = reader.GetString(5)
                     });
                 }

@@ -4,7 +4,7 @@ using System.Data;
 
 namespace Time4SellersApp
 {
-    public partial class MainForm : Form
+    public partial class UserView : Form
     {
         private readonly List<Category> _allCategorys = Reader.Read<Category>("Categories");
         private readonly List<Entry> _allEntrys = Reader.Read<Entry>("Entries", null,
@@ -19,7 +19,7 @@ namespace Time4SellersApp
             ]).First().UserID}",
         ]);
 
-        public MainForm()
+        public UserView()
         {
             InitializeComponent();
             MaximumSize = Size;

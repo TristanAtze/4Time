@@ -2,7 +2,7 @@
 
 namespace Time4SellersApp;
 
-partial class MainForm
+partial class UserView
 {
 	/// <summary>
 	/// Index des in dgvEntries zuletzt ausgewählten Eintrags.
