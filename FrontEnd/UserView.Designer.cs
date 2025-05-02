@@ -390,6 +390,7 @@ namespace Time4SellersApp
             // 
             // pictureBox2
             // 
+            pictureBox2.ErrorImage = (Image)resources.GetObject("pictureLogoUebersicht.ErrorImage");
             pictureBox2.ImageLocation = "4TIMELogo.gif";
             pictureBox2.Location = new Point(20, 14);
             pictureBox2.Name = "pictureBox2";
@@ -622,6 +623,7 @@ namespace Time4SellersApp
             // 
             // pictureBox1
             // 
+            pictureBox1.ErrorImage = (Image)resources.GetObject("pictureLogoUebersicht.ErrorImage");
             pictureBox1.ImageLocation = "4TIMELogo.gif";
             pictureBox1.Location = new Point(20, 14);
             pictureBox1.Name = "pictureBox1";

@@ -15,8 +15,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="FrontEnd\Form1CustomCode\**" />
     <Compile Remove="Properties\**" />
+    <EmbeddedResource Remove="FrontEnd\Form1CustomCode\**" />
     <EmbeddedResource Remove="Properties\**" />
+    <None Remove="FrontEnd\Form1CustomCode\**" />
     <None Remove="Properties\**" />
   </ItemGroup>
 
@@ -41,9 +44,5 @@
 		<Compile Update="Form1.Events.cs">
 			<DependentUpon>Form1.cs</DependentUpon>
 		</Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="FrontEnd\Form1CustomCode\" />
 	</ItemGroup>
 </Project>
