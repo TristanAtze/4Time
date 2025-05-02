@@ -73,13 +73,25 @@ namespace _4Time.DataCore
 
         private static void CreateKey()
         {
-            string? keyContent = File.ReadAllText("Key.txt");
-            if (File.Exists("Key.txt") || keyContent != "")
+            string? keyContent = "";
+            if (File.Exists("Key.txt"))
             {
-                return;
+                keyContent = File.ReadAllText("Key.txt");
+                if (!(keyContent.Length == 0 || keyContent == null))
+                {
+                    return;
+                }
+                else
+                {
+                    File.WriteAllText("Key.txt", Guid.NewGuid().ToString());
+                    return;
+                }
             }
-            File.Create("Key.txt");
-            File.WriteAllText("Key.txt", Guid.NewGuid().ToString());
+            else
+            {
+                File.Create("Key.txt");
+                File.WriteAllText("Key.txt", Guid.NewGuid().ToString());
+            } 
         }
 
         internal static void CloseConnection()
