@@ -1,110 +1,74 @@
 ﻿using _4Time.DataCore.Models;
 using Microsoft.Data.SqlClient;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace _4Time.DataCore
+namespace _4Time.DataCore;
+
+internal class Reader : Connector
 {
-    internal class Reader : Connector
+    internal static List<T> Read<T>(string table, string[]? columns = null, params string[] conditions) where T : new()
     {
-        internal static User GetUserDetails()
+        var entries = new List<T>();
+        var sql = new StringBuilder();
+
+        // Spaltenauswahl
+        string columnList = (columns != null && columns.Length > 0)
+            ? string.Join(", ", columns)
+            : "*";
+
+        sql.Append($"SELECT {columnList} FROM [_LK_TestDB].[dbo].[{table}]");
+
+        // Bedingungen
+        if (conditions != null && conditions.Length > 0)
         {
-            User user = new()
-            {
-                FirstName = Connector.FirstName,
-                LastName = Connector.LastName
-            };
-
-            //TODO Datenbank ändern!!!
-            string query = @"
-                SELECT [UserID], [IsAdmin]
-                FROM [_LK_TestDB].[dbo].[User]
-                WHERE [FirstName] = @firstName AND [LastName] = @lastName
-            ";
-
-            var command = new SqlCommand(query, Connector.connection);
-
-            command.Parameters.AddWithValue("@firstName", FirstName.ToLower());
-            command.Parameters.AddWithValue("@lastName", LastName.ToLower());
-
-            SqlDataReader reader = command.ExecuteReader();
-            while (reader.Read())
-            {
-                user.UserID = reader.GetInt32(0);
-                user.IsAdmin = reader.GetBoolean(1);
-            }
-            reader.Close();
-            return user;
+            sql.Append(" WHERE ");
+            sql.Append(string.Join(" AND ", conditions));
         }
 
-
-        internal static List<Entry> GetAllEntrysOfUser()
+        using (var command = new SqlCommand(sql.ToString(), Connector.connection))
         {
-            List<Entry> Entrys = [];
-
-            //TODO Datenbank ändern!!!
-            string query = @"
-                SELECT *
-                FROM [_LK_TestDB].[dbo].[Entries]
-                WHERE [UserID] = @UserID
-            ";
-
-            User user = GetUserDetails();
-
-            var command = new SqlCommand(query, Connector.connection);
-
-            command.Parameters.AddWithValue("@UserID", user.UserID);
-
-            SqlDataReader reader = command.ExecuteReader();
+            var reader = command.ExecuteReader();
+            var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
             while (reader.Read())
             {
-                Entrys.Add(
-                    new Entry
+                if (typeof(T) == typeof(Entry))
+                {
+                    entries.Add((T)(object)new Entry()
                     {
                         EntryID = reader.GetInt32(0),
                         UserID = reader.GetInt32(1),
                         CategoryID = reader.GetInt32(2),
                         Start = DateTime.Parse(Crypto.Decrypt(reader.GetString(3).Split("-")[0])),
                         End = DateTime.Parse(Crypto.Decrypt(reader.GetString(3).Split("-")[1])),
-                        Comment = reader.GetString(5),
-                    }
-                );
-            }
-            reader.Close();
+                        Comment = reader.GetString(5)
+                    });
+                }
+                else
+                {
+                    var entry = new T();
 
-            return Entrys;
-        }
-
-        internal static List<Category> GetAllCategorysDetails()
-        {
-            List<Category> categories = [];
-
-            //TODO Datenbank ändern!!!
-            string query = @"
-                SELECT *
-                FROM [_LK_TestDB].[dbo].[Categories]
-            ";
-
-            var command = new SqlCommand(query, Connector.connection);
-
-            SqlDataReader reader = command.ExecuteReader();
-            while (reader.Read())
-            {
-                categories.Add(
-                    new Category
+                    foreach (var prop in properties)
                     {
-                        CategoryID = reader.GetInt32(0),
-                        Description = reader.GetString(1),
-                        IsWorkTime = reader.GetBoolean(2)
+                        try
+                        {
+                            var value = reader[prop.Name];
+                            if (value != DBNull.Value)
+                            {
+                                prop.SetValue(entry, Convert.ChangeType(value, prop.PropertyType));
+                            }
+                        }
+                        catch (Exception) { }
                     }
-                );
+
+                    entries.Add(entry);
+                }
             }
             reader.Close();
-            return categories;
         }
+
+        return entries;
     }
+
 }

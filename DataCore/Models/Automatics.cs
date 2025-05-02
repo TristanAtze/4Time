@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace _4Time.DataCore.Models;
 
-namespace _4Time.DataCore.Models
+internal class Automatics
 {
-    internal class Automatics
-    {
-        public int AutomaticID { get; set; }
-        public string Name { get; set; }
-        public bool IsChangeable { get; set; }
-        public bool IsActive { get; set; }
-    }
+    public int AutomaticID { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public bool IsChangeable { get; set; }
+    public bool IsActive { get; set; }
 }
