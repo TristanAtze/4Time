@@ -103,29 +103,14 @@ BEGIN
 			CONSTRAINT FK_Entries_User NOT NULL,
 		[CategoryID] INT
 			CONSTRAINT FK_Entries_Categories NOT NULL,
-		[Start_End] VARCHAR(255) NOT NULL,
+		[Start] VARCHAR(255) NOT NULL,
+		[End] VARCHAR(255) NOT NULL,
 		[TimeStamp] TIMESTAMP NOT NULL,
 		[Comment] VARCHAR(MAX) NULL,
 
 		FOREIGN KEY ([UserID]) REFERENCES dbo.[User] ([UserID]),
 		FOREIGN KEY ([CategoryID]) REFERENCES dbo.[Categories] ([CategoryID])
 	)
-
-	EXEC('
-		CREATE TRIGGER dbo.[TRG_AfterUpdate_TimeStamp]
-		ON dbo.[Entries]
-		AFTER UPDATE
-		AS
-		BEGIN
-			SET NOCOUNT ON;
-
-			UPDATE dbo.[Entries]
-			SET [TimeStamp] = CURRENT_TIMESTAMP
-			FROM dbo.[Entries]
-			JOIN inserted
-				ON inserted.[EntryID] = [Entries].[EntryID]
-		END
-	')
 END
 
 

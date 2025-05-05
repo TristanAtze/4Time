@@ -15,10 +15,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DataCore\Services\**" />
     <Compile Remove="FrontEnd\Form1CustomCode\**" />
     <Compile Remove="Properties\**" />
+    <EmbeddedResource Remove="DataCore\Services\**" />
     <EmbeddedResource Remove="FrontEnd\Form1CustomCode\**" />
     <EmbeddedResource Remove="Properties\**" />
+    <None Remove="DataCore\Services\**" />
     <None Remove="FrontEnd\Form1CustomCode\**" />
     <None Remove="Properties\**" />
   </ItemGroup>
@@ -45,8 +48,4 @@
 			<DependentUpon>Form1.cs</DependentUpon>
 		</Compile>
 	</ItemGroup>
-  <ItemGroup>
-    <Folder Include="DataCore\Services\" />
-    <Folder Include="Properties\PublishProfiles\" />
-  </ItemGroup>
 </Project>

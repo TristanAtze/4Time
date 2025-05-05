@@ -52,8 +52,7 @@ internal class Writer : Connector
         Dictionary<string,object?> columns = [];
 
         //Alle Spalten ermitteln
-        //TODO Datenbank ändern!!!
-        string schemaQuery = $"SELECT COLUMN_NAME FROM [_LK_TestDB].INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}'";
+        string schemaQuery = $"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}'";
         var schemaConnection = new SqlConnection(CONNECTION_STRING);
         var schemaCommand = new SqlCommand(schemaQuery, schemaConnection);
 
@@ -77,17 +76,26 @@ internal class Writer : Connector
         }
 
         //INSERT-Statement erstellen
-        string query = $"INSERT INTO [_LK_TestDB].[dbo].[{table}] ";
+        string query = $"INSERT INTO [dbo].[{table}] ";
 
         if(columns.Count > 0)
         {
-            if (columns.ContainsKey("Start_End") && obj.GetType() == typeof(Entry))
+            if (columns.ContainsKey("Start") && obj.GetType() == typeof(Entry))
             {
-                Entry entry = (Entry)obj;
-                columns["Start_End"] = Crypto.Encrypt(entry.Start.ToString()) + " - " + Crypto.Encrypt(entry.End.ToString());
+                columns["Start"] = Crypto.Encryption(columns["Start"]?.ToString() ?? "");
             }
 
-            query += "(" + string.Join(", ", columns.Keys) + ") VALUES (";
+            if (columns.ContainsKey("End") && obj.GetType() == typeof(Entry))
+            {
+                columns["End"] = Crypto.Encryption(columns["End"]?.ToString() ?? "");
+            }
+
+            if (columns.ContainsKey("Comment") && obj.GetType() == typeof(Entry))
+            {
+                columns["Comment"] = Crypto.Encryption(columns["Comment"]?.ToString() ?? "");
+            }
+
+            query += "([" + string.Join("], [", columns.Keys) + "]) VALUES (";
             query += string.Join(", ", columns.Values.Select(v => v == null ? "NULL" : $"'{v}'")) + ")";
         }
         else
@@ -140,7 +148,7 @@ internal class Writer : Connector
             if(columns.ContainsKey("Start_End") && obj.GetType() == typeof(Entry))
             {
                 Entry entry = (Entry) obj;
-                columns["Start_End"] = Crypto.Encrypt(entry.Start.ToString()) + " - " + Crypto.Encrypt(entry.End.ToString());
+                columns["Start_End"] = Crypto.Encryption(entry.Start.ToString()) + " - " + Crypto.Encryption(entry.End.ToString());
             }
 
             query = $"UPDATE [_LK_TestDB].[dbo].[{table}] SET ";

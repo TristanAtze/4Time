@@ -40,9 +40,9 @@ internal class Reader : Connector
                         EntryID = reader.GetInt32(0),
                         UserID = reader.GetInt32(1),
                         CategoryID = reader.GetInt32(2),
-                        Start = DateTime.Parse(Crypto.Decrypt(reader.GetString(3).Split("-")[0])),
-                        End = DateTime.Parse(Crypto.Decrypt(reader.GetString(3).Split("-")[1])),
-                        Comment = reader.GetString(5)
+                        Start = DateTime.Parse(Crypto.Decryption(reader.GetString(3))),
+                        End = DateTime.Parse(Crypto.Decryption(reader.GetString(4))),
+                        Comment = Crypto.Decryption(reader.GetString(6))
                     });
                 }
                 else
