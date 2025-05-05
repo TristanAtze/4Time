@@ -5,7 +5,7 @@ namespace _4Time.DataCore;
 
 internal static class Crypto
 {
-    private static readonly string Key = Connector.GetCurrentUser().Item1;
+    private static readonly string Key = $"{Connector.GetCurrentUser().Item1}D209135{Connector.GetCurrentUser().Item2}";
     internal static string Encrypt(string plainText)
     {
         var aes = Aes.Create();

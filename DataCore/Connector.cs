@@ -24,9 +24,9 @@ internal class Connector
     /// </summary>
     static Connector()
     {
-       (string, string, string) FirstLastName = GetCurrentUser();
-       FirstName = FirstLastName.Item2;
-       LastName = FirstLastName.Item3;
+       (string, string) FirstLastName = GetCurrentUser();
+       FirstName = FirstLastName.Item1;
+       LastName = FirstLastName.Item2;
     }
 
     /// <summary>
@@ -92,32 +92,11 @@ internal class Connector
     /// Ermittelt den aktuellen Windows-Benutzernamen und erstellt einen eindeutigen Schüssel für die Verschlüsselung von Daten.
     /// </summary>
     /// <returns></returns>
-    internal static (string,string,string) GetCurrentUser()
+    internal static (string,string) GetCurrentUser()
     {
-        CreateKey();
         string userName = Environment.UserName;
         string[] userNameSplitted = userName.Split(".");
-        return ($"{userNameSplitted[0]}{File.ReadAllText("Key.txt")}{userNameSplitted[1]}",userNameSplitted[0],userNameSplitted[1]);
-    }
-
-    /// <summary>
-    /// Erstellt eine Datei mit einem eindeutigen Schlüssel, wenn diese noch nicht existiert.
-    /// </summary>
-    private static void CreateKey()
-    {
-        if(File.Exists("Key.txt"))
-        {
-            string keyContent = File.ReadAllText("Key.txt");
-            if (keyContent == "")
-            {
-                File.WriteAllText("Key.txt", Guid.NewGuid().ToString());
-            }
-        }
-        else
-        {
-            File.Create("Key.txt");
-            File.WriteAllText("Key.txt", Guid.NewGuid().ToString());
-        }
+        return (userNameSplitted[0],userNameSplitted[1]);
     }
 
     internal static void CloseConnection()
