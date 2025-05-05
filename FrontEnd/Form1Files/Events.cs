@@ -160,6 +160,37 @@ partial class UserView
     private void BookingType_SelectionChangeCommitted(object sender, EventArgs e)
     {
         btnSpeichern.Enabled = true;
+
+        //Überprüfen ob es sich um Abwesenheit handelt
+        string[] absence = { "Urlaub", "Krankheit", "Berufsschule" };
+
+        if (absence.Contains(BookingType.Text))
+        {
+            rbEndzeitDauer.Enabled = false;
+            rbStartzeitDauer.Enabled = false;
+
+            rbStartzeitEndzeit.Checked = true;
+            StartzeitEndzeitStart.Value = new DateTime(
+                DateTime.Now.Year,
+                DateTime.Now.Month,
+                DateTime.Now.Day,
+                7, 00, 00
+            );
+            StartzeitEndzeitStart.Text = "07:00";
+
+            StartzeitEndzeitEnde.Value = new DateTime(
+                DateTime.Now.Year,
+                DateTime.Now.Month,
+                DateTime.Now.Day,
+                15, 00, 00
+            );
+            StartzeitEndzeitEnde.Text = "15:00";
+        }
+        else
+        {
+            rbEndzeitDauer.Enabled = true;
+            rbStartzeitDauer.Enabled = true;
+        }
     }
 
     private void UebersichtDTP_ValueChanged(object sender, EventArgs e)
