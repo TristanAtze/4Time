@@ -45,4 +45,8 @@
 			<DependentUpon>Form1.cs</DependentUpon>
 		</Compile>
 	</ItemGroup>
+  <ItemGroup>
+    <Folder Include="DataCore\Services\" />
+    <Folder Include="Properties\PublishProfiles\" />
+  </ItemGroup>
 </Project>
