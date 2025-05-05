@@ -14,7 +14,8 @@ namespace _4Time
         [STAThread]
         static void Main()
         {
-            
+            VersionControl();
+
             DoAutoStart();
             Writer.DatabaseSetup();
             Writer.UserSetup();
@@ -65,6 +66,16 @@ namespace _4Time
                 Console.Error.WriteLine("Fehler beim Eintragen in den Autostart:");
                 Console.Error.WriteLine(ex.Message);
             }
+        }
+
+        static void VersionControl()
+        {
+            string version = File.ReadAllText("res/Version.txt");
+
+            if (!File.Exists("Version.txt"))
+                File.Create("Version.txt").Close();
+
+            File.WriteAllText("Version.txt", version);
         }
     }
 }

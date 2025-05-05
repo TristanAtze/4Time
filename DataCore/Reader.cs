@@ -17,7 +17,7 @@ internal class Reader : Connector
             ? string.Join(", ", columns)
             : "*";
 
-        sql.Append($"SELECT {columnList} FROM [_LK_TestDB].[dbo].[{table}]");
+        sql.Append($"SELECT {columnList} FROM [dbo].[{table}]");
 
         // Bedingungen
         if (conditions != null && conditions.Length > 0)

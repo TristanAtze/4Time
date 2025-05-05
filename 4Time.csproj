@@ -38,7 +38,7 @@
     <None Update="Res\Setup.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="VersionControll.txt">
+    <None Update="Res\Version.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
