@@ -48,8 +48,8 @@ namespace _4Time.DataCore
                                 EntryID = reader.GetInt32(0),
                                 UserID = reader.GetInt32(1),
                                 CategoryID = reader.GetInt32(2),
-                                Start = DateTime.Parse(Crypto.Decrypt(startEnd.Split("-")[0])),
-                                End = DateTime.Parse(Crypto.Decrypt(startEnd.Split("-")[1])),
+                                Start = DateTime.Parse(Crypto.Decryption(startEnd.Split("-")[0])),
+                                End = DateTime.Parse(Crypto.Decryption(startEnd.Split("-")[1])),
                                 Comment = reader.GetString(5)
                             });
                         }
