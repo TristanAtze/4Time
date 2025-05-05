@@ -2,6 +2,6 @@
 
 namespace Time4SellersApp;
 
-partial class MainForm
+partial class UserView
 {
 }

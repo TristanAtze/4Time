@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace _4Time.DataCore.Models;
 
-namespace _4Time.DataCore.Models
+internal class User
 {
-    internal class User
-    {
-        public int UserID { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public bool IsAdmin { get; set; }
-    }
+    public int UserID { get; set; }
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public bool IsAdmin { get; set; }
 }
