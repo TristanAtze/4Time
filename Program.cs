@@ -27,7 +27,7 @@ namespace _4Time
 
             string activeUser = Environment.UserName.ToLower();
             Updater();
-            if (activeUser != "gerd.kaufmann")
+            if (activeUser == "gerd.kaufmann")
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
