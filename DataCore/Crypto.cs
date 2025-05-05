@@ -575,7 +575,7 @@ public static class Crypto
         return encryptedData;
     }
 
-    public static string Decryption(string encryptedData)
+    public static Task<string> Decryption(string encryptedData)
     {
         FirstCallOnly();
         SecureString loadedSecurePassword = WindowsCredentialManager.LoadPassword(AppCredentialName);
@@ -598,7 +598,7 @@ public static class Crypto
                 // Der string passwordStringForDecryption wird vom GC aufgeräumt
             }
         }
-        return decryptedData;
+        return Task.FromResult(decryptedData);
     }
 
     public static void FirstCallOnly()

@@ -1,5 +1,4 @@
 using _4Time.DataCore;
-using _4Time.FrontEnd;
 using Microsoft.Win32;
 using System.Diagnostics;
 using Time4SellersApp;
@@ -28,7 +27,7 @@ namespace _4Time
 
             string activeUser = Environment.UserName.ToLower();
             Updater();
-            if (activeUser == "gerd.kaufmann")
+            if (activeUser != "gerd.kaufmann")
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);

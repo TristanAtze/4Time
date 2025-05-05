@@ -35,22 +35,18 @@ internal class Reader : Connector
             {
                 if (typeof(T) == typeof(Entry))
                 {
-                    Entry entry = new();
-                    entry.EntryID = reader.GetInt32(0);
-                    entry.UserID = reader.GetInt32(1);
-                    entry.CategoryID = reader.GetInt32(2);
-                    entry.Start = DateTime.Parse(Crypto.Decryption(reader.GetString(3)));
-                    entry.End = DateTime.Parse(Crypto.Decryption(reader.GetString(4)));
-                    entry.Comment = Crypto.Decryption(reader.GetString(6));
-
+                    var startDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(3))).Result;
+                    var endDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(4))).Result;
+                    var commentDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(6))).Result;
+                    //Thread.Sleep(20);
                     entries.Add((T)(object)new Entry()
                     {
                         EntryID = reader.GetInt32(0),
                         UserID = reader.GetInt32(1),
                         CategoryID = reader.GetInt32(2),
-                        Start = DateTime.Parse(Crypto.Decryption(reader.GetString(3))),
-                        End = DateTime.Parse(Crypto.Decryption(reader.GetString(4))),
-                        Comment = Crypto.Decryption(reader.GetString(6))
+                        Start = DateTime.Parse(startDecrypted),
+                        End = DateTime.Parse(endDecrypted),
+                        Comment = commentDecrypted
                     });
                 }
                 else

@@ -102,7 +102,6 @@ namespace Time4SellersApp
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserView));
             tabControl = new TabControl();
             tabUebersicht = new TabPage();
             dateTimePickerOverview = new DateTimePicker();
@@ -354,7 +353,6 @@ namespace Time4SellersApp
             // 
             // pictureLogoUebersicht
             // 
-            pictureLogoUebersicht.ErrorImage = Image.FromFile("res/4TIMELogo.gif"); 
             pictureLogoUebersicht.ImageLocation = "res/4TIMELogo.gif";
             pictureLogoUebersicht.Location = new Point(20, 14);
             pictureLogoUebersicht.Name = "pictureLogoUebersicht";
@@ -469,7 +467,6 @@ namespace Time4SellersApp
             // 
             // pictureBox2
             // 
-            pictureBox2.ErrorImage = Image.FromFile("res/4TIMELogo.gif");
             pictureBox2.ImageLocation = "res/4TIMELogo.gif";
             pictureBox2.Location = new Point(20, 14);
             pictureBox2.Name = "pictureBox2";
@@ -698,11 +695,9 @@ namespace Time4SellersApp
             Löschen.Size = new Size(100, 30);
             Löschen.TabIndex = 5;
             Löschen.Text = "Löschen";
-            Löschen.Click += Löschen_Click;
             // 
             // pictureBox1
             // 
-            pictureBox1.ErrorImage = Image.FromFile("res/4TIMELogo.gif");
             pictureBox1.ImageLocation = "res/4TIMELogo.gif";
             pictureBox1.Location = new Point(20, 14);
             pictureBox1.Name = "pictureBox1";
@@ -790,13 +785,13 @@ namespace Time4SellersApp
             label6.TabIndex = 0;
             label6.Text = "COMMING SOON";
             // 
-            // MainForm
+            // UserView
             // 
             ClientSize = new Size(474, 561);
             Controls.Add(tabControl);
             MaximizeBox = false;
             MinimizeBox = false;
-            Name = "MainForm";
+            Name = "UserView";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "4TIME";
             tabControl.ResumeLayout(false);
