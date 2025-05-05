@@ -35,6 +35,14 @@ internal class Reader : Connector
             {
                 if (typeof(T) == typeof(Entry))
                 {
+                    Entry entry = new();
+                    entry.EntryID = reader.GetInt32(0);
+                    entry.UserID = reader.GetInt32(1);
+                    entry.CategoryID = reader.GetInt32(2);
+                    entry.Start = DateTime.Parse(Crypto.Decryption(reader.GetString(3)));
+                    entry.End = DateTime.Parse(Crypto.Decryption(reader.GetString(4)));
+                    entry.Comment = Crypto.Decryption(reader.GetString(6));
+
                     entries.Add((T)(object)new Entry()
                     {
                         EntryID = reader.GetInt32(0),
