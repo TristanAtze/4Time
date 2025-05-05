@@ -91,7 +91,7 @@ namespace _4Time.DataCore
                 if (columns.ContainsKey("Start_End") && obj.GetType() == typeof(Entry))
                 {
                     Entry entry = (Entry)obj;
-                    columns["Start_End"] = Crypto.Encrypt(entry.Start.ToString()) + " - " + Crypto.Encrypt(entry.End.ToString());
+                    columns["Start_End"] = Crypto.Enryption(entry.Start.ToString()) + " - " + Crypto.Enryption(entry.End.ToString());
                 }
 
                 query += "(" + string.Join(", ", columns.Keys) + ") VALUES (";
@@ -147,7 +147,7 @@ namespace _4Time.DataCore
                 if(columns.ContainsKey("Start_End") && obj.GetType() == typeof(Entry))
                 {
                     Entry entry = (Entry) obj;
-                    columns["Start_End"] = Crypto.Encrypt(entry.Start.ToString()) + " - " + Crypto.Encrypt(entry.End.ToString());
+                    columns["Start_End"] = Crypto.Enryption(entry.Start.ToString()) + " - " + Crypto.Enryption(entry.End.ToString());
                 }
 
                 query = $"UPDATE [_LK_TestDB].[dbo].[{table}] SET ";
@@ -215,7 +215,7 @@ namespace _4Time.DataCore
                 [
                     $"[Description] = '{categoryName}'"
                 ]).First().CategoryID);
-                command.Parameters.AddWithValue("@Start_End", $"{Crypto.Encrypt(start.ToString())} - {Crypto.Encrypt(end.ToString())}");
+                command.Parameters.AddWithValue("@Start_End", $"{Crypto.Enryption(start.ToString())} - {Crypto.Enryption(end.ToString())}");
                 command.Parameters.AddWithValue("@Comment", comment ?? string.Empty);
                 command.ExecuteNonQuery();
             }
