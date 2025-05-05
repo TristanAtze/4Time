@@ -2,7 +2,7 @@
 
 namespace Time4SellersApp
 {
-    partial class MainForm
+    partial class UserView
     {
         /// <summary>
         /// Index des in dgvEntries zuletzt ausgewählten Eintrags.
@@ -102,7 +102,7 @@ namespace Time4SellersApp
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserView));
             tabControl = new TabControl();
             tabUebersicht = new TabPage();
             dateTimePickerOverview = new DateTimePicker();
@@ -232,7 +232,7 @@ namespace Time4SellersApp
             dateTimePickerOverview.Size = new Size(101, 23);
             dateTimePickerOverview.TabIndex = 25;
             dateTimePickerOverview.Value = new DateTime(2025, 4, 28, 0, 0, 0, 0);
-            dateTimePickerOverview.ValueChanged += DateTimePickerOverview_ValueChanged;
+            dateTimePickerOverview.ValueChanged += UebersichtDTP_ValueChanged;
             // 
             // dateTimePicker1
             // 
@@ -242,7 +242,7 @@ namespace Time4SellersApp
             dateTimePicker1.Size = new Size(101, 23);
             dateTimePicker1.TabIndex = 24;
             dateTimePicker1.Value = new DateTime(2025, 4, 28, 0, 0, 0, 0);
-            dateTimePicker1.ValueChanged += DateTimePicker1_ValueChanged;
+            dateTimePicker1.ValueChanged += UebersichtDTP_ValueChanged;
             // 
             // PauseLabel
             // 
@@ -354,8 +354,8 @@ namespace Time4SellersApp
             // 
             // pictureLogoUebersicht
             // 
-            pictureLogoUebersicht.ErrorImage = (Image)resources.GetObject("pictureLogoUebersicht.ErrorImage");
-            pictureLogoUebersicht.ImageLocation = "4TIMELogo.gif";
+            pictureLogoUebersicht.ErrorImage = Image.FromFile("res/4TIMELogo.gif"); 
+            pictureLogoUebersicht.ImageLocation = "res/4TIMELogo.gif";
             pictureLogoUebersicht.Location = new Point(20, 14);
             pictureLogoUebersicht.Name = "pictureLogoUebersicht";
             pictureLogoUebersicht.Size = new Size(424, 122);
@@ -469,7 +469,8 @@ namespace Time4SellersApp
             // 
             // pictureBox2
             // 
-            pictureBox2.ImageLocation = "4TIMELogo.gif";
+            pictureBox2.ErrorImage = Image.FromFile("res/4TIMELogo.gif");
+            pictureBox2.ImageLocation = "res/4TIMELogo.gif";
             pictureBox2.Location = new Point(20, 14);
             pictureBox2.Name = "pictureBox2";
             pictureBox2.Size = new Size(424, 122);
@@ -701,7 +702,8 @@ namespace Time4SellersApp
             // 
             // pictureBox1
             // 
-            pictureBox1.ImageLocation = "4TIMELogo.gif";
+            pictureBox1.ErrorImage = Image.FromFile("res/4TIMELogo.gif");
+            pictureBox1.ImageLocation = "res/4TIMELogo.gif";
             pictureBox1.Location = new Point(20, 14);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(424, 122);

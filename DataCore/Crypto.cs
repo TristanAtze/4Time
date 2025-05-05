@@ -536,7 +536,7 @@ public static class Crypto
     private const string AppCredentialName = "4Time/DatenVerschluesselung";
     private static byte[] myAssociatedData = Encoding.UTF8.GetBytes("System Configuration");
 
-    public static string Enryption(string plainText)
+    public static string Encryption(string plainText)
     {
         FirstCallOnly();
         string encryptedData = "";

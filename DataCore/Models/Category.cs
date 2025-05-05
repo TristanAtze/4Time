@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace _4Time.DataCore.Models;
 
-namespace _4Time.DataCore.Models
+internal class Category
 {
-    internal class Category
-    {
-        public int CategoryID { get; set; }
-        public string Description { get; set; }
-        public bool IsWorkTime { get; set; }
-    }
+    public int CategoryID { get; set; }
+    public string Description { get; set; } = string.Empty;
+    public bool IsWorkTime { get; set; }
 }

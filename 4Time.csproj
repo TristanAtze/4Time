@@ -15,7 +15,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="FrontEnd\Form1.CustomCode.cs" />
+    <Compile Remove="DataCore\Services\**" />
+    <Compile Remove="FrontEnd\Form1CustomCode\**" />
+    <Compile Remove="Properties\**" />
+    <EmbeddedResource Remove="DataCore\Services\**" />
+    <EmbeddedResource Remove="FrontEnd\Form1CustomCode\**" />
+    <EmbeddedResource Remove="Properties\**" />
+    <None Remove="DataCore\Services\**" />
+    <None Remove="FrontEnd\Form1CustomCode\**" />
+    <None Remove="Properties\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,13 +39,14 @@
     <None Update="Res\Setup.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="VersionControll.txt">
+    <None Update="Res\Version.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DataCore\Services\" />
-    <Folder Include="Properties\PublishProfiles\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Update="Form1.Events.cs">
+			<DependentUpon>Form1.cs</DependentUpon>
+		</Compile>
+	</ItemGroup>
 </Project>

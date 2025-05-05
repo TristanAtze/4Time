@@ -1,14 +1,10 @@
 using _4Time.DataCore;
 using _4Time.FrontEnd;
-using AutoUpdaterDotNET;
 using Microsoft.Win32;
-using System;
 using System.Diagnostics;
-using System.IO.Packaging;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+using Time4SellersApp;
 
-namespace Time4SellersApp
+namespace _4Time
 {
     internal static class Program
     {
@@ -18,13 +14,20 @@ namespace Time4SellersApp
         [STAThread]
         static void Main()
         {
-            
+            VersionControl();
+
             DoAutoStart();
             Writer.DatabaseSetup();
             Writer.UserSetup();
-            
+
+            Connector.OpenConnection();
+            if (Connector.isConnected)
+            {
+                Thread.Sleep(222);
+            }
+
             string activeUser = Environment.UserName.ToLower();
-            //Updater();
+            Updater();
             if (activeUser == "gerd.kaufmann")
             {
                 Application.EnableVisualStyles();
@@ -35,7 +38,7 @@ namespace Time4SellersApp
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new MainForm());
+                Application.Run(new UserView());
             }
         }
 
@@ -48,14 +51,14 @@ namespace Time4SellersApp
         {
             try
             {
-                string exePath = Process.GetCurrentProcess().MainModule.FileName;
+                string exePath = Process.GetCurrentProcess()?.MainModule?.FileName ?? "";
 
-                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(
-                    @"Software\Microsoft\Windows\CurrentVersion\Run", writable: true))
+                if(exePath != "")
                 {
-                    key.SetValue("AutoStartExample", $"\"{exePath}\"", RegistryValueKind.String);
+                    RegistryKey? key = Registry.CurrentUser.OpenSubKey(
+                    @"Software\Microsoft\Windows\CurrentVersion\Run", writable: true);
+                    key?.SetValue("AutoStartExample", $"\"{exePath}\"", RegistryValueKind.String);
                 }
-
                 Console.WriteLine("Erfolgreich zum Autostart hinzugefügt.");
             }
             catch (Exception ex)
@@ -63,6 +66,16 @@ namespace Time4SellersApp
                 Console.Error.WriteLine("Fehler beim Eintragen in den Autostart:");
                 Console.Error.WriteLine(ex.Message);
             }
+        }
+
+        static void VersionControl()
+        {
+            string version = File.ReadAllText("res/Version.txt");
+
+            if (!File.Exists("Version.txt"))
+                File.Create("Version.txt").Close();
+
+            File.WriteAllText("Version.txt", version);
         }
     }
 }

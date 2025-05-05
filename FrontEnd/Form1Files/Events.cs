@@ -3,7 +3,7 @@ using _4Time.DataCore;
 
 namespace Time4SellersApp;
 
-partial class MainForm
+partial class UserView
 {
     private void RbStartzeitEndzeit_CheckedChanged(object sender, EventArgs e)
     {
@@ -43,48 +43,11 @@ partial class MainForm
 
     private void BtnSpeichern_Click(object sender, EventArgs e)
     {
-        DateTime startzeit = DateTime.Now, endzeit = DateTime.Now;
-        if (StartzeitEndzeitStart.Enabled && StartzeitEndzeitEnde.Enabled)
-        {
-            startzeit = StartzeitEndzeitStart.Value;
-            endzeit = StartzeitEndzeitEnde.Value;
-        }
-        else if (StartzeitDauerStart.Enabled)
-        {
-            startzeit = StartzeitDauerStart.Value;
-            endzeit = startzeit
-                       .AddHours((double)StartzeitDauerStunden.Value)
-                       .AddMinutes((double)StartzeitDauerMinuten.Value);
-        }
-        else if (EndzeitDauerStart.Enabled)
-        {
-            endzeit = EndzeitDauerStart.Value;
-            startzeit = endzeit
-                       .AddHours(-(double)EndzeitDauerStunden.Value)
-                       .AddMinutes(-(double)EndzeitDauerMinuten.Value);
-        }
-        StartzeitEndzeitStart.Text = endzeit.ToString();
-        StartzeitDauerStart.Text = endzeit.ToString();
-        EndzeitDauerStart.Text = endzeit.ToString();
-
-        string art = BookingType.SelectedItem?.ToString();
-
-        string bemerkung = txtBemerkung.Text;
-
         int? oldId = selectedBookingIndex.HasValue
-                     ? allEntrys[selectedBookingIndex.Value].EntryID
-                     : (int?)null;
+                         ? _allEntrys[selectedBookingIndex.Value].EntryID
+                         : (int?)null;
 
-        Entry entry = new()
-        {
-            EntryID = 0,
-            Start = startzeit,
-            End = endzeit,
-            CategoryName = art,
-            Comment = bemerkung,
-            UserID = Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).First().UserID,
-        };
-        entry.CategoryID = Reader.Read<Category>("Categories", ["[CategoryID]"], [$"[Description] = '{entry.CategoryName}'"]).First().CategoryID;
+        var entry = ProcessValues();
 
         if (oldId.HasValue)
         {
@@ -96,33 +59,35 @@ partial class MainForm
 
         if (selectedBookingIndex.HasValue)
         {
+            //TODO Was macht das?!
             var idx = selectedBookingIndex.Value;
-            var k = allEntrys[idx];
-            k.CategoryID = allCategorys.Where(x => x.Description == art).Select(x => x.CategoryID).First();
-            k.Start = startzeit;
-            k.End = endzeit;
-            k.CategoryName = art;
-            k.Comment = bemerkung;
+            var k = _allEntrys[idx];
+            k.CategoryID = entry.CategoryID;
+            k.Start = entry.Start;
+            k.End = entry.End;
+            k.CategoryName = entry.CategoryName;
+            k.Comment = entry.Comment;
         }
         else
         {
-            allEntrys.Add(new Entry
+            _allEntrys.Add(new Entry
             {
-                CategoryID = allCategorys.Where(x => x.Description == art).Select(x => x.CategoryID).First(),
-                Start = startzeit,
-                End = endzeit,
-                CategoryName = art,
-                Comment = bemerkung
+                CategoryID = entry.CategoryID,
+                Start = entry.Start,
+                End = entry.End,
+                CategoryName = entry.CategoryName,
+                Comment = entry.Comment
             });
         }
 
         dgvEntries.Refresh();
-
         selectedBookingIndex = null;
-        MessageBox.Show("Daten gespeichert!", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        fillDataGridView();
         btnSpeichern.Enabled = false;
-        fillValues();
+
+        MessageBox.Show("Daten gespeichert!", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+        FillDataGridView();
+        FillValues();
     }
 
     private void DgvEntries_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -130,7 +95,7 @@ partial class MainForm
         if (e.RowIndex < 0) return;
 
         selectedBookingIndex = e.RowIndex;
-        var entry = allEntrys[e.RowIndex];
+        var entry = _allEntrys[e.RowIndex];
 
         BookingType.SelectedItem = entry.CategoryName;
         txtBemerkung.Text = entry.Comment;
@@ -143,7 +108,7 @@ partial class MainForm
 
     private void BtnNeuladenAuslesen_Click(object sender, EventArgs e)
     {
-        fillDataGridView();
+        FillDataGridView();
     }
 
     private void Löschen_Click(object sender, EventArgs e)
@@ -158,53 +123,79 @@ partial class MainForm
             );
             return;
         }
-
         var result = MessageBox.Show(
             "Möchten Sie den ausgewählten Eintrag wirklich löschen?",
             "Einträge löschen",
             MessageBoxButtons.YesNo,
             MessageBoxIcon.Question
         );
-        if (result != DialogResult.Yes)
-            return;
 
-        var indices = dgvEntries.SelectedRows
+        if (result == DialogResult.Yes)
+        {
+            var indices = dgvEntries.SelectedRows
            .Cast<DataGridViewRow>()
            .Select(r => r.Index)
            .OrderByDescending(i => i)
            .ToList();
 
-        foreach (int rowIndex in indices)
-        {
-            var entry = allEntrys[rowIndex];
-            Writer.Delete("Entries", [$"[EntryID] = {entry.EntryID}"]);
+            foreach (int rowIndex in indices)
+            {
+                var entry = _allEntrys[rowIndex];
+                Writer.Delete("Entries", [$"[EntryID] = {entry.EntryID}"]);
 
-            allEntrys.RemoveAt(rowIndex);
+                _allEntrys.RemoveAt(rowIndex);
+            }
+
+            dgvEntries.Refresh();
+            FillValues();
+            FillDataGridView();
         }
-
-        dgvEntries.Refresh();
-        fillValues();
-        fillDataGridView();
     }
 
     private void Neuladen_Click(object sender, EventArgs e)
     {
-        fillDataGridView();
+        FillDataGridView();
     }
 
     private void BookingType_SelectionChangeCommitted(object sender, EventArgs e)
     {
         btnSpeichern.Enabled = true;
+
+        //Überprüfen ob es sich um Abwesenheit handelt
+        string[] absence = { "Urlaub", "Krankheit", "Berufsschule" };
+
+        if (absence.Contains(BookingType.Text))
+        {
+            rbEndzeitDauer.Enabled = false;
+            rbStartzeitDauer.Enabled = false;
+
+            rbStartzeitEndzeit.Checked = true;
+            StartzeitEndzeitStart.Value = new DateTime(
+                DateTime.Now.Year,
+                DateTime.Now.Month,
+                DateTime.Now.Day,
+                7, 00, 00
+            );
+            StartzeitEndzeitStart.Text = "07:00";
+
+            StartzeitEndzeitEnde.Value = new DateTime(
+                DateTime.Now.Year,
+                DateTime.Now.Month,
+                DateTime.Now.Day,
+                15, 00, 00
+            );
+            StartzeitEndzeitEnde.Text = "15:00";
+        }
+        else
+        {
+            rbEndzeitDauer.Enabled = true;
+            rbStartzeitDauer.Enabled = true;
+        }
     }
 
-    private void DateTimePicker1_ValueChanged(object sender, EventArgs e)
+    private void UebersichtDTP_ValueChanged(object sender, EventArgs e)
     {
-        fillValues();
-    }
-
-    private void DateTimePickerOverview_ValueChanged(object sender, EventArgs e)
-    {
-        fillValues();
+        FillValues();
     }
 
     private void SettingsButton_Click(object sender, EventArgs e)
