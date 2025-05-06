@@ -7,7 +7,7 @@ namespace _4Time.DataCore;
 
 internal class Reader : Connector
 {
-    internal static List<T> Read<T>(string table, string[]? columns = null, string? password = null, params string[] conditions) where T : new()
+    internal static List<T> Read<T>(string table, string[]? columns = null, string[]? conditions = null, string? password = null) where T : new()
     {
         var entries = new List<T>();
         var sql = new StringBuilder();
