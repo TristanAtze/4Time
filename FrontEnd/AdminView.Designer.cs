@@ -368,7 +368,6 @@ namespace Time4SellersApp
             ClientSize = new Size(474, 696);
             Controls.Add(tabControl);
             MaximizeBox = false;
-            MinimizeBox = false;
             Name = "AdminView";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "4TIME";
