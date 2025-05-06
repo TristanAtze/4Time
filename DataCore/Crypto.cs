@@ -539,6 +539,11 @@ public static class Crypto
 
     public static void WriteKey()
     {
+        if (!File.Exists("KeyWritten.4Time"))
+        {
+            File.Create("KeyWritten.4Time").Close();
+        }
+
         if (!File.ReadAllText("KeyWritten.4Time").Contains("true"))
         {
             SecureString userKeySecureString = WindowsCredentialManager.LoadPassword(AppCredentialName);
