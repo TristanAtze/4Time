@@ -143,7 +143,7 @@ namespace Time4SellersApp
                 [
                     $"[FirstName] = '{comboBox1.Text.Split(" ")[0]}'",
                     $"[LastName] = '{comboBox1.Text.Split(" ")[1]}'"
-                ]).First().UserID}", Crypto.GetUserKeys(),
+                ]).First().UserID}",
             ], Crypto.GetUserKeys());
 
             simulatedUser = comboBox1.Text;
