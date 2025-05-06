@@ -7,7 +7,7 @@ namespace _4Time.DataCore;
 
 internal class Reader : Connector
 {
-    internal static List<T> Read<T>(string table, string[]? columns = null, params string[] conditions) where T : new()
+    internal static List<T> Read<T>(string table, string[]? columns = null, string? password = null, params string[] conditions) where T : new()
     {
         var entries = new List<T>();
         var sql = new StringBuilder();
@@ -35,9 +35,9 @@ internal class Reader : Connector
             {
                 if (typeof(T) == typeof(Entry))
                 {
-                    var startDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(3))).Result;
-                    var endDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(4))).Result;
-                    var commentDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(6))).Result;
+                    var startDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(3), password)).Result;
+                    var endDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(4), password)).Result;
+                    var commentDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(6), password)).Result;
                     //Thread.Sleep(20);
                     entries.Add((T)(object)new Entry()
                     {

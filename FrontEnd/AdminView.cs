@@ -7,6 +7,7 @@ namespace Time4SellersApp
 {
     public partial class AdminView : Form
     {
+        public static string simulatedUser = "";
         private readonly List<Category> _allCategorys = Reader.Read<Category>("Categories");
         private List<Entry> _allEntrys = Reader.Read<Entry>("Entries", null,
         [
@@ -37,6 +38,11 @@ namespace Time4SellersApp
 
             FillDataGridView();
             FillValues();
+        }
+
+        public static string ReturnSimulatedUser()
+        {
+            return simulatedUser;
         }
 
         private void FillValues()
@@ -139,6 +145,8 @@ namespace Time4SellersApp
                     $"[LastName] = '{comboBox1.Text.Split(" ")[1]}'"
                 ]).First().UserID}",
             ]);
+
+            simulatedUser = comboBox1.Text;
         }
     }
 }

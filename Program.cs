@@ -22,7 +22,7 @@ namespace _4Time
             Connector.OpenConnection();
             if (Connector.isConnected)
             {
-                Thread.Sleep(222);
+                Thread.Sleep(50);
             }
 
             string activeUser = Environment.UserName.ToLower();
@@ -30,7 +30,7 @@ namespace _4Time
             if (activeUser == "gerd.kaufmann")
             {
                 Crypto.FileListenerStart();
-                Crypto.GetAllKeys();
+                Crypto.GetUserKeys();
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new AdminView());

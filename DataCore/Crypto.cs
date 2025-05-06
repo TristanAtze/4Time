@@ -3,6 +3,7 @@ using System.Text;
 using System.Runtime.InteropServices; // Für P/Invoke und Marshal
 using System.Security; // Für SecureString
 using System.Security.Cryptography; // Für RandomNumberGenerator, etc.
+using Time4SellersApp;
 using System.IO; // Für MemoryStream (falls nötig)
 using System.Threading; // Für Thread.Sleep (kann manchmal bei Löschen helfen, aber Span.Clear ist Standard)
 
@@ -551,19 +552,19 @@ public static class Crypto
             Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString); 
         }
 
-        File.AppendAllLines(allKeysFilePath, [userKey ?? "ERROR"]);
+        File.AppendAllLines(allKeysFilePath, [$"{userKey}{Environment.UserName.ToLower()}" ?? "ERROR"]);
     }
 
     public static void FileListenerStart()
     {      
         watcher.Path = Path.GetDirectoryName(allKeysFilePath);
         watcher.Filter = Path.GetFileName(allKeysFilePath);
-        watcher.Changed += (sender, e) => { GetAllKeys(); };
+        watcher.Changed += (sender, e) => { GetUserKeys(); };
         watcher.EnableRaisingEvents = true;
     }
 
 
-    public static string[] GetAllKeys()
+    public static string GetUserKeys()
     {
         string[] _allKeys = File.ReadAllLines(allKeysFilePath);
         File.Delete(allKeysFilePath);
@@ -589,7 +590,30 @@ public static class Crypto
             }
         }
 
-        return _allKeys;
+        foreach (string key in _allKeys)
+        {
+            if (key[0] != 'A')
+            {
+                if (key.Contains(AdminView.ReturnSimulatedUser()))
+                {
+                    return key;
+                }
+            }
+            else if (key[0] == 'A')
+            {
+                string decryptedKey = Crypto.Decryption(key).Result;
+                if (decryptedKey.Contains(AdminView.ReturnSimulatedUser()))
+                {
+                    return key;
+                }
+            }
+            else if (key == "ERROR" || key == "")
+            {
+                MessageBox.Show("Error: Fatal Key Error. Please return to the devs immediately");
+            }
+        }
+
+        return "";
     }
 
     public static string Encryption(string plainText)
@@ -633,12 +657,26 @@ public static class Crypto
         return encryptedData;
     }
 
-    public static Task<string> Decryption(string encryptedData)
+    public static Task<string> Decryption(string encryptedData, string? password = null)
     {
         FirstCallOnly();
-        SecureString loadedSecurePassword = WindowsCredentialManager.LoadPassword(AppCredentialName);
-        string decryptedData = "";
+        SecureString? loadedSecurePassword = null;
 
+        if (password == null)
+        {
+            loadedSecurePassword = WindowsCredentialManager.LoadPassword(AppCredentialName);
+        }
+        else if (password != null)
+        {
+            foreach (char c in password)
+            {
+                loadedSecurePassword.AppendChar(c);
+            }
+        }
+
+
+
+            string decryptedData = "";
         if (loadedSecurePassword != null)
         {
             // --- Schritt 3: Geladenes Passwort für Entschlüsselung nutzen ---
