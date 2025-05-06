@@ -7,7 +7,7 @@ namespace _4Time.DataCore;
 
 internal class Reader : Connector
 {
-    internal static List<T> Read<T>(string table, string[]? columns = null, params string[] conditions) where T : new()
+    internal static List<T> Read<T>(string table, string[]? columns = null, string[]? conditions = null, string? password = null) where T : new()
     {
         var entries = new List<T>();
         var sql = new StringBuilder();
@@ -17,7 +17,7 @@ internal class Reader : Connector
             ? string.Join(", ", columns)
             : "*";
 
-        sql.Append($"SELECT {columnList} FROM [_LK_TestDB].[dbo].[{table}]");
+        sql.Append($"SELECT {columnList} FROM [dbo].[{table}]");
 
         // Bedingungen
         if (conditions != null && conditions.Length > 0)
@@ -35,14 +35,22 @@ internal class Reader : Connector
             {
                 if (typeof(T) == typeof(Entry))
                 {
+                    //var startDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(3), password)).Result;
+                    //var endDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(4), password)).Result;
+                    //var commentDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(6), password)).Result;
+
+                    var startDecrypted = Crypto.Decryption(reader.GetString(3), password).Result;
+                    var endDecrypted = Crypto.Decryption(reader.GetString(4), password).Result;
+                    var commentDecrypted = Crypto.Decryption(reader.GetString(6), password).Result;
+                    //Thread.Sleep(20);
                     entries.Add((T)(object)new Entry()
                     {
                         EntryID = reader.GetInt32(0),
                         UserID = reader.GetInt32(1),
                         CategoryID = reader.GetInt32(2),
-                        Start = DateTime.Parse(Crypto.Decrypt(reader.GetString(3).Split("-")[0])),
-                        End = DateTime.Parse(Crypto.Decrypt(reader.GetString(3).Split("-")[1])),
-                        Comment = reader.GetString(5)
+                        Start = DateTime.Parse(startDecrypted),
+                        End = DateTime.Parse(endDecrypted),
+                        Comment = commentDecrypted
                     });
                 }
                 else

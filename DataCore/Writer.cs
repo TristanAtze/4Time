@@ -14,7 +14,7 @@ internal class Writer : Connector
 
     internal static void DatabaseSetup()
     {
-        string query = File.ReadAllText("Setup.txt");
+        string query = File.ReadAllText("res/Setup.txt");
 
         var connection = new SqlConnection(CONNECTION_STRING);
         var command = new SqlCommand(query, connection);
@@ -26,11 +26,10 @@ internal class Writer : Connector
 
     internal static void UserSetup()
     {
-        //TODO Datenbank ändern!!!
         string query = @"
-                IF(NOT EXISTS (SELECT 1 FROM [_LK_TestDB].[dbo].[User] WHERE [FirstName] = @firstName AND [LastName] = @lastName))
+                IF(NOT EXISTS (SELECT 1 FROM [dbo].[User] WHERE [FirstName] = @firstName AND [LastName] = @lastName))
                 BEGIN
-                    INSERT INTO [_LK_TestDB].[dbo].[User] ([FirstName], [LastName], [IsAdmin])
+                    INSERT INTO [dbo].[User] ([FirstName], [LastName], [IsAdmin])
                     VALUES (@firstName, @lastName, @IsAdmin)
                 END
             ";
@@ -52,8 +51,7 @@ internal class Writer : Connector
         Dictionary<string,object?> columns = [];
 
         //Alle Spalten ermitteln
-        //TODO Datenbank ändern!!!
-        string schemaQuery = $"SELECT COLUMN_NAME FROM [_LK_TestDB].INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}'";
+        string schemaQuery = $"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}'";
         var schemaConnection = new SqlConnection(CONNECTION_STRING);
         var schemaCommand = new SqlCommand(schemaQuery, schemaConnection);
 
@@ -77,17 +75,26 @@ internal class Writer : Connector
         }
 
         //INSERT-Statement erstellen
-        string query = $"INSERT INTO [_LK_TestDB].[dbo].[{table}] ";
+        string query = $"INSERT INTO [dbo].[{table}] ";
 
         if(columns.Count > 0)
         {
-            if (columns.ContainsKey("Start_End") && obj.GetType() == typeof(Entry))
+            if (columns.ContainsKey("Start") && obj.GetType() == typeof(Entry))
             {
-                Entry entry = (Entry)obj;
-                columns["Start_End"] = Crypto.Encrypt(entry.Start.ToString()) + " - " + Crypto.Encrypt(entry.End.ToString());
+                columns["Start"] = Crypto.Encryption(columns["Start"]?.ToString() ?? "");
             }
 
-            query += "(" + string.Join(", ", columns.Keys) + ") VALUES (";
+            if (columns.ContainsKey("End") && obj.GetType() == typeof(Entry))
+            {
+                columns["End"] = Crypto.Encryption(columns["End"]?.ToString() ?? "");
+            }
+
+            if (columns.ContainsKey("Comment") && obj.GetType() == typeof(Entry))
+            {
+                columns["Comment"] = Crypto.Encryption(columns["Comment"]?.ToString() ?? "");
+            }
+
+            query += "([" + string.Join("], [", columns.Keys) + "]) VALUES (";
             query += string.Join(", ", columns.Values.Select(v => v == null ? "NULL" : $"'{v}'")) + ")";
         }
         else
@@ -107,8 +114,7 @@ internal class Writer : Connector
     {
         Dictionary<string, object?> columns = [];
         //Alle Spalten ermitteln
-        //TODO Datenbank ändern!!!
-        string schemaQuery = $"SELECT COLUMN_NAME FROM [_LK_TestDB].INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}'";
+        string schemaQuery = $"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}'";
         var schemaConnection = new SqlConnection(CONNECTION_STRING);
 
         using (var schemaCommand = new SqlCommand(schemaQuery, schemaConnection))
@@ -140,10 +146,10 @@ internal class Writer : Connector
             if(columns.ContainsKey("Start_End") && obj.GetType() == typeof(Entry))
             {
                 Entry entry = (Entry) obj;
-                columns["Start_End"] = Crypto.Encrypt(entry.Start.ToString()) + " - " + Crypto.Encrypt(entry.End.ToString());
+                columns["Start_End"] = Crypto.Encryption(entry.Start.ToString()) + " - " + Crypto.Encryption(entry.End.ToString());
             }
 
-            query = $"UPDATE [_LK_TestDB].[dbo].[{table}] SET ";
+            query = $"UPDATE [dbo].[{table}] SET ";
             query += string.Join(", ", columns.Select(kvp => $"{kvp.Key} = {(kvp.Value == null ? "NULL" : $"'{kvp.Value}'")}"));
             query += $" WHERE ";
             query += string.Join(" AND ", condition);
@@ -158,7 +164,7 @@ internal class Writer : Connector
 
     internal static void Delete(string table, params string[] conditions)
     {
-        string query = $"DELETE FROM [_LK_TestDB].[dbo].[{table}]";
+        string query = $"DELETE FROM [dbo].[{table}]";
 
         if (conditions.Length > 0)
         {

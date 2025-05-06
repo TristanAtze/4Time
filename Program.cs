@@ -1,5 +1,4 @@
 using _4Time.DataCore;
-using _4Time.FrontEnd;
 using Microsoft.Win32;
 using System.Diagnostics;
 using Time4SellersApp;
@@ -14,7 +13,8 @@ namespace _4Time
         [STAThread]
         static void Main()
         {
-            
+            VersionControl();
+
             DoAutoStart();
             Writer.DatabaseSetup();
             Writer.UserSetup();
@@ -22,19 +22,22 @@ namespace _4Time
             Connector.OpenConnection();
             if (Connector.isConnected)
             {
-                Thread.Sleep(222);
+                Thread.Sleep(50);
             }
 
             string activeUser = Environment.UserName.ToLower();
             Updater();
             if (activeUser == "gerd.kaufmann")
             {
+                Crypto.FileListenerStart();
+                Crypto.GetUserKeys();
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new AdminView());
             }
             else
             {
+                Crypto.WriteKey();
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new UserView());
@@ -65,6 +68,16 @@ namespace _4Time
                 Console.Error.WriteLine("Fehler beim Eintragen in den Autostart:");
                 Console.Error.WriteLine(ex.Message);
             }
+        }
+
+        static void VersionControl()
+        {
+            string version = File.ReadAllText("res/Version.txt");
+
+            if (!File.Exists("Version.txt"))
+                File.Create("Version.txt").Close();
+
+            File.WriteAllText("Version.txt", version);
         }
     }
 }

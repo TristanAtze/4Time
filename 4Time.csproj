@@ -15,10 +15,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DataCore\Services\**" />
     <Compile Remove="FrontEnd\Form1CustomCode\**" />
     <Compile Remove="Properties\**" />
+    <EmbeddedResource Remove="DataCore\Services\**" />
     <EmbeddedResource Remove="FrontEnd\Form1CustomCode\**" />
     <EmbeddedResource Remove="Properties\**" />
+    <None Remove="DataCore\Services\**" />
     <None Remove="FrontEnd\Form1CustomCode\**" />
     <None Remove="Properties\**" />
   </ItemGroup>
@@ -26,6 +29,7 @@
   <ItemGroup>
     <PackageReference Include="Autoupdater.NET.Official" Version="1.9.2" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="9.0.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,7 +39,7 @@
     <None Update="Res\Setup.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="VersionControll.txt">
+    <None Update="Res\Version.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
