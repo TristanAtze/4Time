@@ -35,9 +35,13 @@ internal class Reader : Connector
             {
                 if (typeof(T) == typeof(Entry))
                 {
-                    var startDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(3), password)).Result;
-                    var endDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(4), password)).Result;
-                    var commentDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(6), password)).Result;
+                    //var startDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(3), password)).Result;
+                    //var endDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(4), password)).Result;
+                    //var commentDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(6), password)).Result;
+
+                    var startDecrypted = Crypto.Decryption(reader.GetString(3), password).Result;
+                    var endDecrypted = Crypto.Decryption(reader.GetString(4), password).Result;
+                    var commentDecrypted = Crypto.Decryption(reader.GetString(6), password).Result;
                     //Thread.Sleep(20);
                     entries.Add((T)(object)new Entry()
                     {

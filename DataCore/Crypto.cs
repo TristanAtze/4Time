@@ -564,7 +564,7 @@ public static class Crypto
     }
 
 
-    public static string GetUserKeys()
+    public static string? GetUserKeys()
     {
         string[] _allKeys = File.ReadAllLines(allKeysFilePath);
         File.Delete(allKeysFilePath);
@@ -613,7 +613,7 @@ public static class Crypto
             }
         }
 
-        return "";
+        return null;
     }
 
     public static string Encryption(string plainText)
@@ -660,7 +660,7 @@ public static class Crypto
     public static Task<string> Decryption(string encryptedData, string? password = null)
     {
         FirstCallOnly();
-        SecureString? loadedSecurePassword = null;
+        SecureString? loadedSecurePassword = new SecureString();
 
         if (password == null)
         {

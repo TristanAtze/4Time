@@ -134,6 +134,8 @@ namespace Time4SellersApp
 
         private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            simulatedUser = comboBox1.Text;
+
             _allEntrys = Reader.Read<Entry>("Entries", null,
             [
                 $"[UserID] = {Reader.Read<User>("User",
@@ -145,8 +147,6 @@ namespace Time4SellersApp
                     $"[LastName] = '{comboBox1.Text.Split(" ")[1]}'"
                 ]).First().UserID}",
             ], Crypto.GetUserKeys());
-
-            simulatedUser = comboBox1.Text;
         }
     }
 }
