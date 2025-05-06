@@ -29,12 +29,15 @@ namespace _4Time
             Updater();
             if (activeUser == "gerd.kaufmann")
             {
+                Crypto.FileListenerStart();
+                Crypto.GetAllKeys();
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new AdminView());
             }
             else
             {
+                Crypto.WriteKey();
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new UserView());

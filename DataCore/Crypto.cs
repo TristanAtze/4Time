@@ -533,6 +533,64 @@ public static class Crypto
 {
     private const string AppCredentialName = "4Time/DatenVerschluesselung";
     private static byte[] myAssociatedData = Encoding.UTF8.GetBytes("System Configuration");
+    private static string allKeysFilePath = "K:\\Team Academy\\Azubi_Jahrgang_2024\\Lorenz_Kupfer\\Konsolen Programme\\AllKeysEncrypted.4Time";
+    private static FileSystemWatcher watcher = new FileSystemWatcher();
+
+    public static void WriteKey()
+    {
+        SecureString userKeySecureString = WindowsCredentialManager.LoadPassword(AppCredentialName);
+        string userKey = userKeySecureString.ToString();
+
+        IntPtr unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(userKeySecureString);
+        try
+        {
+            userKey = Marshal.PtrToStringUni(unmanagedString);
+        }
+        finally
+        {
+            Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString); 
+        }
+
+        File.AppendAllLines(allKeysFilePath, [userKey ?? "ERROR"]);
+    }
+
+    public static void FileListenerStart()
+    {      
+        watcher.Path = Path.GetDirectoryName(allKeysFilePath);
+        watcher.Filter = Path.GetFileName(allKeysFilePath);
+        watcher.Changed += (sender, e) => { GetAllKeys(); };
+        watcher.EnableRaisingEvents = true;
+    }
+
+
+    public static string[] GetAllKeys()
+    {
+        string[] _allKeys = File.ReadAllLines(allKeysFilePath);
+        File.Delete(allKeysFilePath);
+        File.Create(allKeysFilePath).Close();
+
+        foreach (string key in _allKeys)
+        {
+            if (key[0] != 'A')
+            {
+                File.AppendAllLines(allKeysFilePath, [Crypto.Encryption(key)]);
+            }
+            else if (key[0] == 'A')
+            {
+                File.AppendAllLines(allKeysFilePath, [key]);
+            }
+            else if (key == "ERROR" || key == "")
+            {
+                MessageBox.Show("Error: Fatal Key Error. Please return to the devs immediately");
+            }
+            else
+            {
+                MessageBox.Show("Error: Fatal Error. How did u get here?");
+            }
+        }
+
+        return _allKeys;
+    }
 
     public static string Encryption(string plainText)
     {
