@@ -42,6 +42,10 @@ namespace Time4SellersApp
 
         public static string ReturnSimulatedUser()
         {
+            if (simulatedUser == "")
+            {
+                return "olkjhdsaoivufaewsutrzgAOSIUVFUESAOITRa";
+            }
             return simulatedUser;
         }
 
@@ -147,6 +151,9 @@ namespace Time4SellersApp
                     $"[LastName] = '{comboBox1.Text.Split(" ")[1]}'"
                 ]).First().UserID}",
             ], Crypto.GetUserKeys());
+
+            FillDataGridView();
+            FillValues();
         }
     }
 }

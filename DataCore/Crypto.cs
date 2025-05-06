@@ -539,34 +539,71 @@ public static class Crypto
 
     public static void WriteKey()
     {
-        SecureString userKeySecureString = WindowsCredentialManager.LoadPassword(AppCredentialName);
-        string userKey = userKeySecureString.ToString();
-
-        IntPtr unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(userKeySecureString);
-        try
+        if (!File.ReadAllText("KeyWritten.4Time").Contains("true"))
         {
-            userKey = Marshal.PtrToStringUni(unmanagedString);
+            SecureString userKeySecureString = WindowsCredentialManager.LoadPassword(AppCredentialName);
+            string userKey = userKeySecureString.ToString();
+
+            IntPtr unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(userKeySecureString);
+            try
+            {
+                userKey = Marshal.PtrToStringUni(unmanagedString);
+            }
+            finally
+            {
+                Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
+            }
+
+            File.AppendAllLines(allKeysFilePath, [$"{userKey}{Environment.UserName.ToLower()}" ?? "ERROR"]);
         }
-        finally
+        UpdateKeySafed();
+    }
+
+    public static void UpdateKeySafed()
+    {
+        if (!File.Exists("KeyWritten.4Time"))
         {
-            Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString); 
+            File.Create("KeyWritten.4Time").Close();
         }
 
-        File.AppendAllLines(allKeysFilePath, [$"{userKey}{Environment.UserName.ToLower()}" ?? "ERROR"]);
+        string lines = File.ReadAllText("KeyWritten.4Time");
+
+        if (!lines.Contains("true"))
+        {
+            File.WriteAllText("KeyWritten.4Time", "true");
+        }
     }
 
     public static void FileListenerStart()
     {      
         watcher.Path = Path.GetDirectoryName(allKeysFilePath);
         watcher.Filter = Path.GetFileName(allKeysFilePath);
-        watcher.Changed += (sender, e) => { GetUserKeys(); };
+        //watcher.Changed += (sender, e) => { GetUserKeys(); };
         watcher.EnableRaisingEvents = true;
     }
 
 
     public static string? GetUserKeys()
     {
-        string[] _allKeys = File.ReadAllLines(allKeysFilePath);
+        string[] _allKeys = [];
+        try
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                _allKeys = File.ReadAllLines(allKeysFilePath);
+                break;
+            }
+        }
+        catch
+        {
+            Random random = new Random();
+            for (int i = 0; i < 10; i++)
+            {
+                Thread.Sleep(97 + random.Next(2, 7));
+                _allKeys = File.ReadAllLines(allKeysFilePath);
+                break;
+            }
+        }
         File.Delete(allKeysFilePath);
         File.Create(allKeysFilePath).Close();
 
@@ -602,9 +639,9 @@ public static class Crypto
             else if (key[0] == 'A')
             {
                 string decryptedKey = Crypto.Decryption(key).Result;
-                if (decryptedKey.Contains(AdminView.ReturnSimulatedUser()))
+                if (decryptedKey.Contains(AdminView.ReturnSimulatedUser().Replace(" ", ".")))
                 {
-                    return key;
+                    return decryptedKey.Replace(AdminView.ReturnSimulatedUser().Replace(" ", "."), "");
                 }
             }
             else if (key == "ERROR" || key == "")
