@@ -564,6 +564,48 @@ public static class Crypto
         UpdateKeySafed();
     }
 
+    public static string ReadBinaryFileAsText(string binaryFilePath)
+    {
+        if (!File.Exists(binaryFilePath))
+        {
+            return null;
+        }
+
+        try
+        {
+            byte[] fileBytes = File.ReadAllBytes(binaryFilePath);
+
+            string textContent = Encoding.UTF8.GetString(fileBytes);
+
+            return textContent;
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
+    }
+
+    public static void ConvertTxtToBinary(string txtFilePath, string binaryFilePath)
+    {
+        if (!File.Exists(txtFilePath))
+        {
+            return;
+        }
+
+        try
+        {
+            string textContent = File.ReadAllText(txtFilePath);
+            
+            byte[] fileBytes = Encoding.UTF8.GetBytes(textContent);
+
+            File.WriteAllBytes(binaryFilePath, fileBytes);
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
     public static void UpdateKeySafed()
     {
         if (!File.Exists("KeyWritten.4Time"))
