@@ -1,13 +1,17 @@
+using _4Time.Async;
 using _4Time.DataCore;
 using _4Time.DataCore.Models;
+using _4Time.FrontEnd;
+using Microsoft.Identity.Client;
 using System.Data;
+using Windows.UI.Notifications;
 
 namespace Time4SellersApp
 {
     public partial class UserView : Form
     {
         private readonly List<Category> _allCategorys = Reader.Read<Category>("Categories");
-        private readonly List<Entry> _allEntrys = Reader.Read<Entry>("Entries", null,
+        public List<Entry> _allEntrys = Reader.Read<Entry>("Entries", null,
         [
             $"[UserID] = {Reader.Read<User>("User",
             [
@@ -44,6 +48,8 @@ namespace Time4SellersApp
             FillValues();
 
             LogginName.Text = Connector.FirstName + " " + Connector.LastName;
+
+            NotificationManager notificationManager = new(_allEntrys, _allCategorys);
         }
 
         private void FillValues()
@@ -130,7 +136,12 @@ namespace Time4SellersApp
             OTWeek.Text = $"{(overtimeWeek > TimeSpan.Zero ? overtimeWeek : TimeSpan.Zero):hh\\:mm} std";
         }
 
-        private void FillDataGridView()
+        public decimal GetMinLockedTime()
+        {
+            return LockTimeMin.Value;
+        }
+
+        public void FillDataGridView()
         {
             dgvEntries.DataSource = null;
             dgvEntries.Rows.Clear();
@@ -201,6 +212,33 @@ namespace Time4SellersApp
             };
 
             return entry;
+        }
+
+        private bool ValidateValues(Entry obj)
+        {
+            bool result = true;
+
+            var dailyEntries = _allEntrys.Where(x => x.Start.Date == DateTime.Now.Date)
+                .ToList();
+
+            TimeSpan workDur = TimeSpan.Zero;
+            for(int i = dailyEntries.Count - 1; i >= 0; i--)
+            {
+                if(_allCategorys.Where(x => x.CategoryID == dailyEntries[i].CategoryID).First().IsWorkTime)
+                    workDur += dailyEntries[i].End - dailyEntries[i].Start;
+            }
+
+            TimeSpan entryDur = obj.End - obj.Start;
+            if (workDur >= TimeSpan.FromHours(4.5) && entryDur < TimeSpan.FromMinutes(30))
+            {
+                result = false;
+            }
+            else if(workDur < TimeSpan.FromHours(1))
+            {
+                result = false;
+            }
+
+            return result;
         }
     }
 }

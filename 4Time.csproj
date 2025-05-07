@@ -6,7 +6,7 @@
 	 <!-- optional, default = <Version> -->
 	 <FileVersion>2.0.1.1</FileVersion>
 	 <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0-windows</TargetFramework>
+	  <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
     <RootNamespace>_4Time</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
@@ -29,6 +29,7 @@
   <ItemGroup>
     <PackageReference Include="Autoupdater.NET.Official" Version="1.9.2" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
+    <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
     <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="9.0.4" />
   </ItemGroup>
 
