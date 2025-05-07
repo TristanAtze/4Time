@@ -783,7 +783,7 @@ public static class Crypto
 
     public static void FirstCallOnly()
     {
-        string myPasswordString = $"{Environment.OSVersion}{Environment.ProcessId}{Environment.CpuUsage}{Environment.TickCount64}";
+        string myPasswordString = $"{Environment.OSVersion}{Environment.ProcessId}{Environment.CurrentManagedThreadId}{Environment.TickCount64}";
         SecureString loadedSecurePassword = WindowsCredentialManager.LoadPassword(AppCredentialName);
         if (loadedSecurePassword == null)
         {
