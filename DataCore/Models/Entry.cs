@@ -1,6 +1,6 @@
 ﻿namespace _4Time.DataCore.Models;
 
-internal class Entry
+public class Entry
 {
     public int EntryID { get; set; }
     public int UserID { get; set; }

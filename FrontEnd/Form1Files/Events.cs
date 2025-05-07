@@ -1,5 +1,6 @@
 ﻿using _4Time.DataCore.Models;
 using _4Time.DataCore;
+using _4Time.Async;
 
 namespace Time4SellersApp;
 
@@ -107,9 +108,26 @@ partial class UserView
         btnSpeichern.Enabled = true;
     }
 
-    private void BtnNeuladenAuslesen_Click(object sender, EventArgs e)
+    private async void BtnNeuladenAuslesen_Click(object sender, EventArgs e)
     {
-        FillDataGridView();
+        this.Neuladen.Enabled = false;
+        this.btnNeuladenAuslesen.Enabled = false;
+
+        try
+        {
+            await Task.Run(() => DisableReloadButton.PerformDataReloadAsync(this));
+
+            this.FillDataGridView();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Ein Fehler ist beim Neuladen aufgetreten: {ex.Message}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        finally
+        {
+            this.Neuladen.Enabled = true;
+            this.btnNeuladenAuslesen.Enabled = true;
+        }
     }
 
     private void Löschen_Click(object sender, EventArgs e)
@@ -153,9 +171,26 @@ partial class UserView
         }
     }
 
-    private void Neuladen_Click(object sender, EventArgs e)
+    public async void Neuladen_Click(object sender, EventArgs e)
     {
-        FillDataGridView();
+        this.Neuladen.Enabled = false;
+        this.btnNeuladenAuslesen.Enabled = false;
+
+        try
+        {
+            await Task.Run(() => DisableReloadButton.PerformDataReloadAsync(this));
+
+            this.FillDataGridView();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Ein Fehler ist beim Neuladen aufgetreten: {ex.Message}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        finally
+        {
+            this.Neuladen.Enabled = true;
+            this.btnNeuladenAuslesen.Enabled = true;
+        }
     }
 
     private void BookingType_SelectionChangeCommitted(object sender, EventArgs e)

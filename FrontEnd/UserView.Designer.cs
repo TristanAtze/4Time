@@ -34,7 +34,7 @@ namespace Time4SellersApp
         private Button btnSpeichern;
         private Button btnSettingsEintragen;
         private Button btnSettingsAuslesen;
-        private Button btnNeuladenAuslesen;
+        public Button btnNeuladenAuslesen;
         private DataGridView dgvEntries;
         private List<Entry> allEntrys = [];
         private List<Category> allCategorys = [];
@@ -74,7 +74,7 @@ namespace Time4SellersApp
         private DataGridViewTextBoxColumn colKommentar;
         private DataGridViewTextBoxColumn colDauer;
         private Button Löschen;
-        private Button Neuladen;
+        public Button Neuladen;
         private Label PauseLabel;
         private Label NachmittagLabel;
         private Label VormittagLabel;
@@ -163,6 +163,10 @@ namespace Time4SellersApp
             colKommentar = new DataGridViewTextBoxColumn();
             colDauer = new DataGridViewTextBoxColumn();
             Settings = new TabPage();
+            label8 = new Label();
+            LockTimeMin = new NumericUpDown();
+            label7 = new Label();
+            LockedTimeMin = new Label();
             label6 = new Label();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
@@ -177,6 +181,7 @@ namespace Time4SellersApp
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvEntries).BeginInit();
             Settings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)LockTimeMin).BeginInit();
             SuspendLayout();
             // 
             // tabControl
@@ -695,6 +700,7 @@ namespace Time4SellersApp
             Löschen.Size = new Size(100, 30);
             Löschen.TabIndex = 5;
             Löschen.Text = "Löschen";
+            Löschen.Click += Löschen_Click;
             // 
             // pictureBox1
             // 
@@ -766,6 +772,10 @@ namespace Time4SellersApp
             // 
             // Settings
             // 
+            Settings.Controls.Add(label8);
+            Settings.Controls.Add(LockTimeMin);
+            Settings.Controls.Add(label7);
+            Settings.Controls.Add(LockedTimeMin);
             Settings.Controls.Add(label6);
             Settings.Location = new Point(4, 24);
             Settings.Name = "Settings";
@@ -774,6 +784,44 @@ namespace Time4SellersApp
             Settings.TabIndex = 3;
             Settings.Text = "Settings";
             Settings.UseVisualStyleBackColor = true;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Font = new Font("Segoe UI", 18F);
+            label8.Location = new Point(294, 12);
+            label8.Name = "label8";
+            label8.Size = new Size(56, 32);
+            label8.TabIndex = 4;
+            label8.Text = "Min";
+            // 
+            // LockTimeMin
+            // 
+            LockTimeMin.Font = new Font("Segoe UI", 10F);
+            LockTimeMin.Location = new Point(247, 19);
+            LockTimeMin.Name = "LockTimeMin";
+            LockTimeMin.Size = new Size(41, 25);
+            LockTimeMin.TabIndex = 3;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Font = new Font("Segoe UI", 9F);
+            label7.Location = new Point(8, 44);
+            label7.Name = "label7";
+            label7.Size = new Size(327, 15);
+            label7.TabIndex = 2;
+            label7.Text = "Die Sperrzeit ab der eine Desktop Benachrichtigung erscheint";
+            // 
+            // LockedTimeMin
+            // 
+            LockedTimeMin.AutoSize = true;
+            LockedTimeMin.Font = new Font("Segoe UI", 18F);
+            LockedTimeMin.Location = new Point(8, 12);
+            LockedTimeMin.Name = "LockedTimeMin";
+            LockedTimeMin.Size = new Size(243, 32);
+            LockedTimeMin.TabIndex = 1;
+            LockedTimeMin.Text = "Pc Sperrzeit Schwelle:";
             // 
             // label6
             // 
@@ -809,7 +857,12 @@ namespace Time4SellersApp
             ((System.ComponentModel.ISupportInitialize)dgvEntries).EndInit();
             Settings.ResumeLayout(false);
             Settings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)LockTimeMin).EndInit();
             ResumeLayout(false);
         }
+        private Label label7;
+        private Label LockedTimeMin;
+        private Label label8;
+        private NumericUpDown LockTimeMin;
     }
 }

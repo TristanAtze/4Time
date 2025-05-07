@@ -1,3 +1,4 @@
+using _4Time.Async;
 using _4Time.DataCore;
 using Microsoft.Win32;
 using System.Diagnostics;
@@ -13,12 +14,7 @@ namespace _4Time
         [STAThread]
         static void Main()
         {
-            VersionControl();
-
-            DoAutoStart();
-            Writer.DatabaseSetup();
-            Writer.UserSetup();
-
+            ProgrammSetup();
             Connector.OpenConnection();
             if (Connector.isConnected)
             {
@@ -42,6 +38,15 @@ namespace _4Time
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new UserView());
             }
+        }
+
+        static void ProgrammSetup()
+        {
+            VersionControl();
+            DoAutoStart();
+            Writer.DatabaseSetup();
+            Writer.UserSetup();
+            Task.Run(static () => TrackLockedTime.TrackLockedTimeStartAsync());
         }
 
         static void Updater()

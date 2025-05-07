@@ -1,5 +1,7 @@
+using _4Time.Async;
 using _4Time.DataCore;
 using _4Time.DataCore.Models;
+using Microsoft.Identity.Client;
 using System.Data;
 
 namespace Time4SellersApp
@@ -7,7 +9,7 @@ namespace Time4SellersApp
     public partial class UserView : Form
     {
         private readonly List<Category> _allCategorys = Reader.Read<Category>("Categories");
-        private readonly List<Entry> _allEntrys = Reader.Read<Entry>("Entries", null,
+        public List<Entry> _allEntrys = Reader.Read<Entry>("Entries", null,
         [
             $"[UserID] = {Reader.Read<User>("User",
             [
@@ -130,7 +132,12 @@ namespace Time4SellersApp
             OTWeek.Text = $"{(overtimeWeek > TimeSpan.Zero ? overtimeWeek : TimeSpan.Zero):hh\\:mm} std";
         }
 
-        private void FillDataGridView()
+        public decimal GetMinLockedTime()
+        {
+            return LockTimeMin.Value;
+        }
+
+        public void FillDataGridView()
         {
             dgvEntries.DataSource = null;
             dgvEntries.Rows.Clear();
