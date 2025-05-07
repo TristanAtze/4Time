@@ -129,6 +129,7 @@ partial class UserView
             await Task.Run(() => DisableReloadButton.PerformDataReloadAsync(this));
 
             this.FillDataGridView();
+            this.FillValues();
         }
         catch (Exception ex)
         {
@@ -192,6 +193,7 @@ partial class UserView
             await Task.Run(() => DisableReloadButton.PerformDataReloadAsync(this));
 
             this.FillDataGridView();
+            this.FillValues();
         }
         catch (Exception ex)
         {
