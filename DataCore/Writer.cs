@@ -1,5 +1,6 @@
 ﻿using _4Time.DataCore.Models;
 using Microsoft.Data.SqlClient;
+using System.Diagnostics.Contracts;
 
 namespace _4Time.DataCore;
 
@@ -136,21 +137,26 @@ internal class Writer : Connector
         {
             if (columns.ContainsKey(prop.Name))
             {
-                columns[prop.Name] = prop.GetValue(obj);
+                if(prop.Name == "Start" || prop.Name == "End" || prop.Name == "Comment")
+                {
+                    columns[prop.Name] = Crypto.Encryption(prop.GetValue(obj)?.ToString() ?? "");
+                }
+                else
+                    columns[prop.Name] = prop.GetValue(obj);
             }
         }
         //UPDATE-Statement erstellen
         string query = "";
         if (columns.Count > 0)
         {
-            if(columns.ContainsKey("Start_End") && obj.GetType() == typeof(Entry))
-            {
-                Entry entry = (Entry) obj;
-                columns["Start_End"] = Crypto.Encryption(entry.Start.ToString()) + " - " + Crypto.Encryption(entry.End.ToString());
-            }
+            //if(columns.ContainsKey("Start_End") && obj.GetType() == typeof(Entry))
+            //{
+            //    Entry entry = (Entry) obj;
+            //    columns["Start_End"] = Crypto.Encryption(entry.Start.ToString()) + " - " + Crypto.Encryption(entry.End.ToString());
+            //}
 
             query = $"UPDATE [dbo].[{table}] SET ";
-            query += string.Join(", ", columns.Select(kvp => $"{kvp.Key} = {(kvp.Value == null ? "NULL" : $"'{kvp.Value}'")}"));
+            query += string.Join(", ", columns.Select(kvp => $"[{kvp.Key}] = {(kvp.Value == null ? "NULL" : $"'{kvp.Value}'")}"));
             query += $" WHERE ";
             query += string.Join(" AND ", condition);
         }

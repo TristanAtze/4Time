@@ -104,6 +104,7 @@ partial class UserView
         StartzeitEndzeitEnde.Value = entry.End;
 
         tabControl.SelectedTab = tabEintragen;
+        btnSpeichern.Enabled = true;
     }
 
     private void BtnNeuladenAuslesen_Click(object sender, EventArgs e)
