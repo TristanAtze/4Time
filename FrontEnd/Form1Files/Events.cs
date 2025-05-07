@@ -50,6 +50,17 @@ partial class UserView
 
         var entry = ProcessValues();
 
+        //Überprüfen der Eingaben hinsichtlich des Jugendarbeitschutzes
+        if (entry.End.Date == DateTime.Now.Date 
+            && entry.Start.Date == DateTime.Now.Date
+            && _allCategorys.Where(x => x.CategoryID == entry.CategoryID).First().IsWorkTime == false
+            && !ValidateValues(entry))
+        {
+            DialogResult result = MessageBox.Show("Ungültiger Eintrag!\nTrotzdem buchen?", "4TIME", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+            if (result == DialogResult.No)
+                return;
+        }
+
         if (oldId.HasValue)
         {
             entry.EntryID = oldId.Value;
@@ -60,7 +71,7 @@ partial class UserView
 
         if (selectedBookingIndex.HasValue)
         {
-            //TODO Was macht das?!
+            //Ändert die Werte des gewählten Objekts auf der "Auslesen"-Seite
             var idx = selectedBookingIndex.Value;
             var k = _allEntrys[idx];
             k.CategoryID = entry.CategoryID;
