@@ -128,10 +128,15 @@ namespace Time4SellersApp
             TimeSpan overtimeToday = workToday - TimeSpan.FromHours(8);
             TimeSpan overtimeWeek = workWeek - TimeSpan.FromHours(40);
 
+            var workWeekHours = workWeek.Hours + workWeek.Days * 24;
+
+            pauseWeek = pauseWeek + TimeSpan.FromHours(pauseWeek.TotalDays * 24);
+            var pauseWeekHours = pauseWeek.Hours + pauseWeek.Days * 24;
+
             PTToday.Text = $"{pauseToday:hh\\:mm} std";
-            PTWeek.Text = $"{pauseWeek:hh\\:mm} std";
+            PTWeek.Text = $"{pauseWeekHours}:{pauseWeek.Minutes} std";
             WTToday.Text = $"{workToday:hh\\:mm} std";
-            WTWeek.Text = $"{workWeek:hh\\:mm} std";
+            WTWeek.Text = $"{workWeekHours}:{workWeek.Minutes} std";
             OTToday.Text = $"{(overtimeToday > TimeSpan.Zero ? overtimeToday : TimeSpan.Zero):hh\\:mm} std";
             OTWeek.Text = $"{(overtimeWeek > TimeSpan.Zero ? overtimeWeek : TimeSpan.Zero):hh\\:mm} std";
         }
