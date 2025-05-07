@@ -34,7 +34,7 @@ internal class NotificationManager
         timer.AutoReset = false;
         timer.Enabled = true;
 
-        int interval = 0;
+        double interval = 0;
         List<Entry> breakTimeToday = [.._allEntrys
             .Where(x => _allCategorys.Where(y => y.CategoryID == x.CategoryID).First().IsWorkTime == false)
             .Where(x => x.Start.Date == DateTime.Now.Date)];
@@ -45,10 +45,10 @@ internal class NotificationManager
 
             TimeSpan timeSpan = DateTime.Now - endOfBreak;
 
-            interval = timeSpan.Milliseconds;
+            interval = timeSpan.TotalMilliseconds;
         }
         else
-            interval = TimeSpan.FromHours(4.5).Milliseconds - Environment.TickCount;
+            interval = TimeSpan.FromHours(4.5).TotalMilliseconds - Environment.TickCount;
 
         timer.Interval = interval > 0 ? interval : 1;
         timer.Start();

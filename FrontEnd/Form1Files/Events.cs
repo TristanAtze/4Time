@@ -50,6 +50,12 @@ partial class UserView
 
         var entry = ProcessValues();
 
+        if(entry.End < entry.Start || entry.End == entry.Start)
+        {
+            MessageBox.Show("Ungültige Zeiten!", "4TIME", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+        }
+
         //Überprüfen der Eingaben hinsichtlich des Jugendarbeitschutzes
         if (entry.End.Date == DateTime.Now.Date 
             && entry.Start.Date == DateTime.Now.Date
