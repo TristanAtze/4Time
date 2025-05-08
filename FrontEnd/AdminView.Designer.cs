@@ -185,7 +185,7 @@ namespace Time4SellersApp
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(121, 23);
             comboBox1.TabIndex = 26;
-            comboBox1.SelectionChangeCommitted += comboBox1_SelectionChangeCommitted;
+            comboBox1.SelectionChangeCommitted += ComboBox1_SelectionChangeCommitted;
             // 
             // dateTimePickerOverview
             // 
