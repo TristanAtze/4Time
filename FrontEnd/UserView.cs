@@ -22,6 +22,7 @@ namespace Time4SellersApp
 
         public UserView()
         {
+            Crypto.WriteKey();
             InitializeComponent();
             MaximumSize = Size;
             MinimumSize = Size;

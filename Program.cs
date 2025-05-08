@@ -34,7 +34,6 @@ namespace _4Time
             }
             else
             {
-                Crypto.WriteKey();
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new UserView());
