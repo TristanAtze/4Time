@@ -217,7 +217,7 @@ partial class UserView
         btnSpeichern.Enabled = true;
 
         //Überprüfen ob es sich um Abwesenheit handelt
-        string[] absence = { "Urlaub", "Krankheit", "Berufsschule" };
+        string[] absence = ["Urlaub", "Krankheit", "Berufsschule"];
 
         if (absence.Contains(BookingType.Text))
         {

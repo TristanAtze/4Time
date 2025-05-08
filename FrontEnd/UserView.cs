@@ -49,7 +49,8 @@ namespace Time4SellersApp
 
             LogginName.Text = Connector.FirstName + " " + Connector.LastName;
 
-            NotificationManager notificationManager = new(_allEntrys, _allCategorys);
+            //TODO : Tatsächlichen Wert aus den Settings holen
+            NotificationManager notificationManager = new(_allEntrys, _allCategorys, false);
         }
 
         private void FillValues()
@@ -130,7 +131,7 @@ namespace Time4SellersApp
 
             var workWeekHours = workWeek.Hours + workWeek.Days * 24;
 
-            pauseWeek = pauseWeek + TimeSpan.FromHours(pauseWeek.TotalDays * 24);
+            pauseWeek += TimeSpan.FromHours(pauseWeek.TotalDays * 24);
             var pauseWeekHours = pauseWeek.Hours + pauseWeek.Days * 24;
 
             PTToday.Text = $"{pauseToday:hh\\:mm} std";

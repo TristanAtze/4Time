@@ -19,10 +19,9 @@ internal class NotificationManager
         _preNotify = preNotify;
         _allEntrys = allEntrys;
         _allCategorys = allCategorys;
-        breakTimeToday = _allEntrys
+        breakTimeToday = [.. _allEntrys
             .Where(x => _allCategorys.Where(y => y.CategoryID == x.CategoryID).First().IsWorkTime == false)
-            .Where(x => x.Start.Date == DateTime.Now.Date)
-            .ToList();
+            .Where(x => x.Start.Date == DateTime.Now.Date)];
 
         TimerSetup();
         if (preNotify)
@@ -97,10 +96,10 @@ internal class NotificationManager
 
             TimeSpan timeSpan = DateTime.Now - endOfBreak;
 
-            interval = timeSpan.TotalMilliseconds;
+            interval = (int)timeSpan.TotalMilliseconds;
         }
         else
-            interval = TimeSpan.FromHours(4.5).TotalMilliseconds - Environment.TickCount;
+            interval = (int)(TimeSpan.FromHours(4.5).TotalMilliseconds - Environment.TickCount);
 
         timer.Interval = interval > 0 ? interval : 1;
         timer.Start();

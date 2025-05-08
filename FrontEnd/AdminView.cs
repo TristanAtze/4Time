@@ -136,7 +136,7 @@ namespace Time4SellersApp
             Settings.Focus();
         }
 
-        private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
+        private void ComboBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
             simulatedUser = comboBox1.Text;
 

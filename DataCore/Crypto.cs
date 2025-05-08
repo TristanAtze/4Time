@@ -7,6 +7,8 @@ using Time4SellersApp;
 using System.IO; // Für MemoryStream (falls nötig)
 using System.Threading; // Für Thread.Sleep (kann manchmal bei Löschen helfen, aber Span.Clear ist Standard)
 
+namespace _4Time.DataCore;
+
 // Wichtiger Hinweis: SecureString und das sichere Löschen von Speicher sind komplexe Themen.
 // SecureString hat Einschränkungen, und 100% garantierte sichere Speicherlöschung kann schwierig sein.
 // Die hier gezeigten Methoden folgen gängigen Praktiken, aber es ist kein absoluter Schutz gegen alle Arten von Angriffen.
@@ -51,7 +53,7 @@ public static class HighlySecureAuthenticatedVersionedCipher
     /// in derselben Assembly sie nutzen können.
     /// </summary>
     /// <param name="data">Das zu löschende Byte-Array.</param>
-    internal static void ClearBytes(byte[] data)
+    internal static void ClearBytes(byte[]? data)
     {
         if (data == null) return;
         // Überschreibt den Speicher mit Nullen.
@@ -72,11 +74,9 @@ public static class HighlySecureAuthenticatedVersionedCipher
     private static byte[] DeriveKeyFromPassword(string password, byte[] salt)
     {
         // Wir nutzen hier SHA256 als Pseudorandom Function (PRF) für PBKDF2.
-        using (var pbkdf2 = new Rfc2898DeriveBytes(password, salt, Pbkdf2Iterations, HashAlgorithmName.SHA256))
-        {
-            byte[] key = pbkdf2.GetBytes(AesKeySizeBytes);
-            return key; // Aufrufer muss diesen Schlüssel löschen!
-        }
+        using var pbkdf2 = new Rfc2898DeriveBytes(password, salt, Pbkdf2Iterations, HashAlgorithmName.SHA256);
+        byte[] key = pbkdf2.GetBytes(AesKeySizeBytes);
+        return key; // Aufrufer muss diesen Schlüssel löschen!
     }
 
     /// <summary>
@@ -88,15 +88,15 @@ public static class HighlySecureAuthenticatedVersionedCipher
     /// <param name="password">Das Passwort, aus dem der Schlüssel abgeleitet wird.</param>
     /// <param name="associatedData">Zusätzliche Daten (z.B. Header), die authentifiziert, aber nicht verschlüsselt werden. Kann null sein.</param>
     /// <returns>Den Base64-kodierten Chiffretext inklusive Version, Salt, Nonce und Tag, oder null bei Fehler.</returns>
-    public static string Encrypt(string plainText, string password, byte[] associatedData = null)
+    public static string? Encrypt(string plainText, string password, byte[]? associatedData = null)
     {
         if (string.IsNullOrEmpty(password)) { Console.WriteLine("Error: Password cannot be empty for secure encryption."); return null; }
-        byte[] plainBytes = (string.IsNullOrEmpty(plainText)) ? new byte[0] : Encoding.UTF8.GetBytes(plainText);
+        byte[] plainBytes = (string.IsNullOrEmpty(plainText)) ? [] : Encoding.UTF8.GetBytes(plainText);
 
-        byte[] keyBytes = null;
-        byte[] salt = null;
-        byte[] nonceBytes = null;
-        byte[] resultBytes = null;
+        byte[]? keyBytes = null;
+        byte[]? salt = null;
+        byte[]? nonceBytes = null;
+        byte[]? resultBytes = null;
 
         try
         {
@@ -110,7 +110,7 @@ public static class HighlySecureAuthenticatedVersionedCipher
             byte[] cipherBytes = new byte[plainBytes.Length];
             byte[] tagBytes = new byte[AesGcmTagSizeBytes];
 
-            using (var aesGcm = new AesGcm(keyBytes))
+            using (var aesGcm = new AesGcm(keyBytes ?? []))
             {
                 aesGcm.Encrypt(nonceBytes, plainBytes, cipherBytes, tagBytes, associatedData);
             }
@@ -151,7 +151,7 @@ public static class HighlySecureAuthenticatedVersionedCipher
     /// <param name="password">Das Passwort, aus dem der Schlüssel abgeleitet wird.</param>
     /// <param name="associatedData">Dieselbe zusätzliche Daten (z.B. Header) wie bei der Verschlüsselung. Kann null sein.</param>
     /// <returns>Der entschlüsselte Klartext, oder null bei Fehler oder Manipulationsversuch (inkl. falscher Version).</returns>
-    public static string Decrypt(string base64CipherTextWithHeader, string password, byte[] associatedData = null)
+    public static string? Decrypt(string base64CipherTextWithHeader, string password, byte[]? associatedData = null)
     {
         if (string.IsNullOrEmpty(password))
         {
@@ -163,13 +163,13 @@ public static class HighlySecureAuthenticatedVersionedCipher
             return "";
         }
 
-        byte[] inputBytes = null;
-        byte[] salt = null;
-        byte[] nonceBytes = null;
-        byte[] tagBytes = null;
-        byte[] cipherBytes = null;
-        byte[] keyBytes = null;
-        byte[] plainBytes = null;
+        byte[]? inputBytes = null;
+        byte[]? salt = null;
+        byte[]? nonceBytes = null;
+        byte[]? tagBytes = null;
+        byte[]? cipherBytes = null;
+        byte[]? keyBytes = null;
+        byte[]? plainBytes = null;
 
         try
         {
@@ -251,7 +251,7 @@ public static class HighlySecureAuthenticatedVersionedCipher
 /// Kapselt P/Invoke-Aufrufe an das Windows Credential Manager API für sichere Passwortspeicherung.
 /// Diese Klasse ist WINDOWS-SPEZIFISCH.
 /// </summary>
-public static class WindowsCredentialManager
+public static partial class WindowsCredentialManager
 {
     // --- P/Invoke Deklarationen für Credential Manager API ---
 
@@ -298,9 +298,9 @@ public static class WindowsCredentialManager
         public IntPtr AcquireCredentialsHandleArgs;
     }
 
-    [DllImport(CredmgrDll, EntryPoint = "CredReadW", CharSet = CharSet.Unicode, SetLastError = true)]
+    [LibraryImport(CredmgrDll, EntryPoint = "CredReadW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
     [return: MarshalAs(UnmanagedType.Bool)] // Gibt Bool zurück
-    internal static extern bool CredRead(
+    internal static partial bool CredRead(
         string TargetName,
         CREDENTIAL_TYPE Type,
         int Flags,
@@ -327,7 +327,7 @@ public static class WindowsCredentialManager
 
     // --- Hilfsfunktion zum Konvertieren und Löschen von SecureString ---
     // Nutzt die ClearBytes Methode aus HighlySecureAuthenticatedVersionedCipher
-    private static byte[] SecureStringToBytes(SecureString secureString)
+    private static byte[]? SecureStringToBytes(SecureString secureString)
     {
         if (secureString == null) return null;
 
@@ -365,14 +365,14 @@ public static class WindowsCredentialManager
         if (string.IsNullOrEmpty(targetName)) throw new ArgumentNullException(nameof(targetName));
         if (password == null) throw new ArgumentNullException(nameof(password));
 
-        byte[] passwordBytes = null; // Managed copy
+        byte[]? passwordBytes = null; // Managed copy
         IntPtr targetNamePtr = IntPtr.Zero;
         IntPtr commentPtr = IntPtr.Zero;
         GCHandle passwordBytesHandle = default;
 
         try
         {
-            passwordBytes = SecureStringToBytes(password);
+            passwordBytes = SecureStringToBytes(password) ?? [];
             if (passwordBytes == null) return false;
 
             passwordBytesHandle = GCHandle.Alloc(passwordBytes, GCHandleType.Pinned);
@@ -384,7 +384,7 @@ public static class WindowsCredentialManager
                 commentPtr = Marshal.StringToHGlobalUni(comment);
             }
 
-            CREDENTIAL cred = new CREDENTIAL
+            CREDENTIAL cred = new()
             {
                 Flags = 0,
                 Type = (uint)CREDENTIAL_TYPE.GENERIC,
@@ -429,12 +429,12 @@ public static class WindowsCredentialManager
     /// </summary>
     /// <param name="targetName">Der eindeutige Name des Credentials.</param>
     /// <returns>Das geladene Passwort als SecureString, oder null, wenn nicht gefunden oder Fehler.</returns>
-    public static SecureString LoadPassword(string targetName)
+    public static SecureString? LoadPassword(string targetName)
     {
         if (string.IsNullOrEmpty(targetName)) throw new ArgumentNullException(nameof(targetName));
 
         IntPtr credPtr = IntPtr.Zero; // Pointer, auf den API die Struktur schreibt
-        SecureString password = null;
+        SecureString? password = null;
 
         try
         {
@@ -535,7 +535,7 @@ public static class Crypto
     private const string AppCredentialName = "4Time/DatenVerschluesselung";
     private static byte[] myAssociatedData = Encoding.UTF8.GetBytes("System Configuration");
     private static string allKeysFilePath = "K:\\Team Academy\\Azubi_Jahrgang_2024\\Lorenz_Kupfer\\Konsolen Programme\\AllKeysEncrypted.4Time";
-    private static FileSystemWatcher watcher = new FileSystemWatcher();
+    private static FileSystemWatcher watcher = new();
 
     public static void WriteKey()
     {
@@ -552,10 +552,10 @@ public static class Crypto
 
         if (!File.ReadAllText("KeyWritten.4Time").Contains("true"))
         {
-            SecureString userKeySecureString = WindowsCredentialManager.LoadPassword(AppCredentialName);
-            string userKey = userKeySecureString.ToString();
+            SecureString? userKeySecureString = WindowsCredentialManager.LoadPassword(AppCredentialName);
+            string? userKey = userKeySecureString?.ToString();
 
-            IntPtr unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(userKeySecureString);
+            IntPtr unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(userKeySecureString ?? new());
             try
             {
                 userKey = Marshal.PtrToStringUni(unmanagedString);
@@ -570,7 +570,7 @@ public static class Crypto
         UpdateKeySafed();
     }
 
-    public static string ReadBinaryFileAsText(string binaryFilePath)
+    public static string? ReadBinaryFileAsText(string binaryFilePath)
     {
         if (!File.Exists(binaryFilePath))
         {
@@ -585,7 +585,7 @@ public static class Crypto
 
             return textContent;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return null;
         }
@@ -606,7 +606,7 @@ public static class Crypto
 
             File.WriteAllBytes(binaryFilePath, fileBytes);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
 
         }
@@ -629,7 +629,7 @@ public static class Crypto
 
     public static void FileListenerStart()
     {      
-        watcher.Path = Path.GetDirectoryName(allKeysFilePath);
+        watcher.Path = Path.GetDirectoryName(allKeysFilePath) ?? "";
         watcher.Filter = Path.GetFileName(allKeysFilePath);
         //watcher.Changed += (sender, e) => { GetUserKeys(); };
         watcher.EnableRaisingEvents = true;
@@ -641,21 +641,13 @@ public static class Crypto
         string[] _allKeys = [];
         try
         {
-            for (int i = 0; i < 10; i++)
-            {
-                _allKeys = File.ReadAllLines(allKeysFilePath);
-                break;
-            }
+            _allKeys = File.ReadAllLines(allKeysFilePath);
         }
         catch
         {
-            Random random = new Random();
-            for (int i = 0; i < 10; i++)
-            {
-                Thread.Sleep(97 + random.Next(2, 7));
-                _allKeys = File.ReadAllLines(allKeysFilePath);
-                break;
-            }
+            Random random = new ();
+            Thread.Sleep(97 + random.Next(2, 7));
+            _allKeys = File.ReadAllLines(allKeysFilePath);
         }
         File.Delete(allKeysFilePath);
         File.Create(allKeysFilePath).Close();
@@ -710,13 +702,13 @@ public static class Crypto
     {
         FirstCallOnly();
         string encryptedData = "";
-        SecureString loadedSecurePassword = WindowsCredentialManager.LoadPassword(AppCredentialName);
+        SecureString loadedSecurePassword = WindowsCredentialManager.LoadPassword(AppCredentialName) ?? new();
 
         if (loadedSecurePassword != null)
         {
             // WICHTIG: Das geladene SecureString SOFORT für die Schlüsselableitung nutzen
             // und dann das SecureString Objekt und alle temporären Klartextkopien löschen.
-            string passwordStringForDerivation = null;
+            string? passwordStringForDerivation = null;
 
             try
             {
@@ -731,7 +723,7 @@ public static class Crypto
                 // aber wir brauchen hier das Salt vom Encrypt/Decrypt Ergebnis, um sie direkt aufzurufen.
                 // Einfacher ist, den String an Encrypt/Decrypt zu übergeben.)
 
-                encryptedData = HighlySecureAuthenticatedVersionedCipher.Encrypt(plainText, passwordStringForDerivation, myAssociatedData);
+                encryptedData = HighlySecureAuthenticatedVersionedCipher.Encrypt(plainText, passwordStringForDerivation, myAssociatedData) ?? "";
             }
             finally
             {
@@ -750,7 +742,7 @@ public static class Crypto
     public static Task<string> Decryption(string encryptedData, string? password = null)
     {
         FirstCallOnly();
-        SecureString? loadedSecurePassword = new SecureString();
+        SecureString? loadedSecurePassword = new();
 
         if (password == null)
         {
@@ -770,12 +762,12 @@ public static class Crypto
         if (loadedSecurePassword != null)
         {
             // --- Schritt 3: Geladenes Passwort für Entschlüsselung nutzen ---
-            string passwordStringForDecryption = null;
+            string? passwordStringForDecryption = null;
             try
             {
                 passwordStringForDecryption = new System.Net.NetworkCredential("", loadedSecurePassword).Password;
 
-                decryptedData = HighlySecureAuthenticatedVersionedCipher.Decrypt(encryptedData, passwordStringForDecryption, myAssociatedData);
+                decryptedData = HighlySecureAuthenticatedVersionedCipher.Decrypt(encryptedData, passwordStringForDecryption, myAssociatedData) ?? "";
             }
             finally
             {
@@ -790,10 +782,10 @@ public static class Crypto
     public static void FirstCallOnly()
     {
         string myPasswordString = $"{Environment.OSVersion}{Environment.ProcessId}{Environment.CurrentManagedThreadId}{Environment.TickCount64}";
-        SecureString loadedSecurePassword = WindowsCredentialManager.LoadPassword(AppCredentialName);
+        SecureString? loadedSecurePassword = WindowsCredentialManager.LoadPassword(AppCredentialName);
         if (loadedSecurePassword == null)
         {
-            SecureString userSecurePassword = new SecureString();
+            SecureString userSecurePassword = new();
             foreach (char c in myPasswordString)
             {
                 userSecurePassword.AppendChar(c);
