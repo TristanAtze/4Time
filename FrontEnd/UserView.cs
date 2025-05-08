@@ -1,10 +1,7 @@
-using _4Time.Async;
 using _4Time.DataCore;
 using _4Time.DataCore.Models;
 using _4Time.FrontEnd;
-using Microsoft.Identity.Client;
 using System.Data;
-using Windows.UI.Notifications;
 
 namespace Time4SellersApp
 {

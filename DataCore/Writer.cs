@@ -1,6 +1,5 @@
 ﻿using _4Time.DataCore.Models;
 using Microsoft.Data.SqlClient;
-using System.Diagnostics.Contracts;
 
 namespace _4Time.DataCore;
 
@@ -80,19 +79,19 @@ internal class Writer : Connector
 
         if(columns.Count > 0)
         {
-            if (columns.ContainsKey("Start") && obj.GetType() == typeof(Entry))
+            if (columns.TryGetValue("Start", out object? valueStart) && obj.GetType() == typeof(Entry))
             {
-                columns["Start"] = Crypto.Encryption(columns["Start"]?.ToString() ?? "");
+                columns["Start"] = Crypto.Encryption(valueStart?.ToString() ?? "");
             }
 
-            if (columns.ContainsKey("End") && obj.GetType() == typeof(Entry))
+            if (columns.TryGetValue("End", out object? valueEnd) && obj.GetType() == typeof(Entry))
             {
-                columns["End"] = Crypto.Encryption(columns["End"]?.ToString() ?? "");
+                columns["End"] = Crypto.Encryption(valueEnd?.ToString() ?? "");
             }
 
-            if (columns.ContainsKey("Comment") && obj.GetType() == typeof(Entry))
+            if (columns.TryGetValue("Comment", out object? valueComment) && obj.GetType() == typeof(Entry))
             {
-                columns["Comment"] = Crypto.Encryption(columns["Comment"]?.ToString() ?? "");
+                columns["Comment"] = Crypto.Encryption(valueComment?.ToString() ?? "");
             }
 
             query += "([" + string.Join("], [", columns.Keys) + "]) VALUES (";
@@ -149,12 +148,6 @@ internal class Writer : Connector
         string query = "";
         if (columns.Count > 0)
         {
-            //if(columns.ContainsKey("Start_End") && obj.GetType() == typeof(Entry))
-            //{
-            //    Entry entry = (Entry) obj;
-            //    columns["Start_End"] = Crypto.Encryption(entry.Start.ToString()) + " - " + Crypto.Encryption(entry.End.ToString());
-            //}
-
             query = $"UPDATE [dbo].[{table}] SET ";
             query += string.Join(", ", columns.Select(kvp => $"[{kvp.Key}] = {(kvp.Value == null ? "NULL" : $"'{kvp.Value}'")}"));
             query += $" WHERE ";

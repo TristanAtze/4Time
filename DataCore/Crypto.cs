@@ -1,11 +1,8 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using System.Runtime.InteropServices; // Für P/Invoke und Marshal
 using System.Security; // Für SecureString
 using System.Security.Cryptography; // Für RandomNumberGenerator, etc.
 using Time4SellersApp;
-using System.IO; // Für MemoryStream (falls nötig)
-using System.Threading; // Für Thread.Sleep (kann manchmal bei Löschen helfen, aber Span.Clear ist Standard)
 
 namespace _4Time.DataCore;
 
