@@ -97,10 +97,10 @@ internal class NotificationManager
 
             TimeSpan timeSpan = DateTime.Now - endOfBreak;
 
-            interval = timeSpan.Milliseconds;
+            interval = timeSpan.TotalMilliseconds;
         }
         else
-            interval = TimeSpan.FromHours(4.5).Milliseconds - Environment.TickCount;
+            interval = TimeSpan.FromHours(4.5).TotalMilliseconds - Environment.TickCount;
 
         timer.Interval = interval > 0 ? interval : 1;
         timer.Start();
