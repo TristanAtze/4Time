@@ -13,10 +13,10 @@ internal class NotificationManager
     private static bool _preNotify = false;
     private static bool _preNotifyActive = false;
 
-    public NotificationManager(List<Entry> allEntrys, List<Category> allCategorys, bool preNotify)
+    public NotificationManager(List<Entry> allEntrys, List<Category> allCategorys, CheckBox preNotify)
     {
-        _preNotifyActive = preNotify;
-        _preNotify = preNotify;
+        _preNotifyActive = preNotify.Checked;
+        _preNotify = preNotify.Checked;
         _allEntrys = allEntrys;
         _allCategorys = allCategorys;
         breakTimeToday = [.. _allEntrys
@@ -24,7 +24,7 @@ internal class NotificationManager
             .Where(x => x.Start.Date == DateTime.Now.Date)];
 
         TimerSetup();
-        if (preNotify)
+        if (preNotify.Checked)
         {
             PreNotify();
         }

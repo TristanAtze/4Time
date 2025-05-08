@@ -47,8 +47,7 @@ namespace Time4SellersApp
 
             LogginName.Text = Connector.FirstName + " " + Connector.LastName;
 
-            //TODO : Tatsächlichen Wert aus den Settings holen
-            NotificationManager notificationManager = new(_allEntrys, _allCategorys, false);
+            NotificationManager notificationManager = new(_allEntrys, _allCategorys, checkBox1);
         }
 
         private void FillValues()
