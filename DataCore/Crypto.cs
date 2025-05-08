@@ -539,6 +539,12 @@ public static class Crypto
 
     public static void WriteKey()
     {
+        //TODO Registry Implementierung des KeyWritten.4Time
+        //Anstatt den Key in einer Datei zu speichern wird er hier in der Registry gespeichert.
+        //RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\4Time");
+        //key.SetValue("PreNotify", false);
+        //key.Close();
+
         if (!File.Exists("KeyWritten.4Time"))
         {
             File.Create("KeyWritten.4Time").Close();

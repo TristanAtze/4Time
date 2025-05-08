@@ -81,7 +81,6 @@ namespace Time4SellersApp
         private DateTimePicker dateTimePicker1;
         private DateTimePicker dateTimePickerOverview;
         private TabPage Settings;
-        private Label label6;
 
         /// <summary>
         /// Verwendete Ressourcen bereinigen.
@@ -167,7 +166,6 @@ namespace Time4SellersApp
             LockTimeMin = new NumericUpDown();
             label7 = new Label();
             LockedTimeMin = new Label();
-            label6 = new Label();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureLogoUebersicht).BeginInit();
@@ -776,7 +774,6 @@ namespace Time4SellersApp
             Settings.Controls.Add(LockTimeMin);
             Settings.Controls.Add(label7);
             Settings.Controls.Add(LockedTimeMin);
-            Settings.Controls.Add(label6);
             Settings.Location = new Point(4, 24);
             Settings.Name = "Settings";
             Settings.Padding = new Padding(3);
@@ -822,16 +819,6 @@ namespace Time4SellersApp
             LockedTimeMin.Size = new Size(243, 32);
             LockedTimeMin.TabIndex = 1;
             LockedTimeMin.Text = "Pc Sperrzeit Schwelle:";
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Font = new Font("Segoe UI", 42F);
-            label6.Location = new Point(-3, 226);
-            label6.Name = "label6";
-            label6.Size = new Size(473, 74);
-            label6.TabIndex = 0;
-            label6.Text = "COMMING SOON";
             // 
             // UserView
             // 
