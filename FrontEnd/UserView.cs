@@ -55,6 +55,8 @@ namespace Time4SellersApp
             LoadSettings();
 
             NotificationManager notificationManager = new(_allEntrys, _allCategorys, checkBox1);
+
+            TrackLockedTime.InitializeAndStartTracking(this);
         }
 
         private void LoadSettings()

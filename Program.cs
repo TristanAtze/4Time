@@ -46,7 +46,6 @@ namespace _4Time
             DoAutoStart();
             Writer.DatabaseSetup();
             Writer.UserSetup();
-            Task.Run(static () => TrackLockedTime.TrackLockedTimeStartAsync());
         }
 
         static void Updater()
