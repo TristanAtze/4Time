@@ -29,6 +29,7 @@ namespace Time4SellersApp
         {
             Crypto.WriteKey();
             InitializeComponent();
+            this.FormClosing += new FormClosingEventHandler(MainForm_FormClosing);
             MaximumSize = Size;
             MinimumSize = Size;
 
@@ -57,6 +58,16 @@ namespace Time4SellersApp
             NotificationManager notificationManager = new(_allEntrys, _allCategorys, checkBox1);
 
             TrackLockedTime.InitializeAndStartTracking(this);
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true; 
+                MessageBox.Show("Dieses Fenster kann nicht geschlossen werden.", "Hinweis", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            }
         }
 
         private void LoadSettings()
