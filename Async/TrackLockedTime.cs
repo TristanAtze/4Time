@@ -50,8 +50,8 @@ internal class TrackLockedTime
             case SessionSwitchReason.SessionUnlock:
                 _pcUnlockedTime = DateTime.Now;
                 Debug.WriteLine($"PC entsperrt um: {_pcUnlockedTime}");
-                AutoBookCaller(); // Verwendet jetzt _mainUserViewInstance
-                ShowPauseMessageBox(); // Verwendet jetzt _mainUserViewInstance
+                AutoBookCaller(); 
+                ShowPauseMessageBox();
                 break;
         }
     }
@@ -70,14 +70,16 @@ internal class TrackLockedTime
             .OrderBy(x => x.Start).FirstOrDefault();
 
         Entry? lastEntry = _mainUserViewInstance._allEntrys
-            .Where(x => x.End.Date == DateTime.Now.Date) // Beachte: Nur Einträge, die heute enden
+            .Where(x => x.End.Date == DateTime.Now.Date) 
             .Where(x => x.End.TimeOfDay < DateTime.Now.TimeOfDay)
             .OrderByDescending(x => x.End).FirstOrDefault();
 
-        if (DateTime.Now.Hour < 12 && todaysFirstEntry == null)
-            ShowFirstEntryMessageBox(null); // Explizit null übergeben, da todaysFirstEntry hier null ist
+        if (todaysFirstEntry == null)
+            ShowFirstEntryMessageBox(null);
         else
             ShowLatestEntryMessageBox(lastEntry);
+
+        _mainUserViewInstance.Neuladen.PerformClick();
     }
 
     private static void ShowLatestEntryMessageBox(Entry? entry)
@@ -93,11 +95,11 @@ internal class TrackLockedTime
             return;
         }
 
-        var latestEntryEnd = entry.End; // Jetzt sicher, da entry nicht null ist
+        var latestEntryEnd = entry.End; 
         var category = 1;
         string bookTypeString = "";
 
-        if (DateTime.Now.Hour >= 12) // Korrektur: >= 12 für Nachmittag
+        if (DateTime.Now.Hour >= 12) 
         {
             bookTypeString = "Nachmittag"; category = 10;
         }
@@ -106,26 +108,23 @@ internal class TrackLockedTime
             bookTypeString = "Vormittag"; category = 9;
         }
 
-        Thread.Sleep(500); // Überlege, ob Thread.Sleep hier wirklich nötig ist (blockiert den Event-Thread)
+        Thread.Sleep(500); 
         if (_pcLockedTime.HasValue)
         {
-            var ursprünglicheMinSize = _mainUserViewInstance.MinimumSize; // Verwende _mainUserViewInstance
+            var ursprünglicheMinSize = _mainUserViewInstance.MinimumSize;
             _mainUserViewInstance.MinimumSize = new System.Drawing.Size(0, 0);
 
             DialogResult result = MessageBox.Show(
-                _mainUserViewInstance, // Wichtig: Owner für das MessageBox setzen, falls UserView ein Fenster ist
+                _mainUserViewInstance,
                 $"Der PC wurde Entsperrt. Willst du folgende Zeit als '{bookTypeString}' buchen?\nStart: {latestEntryEnd}\nEnde: {_pcLockedTime.Value}",
                 "4Time Autobook",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Information,
-                MessageBoxDefaultButton.Button1,
-                MessageBoxOptions.ServiceNotification // Kann UI blockieren, wenn aus einem Nicht-UI-Thread aufgerufen ohne Invoke
+                MessageBoxDefaultButton.Button1
             );
 
             if (result == DialogResult.Yes)
             {
-                _mainUserViewInstance.Neuladen.PerformClick(); // Verwende die übergebene Instanz
-
                 Writer.Insert("Entries", new Entry
                 {
                     UserID = Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).First().UserID,
@@ -134,13 +133,12 @@ internal class TrackLockedTime
                     CategoryID = category,
                     Comment = "[AUTO]Letzer Eintrag - Lock"
                 });
-                _mainUserViewInstance.Neuladen.PerformClick(); // Eventuell nochmal laden nach dem Insert
             }
-            _mainUserViewInstance.MinimumSize = ursprünglicheMinSize; // Zurücksetzen
+            _mainUserViewInstance.MinimumSize = ursprünglicheMinSize;
         }
     }
 
-    private static void ShowFirstEntryMessageBox(Entry? todaysFirstEntry) // todaysFirstEntry ist hier immer null basierend auf AutoBookCaller
+    private static void ShowFirstEntryMessageBox(Entry? todaysFirstEntry) 
     {
         if (_mainUserViewInstance == null)
         {
@@ -148,12 +146,9 @@ internal class TrackLockedTime
             return;
         }
 
-        if (DateTime.Now.Hour >= 12) // Korrektur: >= 12
-            return;
-
         string bookTypeString = "Vormittag";
-        TimeSpan pcUptime = TimeSpan.FromMilliseconds(Environment.TickCount); // Uptime seit Systemstart
-        DateTime pcStartedAt = DateTime.Now - pcUptime; // Berechnet den Zeitpunkt des Systemstarts
+        TimeSpan pcUptime = TimeSpan.FromMilliseconds(Environment.TickCount);
+        DateTime pcStartedAt = DateTime.Now - pcUptime;
 
         Thread.Sleep(500);
         if (_pcLockedTime.HasValue)
@@ -166,14 +161,11 @@ internal class TrackLockedTime
                 "4Time Autobook",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Information,
-                MessageBoxDefaultButton.Button1,
-                MessageBoxOptions.ServiceNotification
+                MessageBoxDefaultButton.Button1
             );
 
             if (result == DialogResult.Yes)
             {
-                _mainUserViewInstance.Neuladen.PerformClick(); // Verwende die übergebene Instanz
-
                 Writer.Insert("Entries", new Entry
                 {
                     UserID = Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).First().UserID,
@@ -182,7 +174,6 @@ internal class TrackLockedTime
                     CategoryID = 9,
                     Comment = "[AUTO]PC Start - Lock"
                 });
-                _mainUserViewInstance.Neuladen.PerformClick();
             }
             _mainUserViewInstance.MinimumSize = ursprünglicheMinSize;
         }
@@ -198,7 +189,7 @@ internal class TrackLockedTime
 
         Thread.Sleep(500);
         if (_pcLockedTime.HasValue && _pcUnlockedTime.HasValue &&
-            (_pcUnlockedTime.Value - _pcLockedTime.Value > TimeSpan.FromMinutes((double)_mainUserViewInstance.GetMinLockedTime()))) // Zugriff auf Methode der Instanz
+            (_pcUnlockedTime.Value - _pcLockedTime.Value > TimeSpan.FromMinutes((double)_mainUserViewInstance.GetMinLockedTime())))
         {
             var ursprünglicheMinSize = _mainUserViewInstance.Size;
             _mainUserViewInstance.MinimumSize = new System.Drawing.Size(0, 0);
@@ -208,14 +199,11 @@ internal class TrackLockedTime
                 "4Time Autobook",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Information,
-                MessageBoxDefaultButton.Button1,
-                MessageBoxOptions.ServiceNotification
+                MessageBoxDefaultButton.Button1
             );
 
             if (result == DialogResult.Yes)
             {
-                _mainUserViewInstance.Neuladen.PerformClick(); // Verwende die übergebene Instanz
-
                 Writer.Insert("Entries", new Entry
                 {
                     UserID = Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).First().UserID,
@@ -224,7 +212,6 @@ internal class TrackLockedTime
                     CategoryID = 3,
                     Comment = "[AUTO]PC Lock - Unlock"
                 });
-                _mainUserViewInstance.Neuladen.PerformClick();
             }
             _mainUserViewInstance.MinimumSize = ursprünglicheMinSize;
         }
