@@ -43,18 +43,18 @@ internal class NotificationManager
         {
             notifyText = "Bitte mache eine Pause.";
 
-            if(!_preNotifyActive)
+            if (!_preNotifyActive)
             {
                 _preNotify = true;
-            }  
+            }
         }
 
-            new ToastContentBuilder()
-                .AddText(notifyText)
-                .Show(toast =>
-                {
-                    toast.ExpirationTime = DateTime.Now.AddMinutes(15);
-                });
+        new ToastContentBuilder()
+            .AddText(notifyText)
+            .Show(toast =>
+            {
+                toast.ExpirationTime = DateTime.Now.AddMinutes(15);
+            });
     }
 
     private void PreNotify()
@@ -72,10 +72,10 @@ internal class NotificationManager
 
             TimeSpan timeSpan = DateTime.Now - endOfBreak.AddMinutes(-10);
 
-            interval = timeSpan.Milliseconds;
+            interval = (int)timeSpan.TotalMilliseconds;
         }
         else
-            interval = TimeSpan.FromHours(4.5).Milliseconds - Environment.TickCount;
+            interval = (int)TimeSpan.FromHours(4.5).TotalMilliseconds - Environment.TickCount;
 
         timer.Interval = interval > 0 ? interval : 1;
         timer.Start();

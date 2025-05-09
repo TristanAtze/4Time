@@ -13,7 +13,7 @@ namespace _4Time
         /// Der Haupteinstiegspunkt für die Anwendung.
         /// </summary>
         [STAThread]
-        static void Main()
+        public static void Main()
         {
             ProgrammSetup();
             Connector.OpenConnection();
