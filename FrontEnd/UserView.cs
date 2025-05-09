@@ -1,15 +1,17 @@
+using _4Time;
 using _4Time.Async;
 using _4Time.DataCore;
 using _4Time.DataCore.Models;
 using _4Time.FrontEnd;
-using Microsoft.Identity.Client;
 using System.Data;
-using Windows.UI.Notifications;
+using System.Diagnostics;
+using Windows.ApplicationModel.Core;
 
 namespace Time4SellersApp
 {
     public partial class UserView : Form
     {
+        private List<(string Key, object Value)> _settingsToSave = [];
         private readonly List<Category> _allCategorys = Reader.Read<Category>("Categories");
         public List<Entry> _allEntrys = Reader.Read<Entry>("Entries", null,
         [
@@ -25,7 +27,9 @@ namespace Time4SellersApp
 
         public UserView()
         {
+            Crypto.WriteKey();
             InitializeComponent();
+            this.FormClosing += new FormClosingEventHandler(MainForm_FormClosing);
             MaximumSize = Size;
             MinimumSize = Size;
 
@@ -49,11 +53,46 @@ namespace Time4SellersApp
 
             LogginName.Text = Connector.FirstName + " " + Connector.LastName;
 
-            NotificationManager notificationManager = new(_allEntrys, _allCategorys);
+            LoadSettings();
+
+            NotificationManager notificationManager = new(_allEntrys, _allCategorys, checkBox1);
+
+            TrackLockedTime.InitializeAndStartTracking(this);
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true; 
+                MessageBox.Show("Dieses Fenster kann nicht geschlossen werden.", "Hinweis", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            }
+        }
+
+        private void LoadSettings()
+        {
+            SettinngsController settinngsController = new();
+            var settings = settinngsController.GetSettings();
+            var lockTimeMin = settings.FirstOrDefault(x => x.Key == "LockTimeMin");
+            var checkBox1Value = settings.FirstOrDefault(x => x.Key == "checkBox1");
+
+            if (settings != null)
+            {
+                if (lockTimeMin.Key != null)
+                {
+                    LockTimeMin.Value = Convert.ToInt64(lockTimeMin.Value);
+                }
+                if (checkBox1Value.Key != null)
+                {
+                    checkBox1.Checked = Convert.ToBoolean(checkBox1Value.Value);
+                }
+            }
         }
 
         private void FillValues()
         {
+
             Settings.Hide();
             DateTime My4SellersDateTime = dateTimePicker1.Value.Date;
 
@@ -128,10 +167,15 @@ namespace Time4SellersApp
             TimeSpan overtimeToday = workToday - TimeSpan.FromHours(8);
             TimeSpan overtimeWeek = workWeek - TimeSpan.FromHours(40);
 
+            var workWeekHours = workWeek.Hours + workWeek.Days * 24;
+
+            pauseWeek += TimeSpan.FromHours(pauseWeek.TotalDays * 24);
+            var pauseWeekHours = pauseWeek.Hours + pauseWeek.Days * 24;
+
             PTToday.Text = $"{pauseToday:hh\\:mm} std";
-            PTWeek.Text = $"{pauseWeek:hh\\:mm} std";
+            PTWeek.Text = $"{pauseWeekHours}:{pauseWeek.Minutes} std";
             WTToday.Text = $"{workToday:hh\\:mm} std";
-            WTWeek.Text = $"{workWeek:hh\\:mm} std";
+            WTWeek.Text = $"{workWeekHours}:{workWeek.Minutes} std";
             OTToday.Text = $"{(overtimeToday > TimeSpan.Zero ? overtimeToday : TimeSpan.Zero):hh\\:mm} std";
             OTWeek.Text = $"{(overtimeWeek > TimeSpan.Zero ? overtimeWeek : TimeSpan.Zero):hh\\:mm} std";
         }
@@ -222,9 +266,9 @@ namespace Time4SellersApp
                 .ToList();
 
             TimeSpan workDur = TimeSpan.Zero;
-            for(int i = dailyEntries.Count - 1; i >= 0; i--)
+            for (int i = dailyEntries.Count - 1; i >= 0; i--)
             {
-                if(_allCategorys.Where(x => x.CategoryID == dailyEntries[i].CategoryID).First().IsWorkTime)
+                if (_allCategorys.Where(x => x.CategoryID == dailyEntries[i].CategoryID).First().IsWorkTime)
                     workDur += dailyEntries[i].End - dailyEntries[i].Start;
             }
 
@@ -233,12 +277,43 @@ namespace Time4SellersApp
             {
                 result = false;
             }
-            else if(workDur < TimeSpan.FromHours(1))
+            else if (workDur < TimeSpan.FromHours(1))
             {
                 result = false;
             }
 
             return result;
+        }
+
+        private void UserView_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            SetSettingsList();
+            SettinngsController settinngsController = new();
+            settinngsController.SetSettings(_settingsToSave);
+        }
+
+        private void SetSettingsList()
+        {
+            _settingsToSave.Add(("LockTimeMin", LockTimeMin.Value));
+            _settingsToSave.Add(("checkBox1", checkBox1.Checked));
+        }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+            Restart();
+        }
+        private void Restart()
+        {
+            SetSettingsList();
+            SettinngsController settinngsController = new();
+            settinngsController.SetSettings(_settingsToSave);
+            this.Dispose();
+            this.Close();
+
+            var process = Process.GetProcessesByName("4Time").FirstOrDefault();
+            string localExePath = process.MainModule.FileName;
+            string localDir = Path.GetDirectoryName(localExePath);
+            Process.Start(new ProcessStartInfo { FileName = localExePath, WorkingDirectory = localDir });
         }
     }
 }

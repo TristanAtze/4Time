@@ -7,7 +7,7 @@ namespace Time4SellersApp
 {
     public partial class AdminView : Form
     {
-        public static string simulatedUser = "";
+        private static string simulatedUser = "";
         private readonly List<Category> _allCategorys = Reader.Read<Category>("Categories");
         private List<Entry> _allEntrys = Reader.Read<Entry>("Entries", null,
         [
@@ -136,7 +136,7 @@ namespace Time4SellersApp
             Settings.Focus();
         }
 
-        private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
+        private void ComboBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
             simulatedUser = comboBox1.Text;
 

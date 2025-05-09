@@ -26,7 +26,9 @@ internal class Reader : Connector
             sql.Append(string.Join(" AND ", conditions));
         }
 
-        using (var command = new SqlCommand(sql.ToString(), Connector.connection))
+        var connection = new SqlConnection(CONNECTION_STRING);
+        connection.Open();
+        using (var command = new SqlCommand(sql.ToString(), connection))
         {
             var reader = command.ExecuteReader();
             var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
@@ -35,14 +37,10 @@ internal class Reader : Connector
             {
                 if (typeof(T) == typeof(Entry))
                 {
-                    //var startDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(3), password)).Result;
-                    //var endDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(4), password)).Result;
-                    //var commentDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(6), password)).Result;
-
                     var startDecrypted = Crypto.Decryption(reader.GetString(3), password).Result;
                     var endDecrypted = Crypto.Decryption(reader.GetString(4), password).Result;
                     var commentDecrypted = Crypto.Decryption(reader.GetString(6), password).Result;
-                    //Thread.Sleep(20);
+
                     entries.Add((T)(object)new Entry()
                     {
                         EntryID = reader.GetInt32(0),
@@ -75,6 +73,7 @@ internal class Reader : Connector
             }
             reader.Close();
         }
+        connection.Close();
 
         return entries;
     }

@@ -50,6 +50,12 @@ partial class UserView
 
         var entry = ProcessValues();
 
+        if(entry.End < entry.Start || entry.End == entry.Start)
+        {
+            MessageBox.Show("Ungültige Zeiten!", "4TIME", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+        }
+
         //Überprüfen der Eingaben hinsichtlich des Jugendarbeitschutzes
         if (entry.End.Date == DateTime.Now.Date 
             && entry.Start.Date == DateTime.Now.Date
@@ -129,6 +135,7 @@ partial class UserView
             await Task.Run(() => DisableReloadButton.PerformDataReloadAsync(this));
 
             this.FillDataGridView();
+            this.FillValues();
         }
         catch (Exception ex)
         {
@@ -192,6 +199,7 @@ partial class UserView
             await Task.Run(() => DisableReloadButton.PerformDataReloadAsync(this));
 
             this.FillDataGridView();
+            this.FillValues();
         }
         catch (Exception ex)
         {
@@ -209,7 +217,7 @@ partial class UserView
         btnSpeichern.Enabled = true;
 
         //Überprüfen ob es sich um Abwesenheit handelt
-        string[] absence = { "Urlaub", "Krankheit", "Berufsschule" };
+        string[] absence = ["Urlaub", "Krankheit", "Berufsschule"];
 
         if (absence.Contains(BookingType.Text))
         {

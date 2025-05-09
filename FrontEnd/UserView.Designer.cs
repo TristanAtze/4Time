@@ -81,7 +81,6 @@ namespace Time4SellersApp
         private DateTimePicker dateTimePicker1;
         private DateTimePicker dateTimePickerOverview;
         private TabPage Settings;
-        private Label label6;
 
         /// <summary>
         /// Verwendete Ressourcen bereinigen.
@@ -163,11 +162,14 @@ namespace Time4SellersApp
             colKommentar = new DataGridViewTextBoxColumn();
             colDauer = new DataGridViewTextBoxColumn();
             Settings = new TabPage();
+            label9 = new Label();
+            label6 = new Label();
+            checkBox1 = new CheckBox();
+            Benach = new Label();
             label8 = new Label();
             LockTimeMin = new NumericUpDown();
             label7 = new Label();
             LockedTimeMin = new Label();
-            label6 = new Label();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureLogoUebersicht).BeginInit();
@@ -772,11 +774,14 @@ namespace Time4SellersApp
             // 
             // Settings
             // 
+            Settings.Controls.Add(label9);
+            Settings.Controls.Add(label6);
+            Settings.Controls.Add(checkBox1);
+            Settings.Controls.Add(Benach);
             Settings.Controls.Add(label8);
             Settings.Controls.Add(LockTimeMin);
             Settings.Controls.Add(label7);
             Settings.Controls.Add(LockedTimeMin);
-            Settings.Controls.Add(label6);
             Settings.Location = new Point(4, 24);
             Settings.Name = "Settings";
             Settings.Padding = new Padding(3);
@@ -784,6 +789,47 @@ namespace Time4SellersApp
             Settings.TabIndex = 3;
             Settings.Text = "Settings";
             Settings.UseVisualStyleBackColor = true;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(5, 515);
+            label9.Name = "label9";
+            label9.Size = new Size(453, 15);
+            label9.TabIndex = 8;
+            label9.Text = "Manche Einstellungen werden erst nach einem Neustart aktiv. Klicke zum Neustarten";
+            label9.Click += label9_Click;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Font = new Font("Segoe UI", 9F);
+            label6.Location = new Point(8, 112);
+            label6.Name = "label6";
+            label6.Size = new Size(421, 15);
+            label6.TabIndex = 7;
+            label6.Text = "10 min vor bevor du zu lange garbeitet hast eine Benachrichtigung bekommen";
+            // 
+            // checkBox1
+            // 
+            checkBox1.AutoSize = true;
+            checkBox1.Font = new Font("Segoe UI", 18F);
+            checkBox1.Location = new Point(347, 95);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new Size(15, 14);
+            checkBox1.TabIndex = 6;
+            checkBox1.Tag = "";
+            checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // Benach
+            // 
+            Benach.AutoSize = true;
+            Benach.Font = new Font("Segoe UI", 18F);
+            Benach.Location = new Point(8, 80);
+            Benach.Name = "Benach";
+            Benach.Size = new Size(344, 32);
+            Benach.TabIndex = 5;
+            Benach.Text = "10 min Reminder (Plichtpause):";
             // 
             // label8
             // 
@@ -823,16 +869,6 @@ namespace Time4SellersApp
             LockedTimeMin.TabIndex = 1;
             LockedTimeMin.Text = "Pc Sperrzeit Schwelle:";
             // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Font = new Font("Segoe UI", 42F);
-            label6.Location = new Point(-3, 226);
-            label6.Name = "label6";
-            label6.Size = new Size(473, 74);
-            label6.TabIndex = 0;
-            label6.Text = "COMMING SOON";
-            // 
             // UserView
             // 
             ClientSize = new Size(474, 561);
@@ -841,6 +877,7 @@ namespace Time4SellersApp
             Name = "UserView";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "4TIME";
+            FormClosed += UserView_FormClosed;
             tabControl.ResumeLayout(false);
             tabUebersicht.ResumeLayout(false);
             tabUebersicht.PerformLayout();
@@ -864,5 +901,9 @@ namespace Time4SellersApp
         private Label LockedTimeMin;
         private Label label8;
         private NumericUpDown LockTimeMin;
+        private Label Benach;
+        private CheckBox checkBox1;
+        private Label label6;
+        private Label label9;
     }
 }
