@@ -26,7 +26,9 @@ internal class Reader : Connector
             sql.Append(string.Join(" AND ", conditions));
         }
 
-        using (var command = new SqlCommand(sql.ToString(), Connector.connection))
+        var connection = new SqlConnection(CONNECTION_STRING);
+        connection.Open();
+        using (var command = new SqlCommand(sql.ToString(), connection))
         {
             var reader = command.ExecuteReader();
             var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
@@ -71,6 +73,7 @@ internal class Reader : Connector
             }
             reader.Close();
         }
+        connection.Close();
 
         return entries;
     }

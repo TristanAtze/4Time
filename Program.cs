@@ -16,7 +16,7 @@ namespace _4Time
         public static void Main()
         {
             ProgrammSetup();
-            Connector.OpenConnection();
+            //Connector.OpenConnection();
             if (Connector.isConnected)
             {
                 Thread.Sleep(50);

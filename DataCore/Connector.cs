@@ -68,25 +68,25 @@ internal class Connector
     /// <summary>
     /// Öffnet die Verbindung zur Datenbank, wenn sie noch nicht geöffnet ist.
     /// </summary>
-    internal static void OpenConnection()
-    {
-        if (IsDatabaseConnectionAvailable() && !isConnected)
-        {
-            connection = new SqlConnection(CONNECTION_STRING);
-            connection.OpenAsync();
-            Thread.Sleep(222);
-            isConnected = true;
-        }
-        else
-        {
-            MessageBox.Show(
-            "Fehler bei der Datenbankverbindung",
-            "Fehler",
-            MessageBoxButtons.OK,
-            MessageBoxIcon.Error
-            );
-        }
-    }
+    //internal static void OpenConnection()
+    //{
+    //    if (IsDatabaseConnectionAvailable() && !isConnected)
+    //    {
+    //        connection = new SqlConnection(CONNECTION_STRING);
+    //        connection.OpenAsync();
+    //        Thread.Sleep(222);
+    //        isConnected = true;
+    //    }
+    //    else
+    //    {
+    //        MessageBox.Show(
+    //        "Fehler bei der Datenbankverbindung",
+    //        "Fehler",
+    //        MessageBoxButtons.OK,
+    //        MessageBoxIcon.Error
+    //        );
+    //    }
+    //}
 
     /// <summary>
     /// Ermittelt den aktuellen Windows-Benutzernamen und erstellt einen eindeutigen Schüssel für die Verschlüsselung von Daten.
