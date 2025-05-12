@@ -170,7 +170,7 @@ namespace Time4SellersApp
 
             var workWeekHours = workWeek.Hours + workWeek.Days * 24;
 
-            pauseWeek += TimeSpan.FromHours(pauseWeek.TotalDays * 24);
+            pauseWeek = TimeSpan.FromHours(pauseWeek.TotalDays * 24);
             var pauseWeekHours = pauseWeek.Hours + pauseWeek.Days * 24;
 
             PTToday.Text = $"{pauseToday:hh\\:mm} std";
@@ -303,6 +303,7 @@ namespace Time4SellersApp
         {
             Restart();
         }
+
         private void Restart()
         {
             SetSettingsList();
