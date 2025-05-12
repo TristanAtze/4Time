@@ -62,7 +62,7 @@ namespace _4Time
             if (!File.Exists("Version.txt"))
                 File.Create("Version.txt").Close();
 
-            string version = File.ReadAllText("res/Version.txt");
+            string version = File.ReadAllText("res\\Version.txt");
 
             File.WriteAllText("Version.txt", version);
         }
@@ -90,7 +90,12 @@ namespace _4Time
                 {
                     if (key == null)
                     {
-                        Console.WriteLine($"Fehler: Registry-Schlüssel nicht gefunden: HKCU\\{RegistryPathCurrentUser}");
+                        MessageBox.Show(
+                            "Fehler: Registry-Schlüssel nicht gefunden.",
+                            "Autostart",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error
+                        );
                         return;
                     }
 
@@ -98,12 +103,22 @@ namespace _4Time
                     // string executablePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
 
                     key.SetValue(AppName, $"\"{executablePath}\"");
-                    Console.WriteLine($"Anwendung '{AppName}' wurde zum Autostart hinzugefügt: \"{executablePath}\"");
+                    MessageBox.Show(
+                        "Die Anwendung wurde erfolgreich zum Autostart hinzugefügt.",
+                        "Autostart",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Fehler beim Hinzufügen zum Autostart: {ex.Message}");
+                MessageBox.Show(
+                    $"Fehler beim Hinzufügen zum Autostart: {ex.Message}",
+                    "Autostart",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
             }
         }
 
@@ -166,7 +181,12 @@ namespace _4Time
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Fehler beim Überprüfen des Autostarts: {ex.Message}");
+                MessageBox.Show(
+                    $"Fehler beim Überprüfen des Autostarts: {ex.Message}",
+                    "Autostart",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
                 return false;
             }
         }

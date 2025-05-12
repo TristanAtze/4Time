@@ -27,7 +27,7 @@ namespace Time4SellersApp
 
         public UserView()
         {
-            Crypto.WriteKey();
+            
             InitializeComponent();
             this.FormClosing += new FormClosingEventHandler(MainForm_FormClosing);
             MaximumSize = Size;
@@ -54,11 +54,12 @@ namespace Time4SellersApp
             LogginName.Text = Connector.FirstName + " " + Connector.LastName;
 
             LoadSettings();
-
+            Crypto.WriteKey();
             //If settingsU18 = true dann machen
             NotificationManager notificationManager = new(_allEntrys, _allCategorys, checkBox1);
 
             TrackLockedTime.InitializeAndStartTracking(this);
+            
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
