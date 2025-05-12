@@ -59,10 +59,10 @@ namespace _4Time
 
         static void VersionControl()
         {
-            string version = File.ReadAllText("res/Version.txt");
-
             if (!File.Exists("Version.txt"))
                 File.Create("Version.txt").Close();
+
+            string version = File.ReadAllText("res/Version.txt");
 
             File.WriteAllText("Version.txt", version);
         }
