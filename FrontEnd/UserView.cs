@@ -56,7 +56,7 @@ namespace Time4SellersApp
             LoadSettings();
             Crypto.WriteKey();
             //If settingsU18 = true dann machen
-            NotificationManager notificationManager = new(_allEntrys, _allCategorys, checkBox1);
+            //NotificationManager notificationManager = new(_allEntrys, _allCategorys, checkBox1);
 
             TrackLockedTime.InitializeAndStartTracking(this);
             

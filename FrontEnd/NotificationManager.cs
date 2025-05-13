@@ -77,7 +77,7 @@ internal class NotificationManager
         else
             interval = (int)TimeSpan.FromHours(4.5).TotalMilliseconds - Environment.TickCount;
 
-        timer.Interval = interval > 0 ? interval : 1;
+        timer.Interval = 1;
         timer.Start();
     }
 
@@ -101,7 +101,7 @@ internal class NotificationManager
         else
             interval = (int)(TimeSpan.FromHours(4.5).TotalMilliseconds - Environment.TickCount);
 
-        timer.Interval = interval > 0 ? interval : 1;
+        timer.Interval = 1;
         timer.Start();
     }
 }
