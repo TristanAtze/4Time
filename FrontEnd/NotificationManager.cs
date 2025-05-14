@@ -37,8 +37,7 @@ internal class NotificationManager
             maxWorkTime = 6.0;
 
         if (preNotifyCheckBox.Checked)
-            _ = StartPreNotificationTaskAsync(maxWorkTime);
-
+            _ = StartPreNotificationTaskAsync(maxWorkTime)
         _ = StartMainNotificationTaskAsync(maxWorkTime);
     }
 
