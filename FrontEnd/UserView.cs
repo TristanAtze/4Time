@@ -2,15 +2,16 @@ using _4Time;
 using _4Time.Async;
 using _4Time.DataCore;
 using _4Time.DataCore.Models;
-using _4Time.FrontEnd;
 using System.Data;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using Windows.ApplicationModel.Core;
 
 namespace Time4SellersApp
 {
     public partial class UserView : Form
     {
+        private readonly IntPtr IconPointer;
         private List<(string Key, object Value)> _settingsToSave = [];
         private readonly List<Category> _allCategorys = Reader.Read<Category>("Categories");
         public List<Entry> _allEntrys = Reader.Read<Entry>("Entries", null,
@@ -27,11 +28,18 @@ namespace Time4SellersApp
 
         public UserView()
         {
-            Crypto.WriteKey();
+
             InitializeComponent();
             this.FormClosing += new FormClosingEventHandler(MainForm_FormClosing);
             MaximumSize = Size;
             MinimumSize = Size;
+
+            string RunningPath = AppDomain.CurrentDomain.BaseDirectory;
+            string FileName = string.Format("{0}Res\\Icon.png", Path.GetFullPath(Path.Combine(RunningPath, @"..\..\..\")));
+
+            Bitmap bm = new Bitmap(FileName);
+            IconPointer = bm.GetHicon();
+            this.Icon = Icon.FromHandle(IconPointer);
 
             dateTimePicker1.Value = DateTime.Now.Date;
             dateTimePickerOverview.Value = DateTime.Now.Date;
@@ -55,27 +63,36 @@ namespace Time4SellersApp
 
             LoadSettings();
 
-            NotificationManager notificationManager = new(_allEntrys, _allCategorys, checkBox1);
+            NotificationManager notificationManager = new(_allEntrys, _allCategorys, checkBox1, checkBox2);
 
             TrackLockedTime.InitializeAndStartTracking(this);
+
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)
             {
-                e.Cancel = true; 
-                MessageBox.Show("Dieses Fenster kann nicht geschlossen werden.", "Hinweis", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                e.Cancel = true;
+                var x = MessageBox.Show("Sie sollten dieses Fenster nicht schließen! Trozdem schließen?", "Hinweis", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
+                if(x.Equals(DialogResult.Yes))
+                {
+                    SetSettingsList();
+                    SettingsController.SetSettings(_settingsToSave);
+                    e.Cancel = false;
+                }
             }
         }
 
+
+
         private void LoadSettings()
         {
-            SettinngsController settinngsController = new();
-            var settings = settinngsController.GetSettings();
+            var settings = SettingsController.GetSettings();
             var lockTimeMin = settings.FirstOrDefault(x => x.Key == "LockTimeMin");
             var checkBox1Value = settings.FirstOrDefault(x => x.Key == "checkBox1");
+            var checkBox2Value = settings.FirstOrDefault(x => x.Key == "checkBox2");
 
             if (settings != null)
             {
@@ -86,6 +103,10 @@ namespace Time4SellersApp
                 if (checkBox1Value.Key != null)
                 {
                     checkBox1.Checked = Convert.ToBoolean(checkBox1Value.Value);
+                }
+                if (checkBox2Value.Key != null)
+                {
+                    checkBox2.Checked = Convert.ToBoolean(checkBox2Value.Value);
                 }
             }
         }
@@ -169,7 +190,7 @@ namespace Time4SellersApp
 
             var workWeekHours = workWeek.Hours + workWeek.Days * 24;
 
-            pauseWeek += TimeSpan.FromHours(pauseWeek.TotalDays * 24);
+            pauseWeek = TimeSpan.FromHours(pauseWeek.TotalDays * 24);
             var pauseWeekHours = pauseWeek.Hours + pauseWeek.Days * 24;
 
             PTToday.Text = $"{pauseToday:hh\\:mm} std";
@@ -257,7 +278,11 @@ namespace Time4SellersApp
 
             return entry;
         }
-
+        /// <summary>
+        /// Validiert die Werte des Eintrags.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns>Gibt einen <see cref="bool"/> zurück ob der eintrag Gültig ist</returns>
         private bool ValidateValues(Entry obj)
         {
             bool result = true;
@@ -285,28 +310,43 @@ namespace Time4SellersApp
             return result;
         }
 
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool DestroyIcon(IntPtr hIcon);
+
         private void UserView_FormClosed(object sender, FormClosedEventArgs e)
         {
             SetSettingsList();
-            SettinngsController settinngsController = new();
-            settinngsController.SetSettings(_settingsToSave);
+            SettingsController.SetSettings(_settingsToSave);
+            DestroyIcon(IconPointer);
         }
 
+        /// <summary>
+        /// Setzt die Liste der Einstellungen, die gespeichert werden sollen.
+        /// </summary>
         private void SetSettingsList()
         {
+            _settingsToSave.Clear();
+
             _settingsToSave.Add(("LockTimeMin", LockTimeMin.Value));
             _settingsToSave.Add(("checkBox1", checkBox1.Checked));
+            _settingsToSave.Add(("checkBox2", checkBox2.Checked));
         }
 
         private void label9_Click(object sender, EventArgs e)
         {
             Restart();
         }
+
+
+
+        /// <summary>
+        /// Restartet die Anwendung, nachdem die Einstellungen gespeichert wurden.
+        /// </summary>
         private void Restart()
         {
             SetSettingsList();
-            SettinngsController settinngsController = new();
-            settinngsController.SetSettings(_settingsToSave);
+            SettingsController.SetSettings(_settingsToSave);
             this.Dispose();
             this.Close();
 
