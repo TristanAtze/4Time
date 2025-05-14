@@ -170,6 +170,9 @@ namespace Time4SellersApp
             LockTimeMin = new NumericUpDown();
             label7 = new Label();
             LockedTimeMin = new Label();
+            u18Description = new Label();
+            checkBox2 = new CheckBox();
+            u18 = new Label();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureLogoUebersicht).BeginInit();
@@ -774,6 +777,9 @@ namespace Time4SellersApp
             // 
             // Settings
             // 
+            Settings.Controls.Add(u18Description);
+            Settings.Controls.Add(checkBox2);
+            Settings.Controls.Add(u18);
             Settings.Controls.Add(label9);
             Settings.Controls.Add(label6);
             Settings.Controls.Add(checkBox1);
@@ -869,6 +875,37 @@ namespace Time4SellersApp
             LockedTimeMin.TabIndex = 1;
             LockedTimeMin.Text = "Pc Sperrzeit Schwelle:";
             // 
+            // u18Description
+            // 
+            u18Description.AutoSize = true;
+            u18Description.Font = new Font("Segoe UI", 9F);
+            u18Description.Location = new Point(8, 186);
+            u18Description.Name = "u18Description";
+            u18Description.Size = new Size(356, 15);
+            u18Description.TabIndex = 11;
+            u18Description.Text = "Dies bestimmt gesetzliche Regelungen bezüglich der Pausenzeiten";
+            // 
+            // checkBox2
+            // 
+            checkBox2.AutoSize = true;
+            checkBox2.Font = new Font("Segoe UI", 18F);
+            checkBox2.Location = new Point(222, 169);
+            checkBox2.Name = "checkBox2";
+            checkBox2.Size = new Size(15, 14);
+            checkBox2.TabIndex = 10;
+            checkBox2.Tag = "";
+            checkBox2.UseVisualStyleBackColor = true;
+            // 
+            // u18
+            // 
+            u18.AutoSize = true;
+            u18.Font = new Font("Segoe UI", 18F);
+            u18.Location = new Point(8, 154);
+            u18.Name = "u18";
+            u18.Size = new Size(200, 32);
+            u18.TabIndex = 9;
+            u18.Text = "Älter als 18 Jahre:";
+            // 
             // UserView
             // 
             ClientSize = new Size(474, 561);
@@ -905,5 +942,8 @@ namespace Time4SellersApp
         private CheckBox checkBox1;
         private Label label6;
         private Label label9;
+        private Label u18Description;
+        private CheckBox checkBox2;
+        private Label u18;
     }
 }

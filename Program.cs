@@ -1,6 +1,5 @@
 using _4Time.Async;
 using _4Time.DataCore;
-using _4Time.FrontEnd;
 using Microsoft.Win32;
 using System.Diagnostics;
 using Time4SellersApp;
@@ -62,7 +61,7 @@ namespace _4Time
             if (!File.Exists("Version.txt"))
                 File.Create("Version.txt").Close();
 
-            string version = File.ReadAllText("res\\Version.txt");
+            string version = File.ReadAllText("Res/Version.txt");
 
             File.WriteAllText("Version.txt", version);
         }
