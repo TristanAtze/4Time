@@ -14,6 +14,7 @@ namespace _4Time
         [STAThread]
         public static void Main()
         {
+            Task.Run(YouTubeShortsBlocker.StartMonitoringAsync);
             ProgrammSetup();
             //Connector.OpenConnection();
             if (Connector.isConnected)
