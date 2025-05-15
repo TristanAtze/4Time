@@ -75,8 +75,8 @@ internal class NotificationManager
     /// <returns>Eine Liste der relevanten beendeten Pauseneinträge.</returns>
     private Entry? GetRelevantBreaksToday(DateTime currentTime)
     {
-        return _allEntrys?.Where(x => x.End.Date == DateTime.Now.Date).OrderBy(e => Math.Abs((e.End - currentTime).Ticks))
-            .FirstOrDefault(); 
+        return _allEntrys?.Where(x => x.End.Date == DateTime.Now.Date).Where(x => x.Start - x.End > TimeSpan.FromMinutes(15)).OrderBy(e => Math.Abs((e.End - currentTime).Ticks))
+            .FirstOrDefault();
     }
 
     /// <summary>
@@ -117,7 +117,7 @@ internal class NotificationManager
     {
         TimeSpan initialDelay = CalculatePreNotifyInterval(maxWorkTime);
 
-        if (initialDelay == TimeSpan.Zero)
+        if (initialDelay < TimeSpan.Zero)
         {
             if (CalculatePreNotifyInterval(maxWorkTime) <= TimeSpan.Zero)
             {
@@ -167,7 +167,7 @@ internal class NotificationManager
     {
         TimeSpan initialDelay = CalculateMainNotificationInterval(maxWorkTime);
 
-        if (initialDelay == TimeSpan.Zero)
+        if (initialDelay < TimeSpan.Zero)
         {
             if (CalculateMainNotificationInterval(maxWorkTime) <= TimeSpan.Zero)
             {

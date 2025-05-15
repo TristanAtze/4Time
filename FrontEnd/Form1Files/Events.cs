@@ -104,6 +104,11 @@ partial class UserView
 
         MessageBox.Show("Daten gespeichert!", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+        if (entry.CategoryName == "Pause" || entry.CategoryName == "MittagsPause" || entry.CategoryName == "RaucherPause")
+        { 
+            NotificationManager notificationManager = new(dgvEntries, allCategorys, checkBox1, checkBox2); 
+        }
+        
         FillDataGridView();
         FillValues();
     }
