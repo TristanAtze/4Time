@@ -23,6 +23,7 @@ namespace _4Time
             }
 
             string activeUser = Environment.UserName.ToLower();
+
             Updater();
             if (activeUser == "gerd.kaufmann")
             {
