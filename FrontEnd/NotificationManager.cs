@@ -75,7 +75,7 @@ internal class NotificationManager
     /// <returns>Eine Liste der relevanten beendeten Pauseneinträge.</returns>
     private Entry? GetRelevantBreaksToday(DateTime currentTime)
     {
-        return _allEntrys?.Where(x => x.End.Date == DateTime.Now.Date).Where(x => x.Start - x.End > TimeSpan.FromMinutes(15)).OrderBy(e => Math.Abs((e.End - currentTime).Ticks))
+        return _allEntrys?.Where(x => x.End.Date == DateTime.Now.Date).Where(x => x.End - x.Start > TimeSpan.FromMinutes(15)).OrderBy(e => Math.Abs((e.End - currentTime).Ticks))
             .FirstOrDefault();
     }
 
