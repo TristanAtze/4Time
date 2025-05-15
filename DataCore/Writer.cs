@@ -12,6 +12,9 @@ internal class Writer : Connector
         {typeof(Category), ["CategoryID"] },
     };
 
+    /// <summary>
+    /// Erstellt die Datenbank und die benötigten Tabellen, wenn sie nicht existieren.
+    /// </summary>
     internal static void DatabaseSetup()
     {
         string query = File.ReadAllText("res/Setup.txt");

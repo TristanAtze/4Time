@@ -63,7 +63,7 @@ namespace Time4SellersApp
 
             LoadSettings();
 
-            NotificationManager notificationManager = new(_allEntrys, _allCategorys, checkBox1, checkBox2);
+            NotificationManager notificationManager = new(dgvEntries, allCategorys, checkBox1, checkBox2);
 
             TrackLockedTime.InitializeAndStartTracking(this);
 
@@ -201,6 +201,10 @@ namespace Time4SellersApp
             OTWeek.Text = $"{(overtimeWeek > TimeSpan.Zero ? overtimeWeek : TimeSpan.Zero):hh\\:mm} std";
         }
 
+        /// <summary>
+        /// Gibt die Zeit zurück, die der PC gesperrt war.
+        /// </summary>
+        /// <returns>Gibt einen <see cref="decimal"/> zurück</returns>
         public decimal GetMinLockedTime()
         {
             return LockTimeMin.Value;
@@ -281,7 +285,7 @@ namespace Time4SellersApp
         /// <summary>
         /// Validiert die Werte des Eintrags.
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="obj"> ist der aktuelle entry</param>
         /// <returns>Gibt einen <see cref="bool"/> zurück ob der eintrag Gültig ist</returns>
         private bool ValidateValues(Entry obj)
         {

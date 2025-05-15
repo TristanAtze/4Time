@@ -14,7 +14,7 @@ public class CheckBoxStub
 
 internal class NotificationManager
 {
-    private readonly List<Entry> _allEntrys;
+    private readonly List<Entry> _allEntrys = [];
     private readonly List<Category> _allCategorys;
 
     /// <summary>
@@ -24,10 +24,19 @@ internal class NotificationManager
     /// <param name="allEntrys">Eine Liste aller Zeiteinträge. Es wird angenommen, dass diese Liste aktuell gehalten wird oder eine Referenz darauf ist.</param>
     /// <param name="allCategorys">Eine Liste aller Kategorien.</param>
     /// <param name="preNotifyCheckBox">Eine CheckBox, die angibt, ob eine Vorab-Benachrichtigung gesendet werden soll.</param>
-    public NotificationManager(List<Entry> allEntrys, List<Category> allCategorys, CheckBox preNotifyCheckBox, CheckBox is18)
+    public NotificationManager(DataGridView dataGridView, List<Category> allCategorys, CheckBox preNotifyCheckBox, CheckBox is18)
     {
-        //TODO: DataGridview mit übergeben anstatt die allEntrys liste
-        _allEntrys = allEntrys ?? throw new ArgumentNullException(nameof(allEntrys));
+        for (int i = 0; i < dataGridView.Rows.Count; i++)
+        {
+            var row = dataGridView.Rows[i];
+            var entry = new Entry
+            {
+                CategoryName = (string)row.Cells["colArt"].Value,
+                Start = DateTime.Parse(row.Cells["colStart"].Value.ToString() ?? ""),
+                End = DateTime.Parse(row.Cells["colEnd"].Value.ToString() ?? "")
+            };
+            _allEntrys.Add(entry);
+        }
         _allCategorys = allCategorys ?? throw new ArgumentNullException(nameof(allCategorys));
         double maxWorkTime = 4.5;
 
@@ -64,14 +73,10 @@ internal class NotificationManager
     /// </summary>
     /// <param name="currentTime">Der aktuelle Zeitpunkt, der für Datumsvergleiche verwendet wird.</param>
     /// <returns>Eine Liste der relevanten beendeten Pauseneinträge.</returns>
-    private List<Entry> GetRelevantBreaksToday(DateTime currentTime)
+    private Entry? GetRelevantBreaksToday(DateTime currentTime)
     {
-        return _allEntrys
-            .Where(entry => _allCategorys.Any(cat => cat.CategoryID == entry.CategoryID && !cat.IsWorkTime))
-            .Where(entry => entry.Start.Date == currentTime.Date &&
-                            entry.End != DateTime.MinValue &&
-                            entry.End.Date == currentTime.Date) 
-            .ToList();
+        return _allEntrys?.Where(x => x.End.Date == DateTime.Now.Date).OrderBy(e => Math.Abs((e.End - currentTime).Ticks))
+            .FirstOrDefault(); 
     }
 
     /// <summary>
@@ -85,11 +90,11 @@ internal class NotificationManager
         DateTime systemStartTime = now - TimeSpan.FromMilliseconds(Environment.TickCount64);
 
         DateTime notificationBaseTime;
-        List<Entry> relevantBreaksToday = GetRelevantBreaksToday(now);
+        Entry relevantBreaksToday = GetRelevantBreaksToday(now);
 
-        if (relevantBreaksToday.Any())
+        if (relevantBreaksToday != null)
         {
-            notificationBaseTime = relevantBreaksToday.Select(x => x.End).Max();
+            notificationBaseTime = relevantBreaksToday.End;
         }
         else
         {
@@ -103,6 +108,11 @@ internal class NotificationManager
         return preNotificationTargetTime - now;
     }
 
+    /// <summary>
+    /// Startet die Vorab-Benachrichtigung, wenn die Zeit abgelaufen ist.
+    /// </summary>
+    /// <param name="maxWorkTime"></param>
+    /// <returns></returns>
     private async Task StartPreNotificationTaskAsync(double maxWorkTime)
     {
         TimeSpan initialDelay = CalculatePreNotifyInterval(maxWorkTime);
@@ -135,11 +145,11 @@ internal class NotificationManager
         DateTime systemStartTime = now - TimeSpan.FromMilliseconds(Environment.TickCount64);
 
         DateTime notificationBaseTime;
-        List<Entry> relevantBreaksToday = GetRelevantBreaksToday(now);
+        Entry? relevantBreaksToday = GetRelevantBreaksToday(now);
 
-        if (relevantBreaksToday.Any())
+        if (relevantBreaksToday != null)
         {
-            notificationBaseTime = relevantBreaksToday.Select(x => x.End).Max();
+            notificationBaseTime = relevantBreaksToday.End;
         }
         else
         {
