@@ -2,6 +2,7 @@ using _4Time;
 using _4Time.Async;
 using _4Time.DataCore;
 using _4Time.DataCore.Models;
+using _4Time.FrontEnd;
 using System.Data;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -76,7 +77,7 @@ namespace Time4SellersApp
                 e.Cancel = true;
                 var x = MessageBox.Show("Sie sollten dieses Fenster nicht schließen! Trozdem schließen?", "Hinweis", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
-                if(x.Equals(DialogResult.Yes))
+                if (x.Equals(DialogResult.Yes))
                 {
                     SetSettingsList();
                     SettingsController.SetSettings(_settingsToSave);
@@ -358,6 +359,11 @@ namespace Time4SellersApp
             string localExePath = process.MainModule.FileName;
             string localDir = Path.GetDirectoryName(localExePath);
             Process.Start(new ProcessStartInfo { FileName = localExePath, WorkingDirectory = localDir });
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show($"{DadJokes.GetRandomJoke()}", "Dad jokes", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
