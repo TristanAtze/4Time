@@ -19,7 +19,7 @@ internal class Writer : Connector
     {
         string query = File.ReadAllText("res/Setup.txt");
 
-        var connection = new SqlConnection(CONNECTION_STRING);
+        var connection = new SqlConnection(ConnectionString);
         var command = new SqlCommand(query, connection);
 
         connection.Open();
@@ -37,7 +37,7 @@ internal class Writer : Connector
                 END
             ";
 
-        var connection = new SqlConnection(CONNECTION_STRING);
+        var connection = new SqlConnection(ConnectionString);
         var command = new SqlCommand(query, connection);
 
         command.Parameters.AddWithValue("@firstName", Connector.FirstName.ToLower());
@@ -55,7 +55,7 @@ internal class Writer : Connector
 
         //Alle Spalten ermitteln
         string schemaQuery = $"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}'";
-        var schemaConnection = new SqlConnection(CONNECTION_STRING);
+        var schemaConnection = new SqlConnection(ConnectionString);
         var schemaCommand = new SqlCommand(schemaQuery, schemaConnection);
 
         schemaConnection.Open();
@@ -105,7 +105,7 @@ internal class Writer : Connector
             query += "DEFAULT VALUES";
         }
 
-        var connection = new SqlConnection(CONNECTION_STRING);
+        var connection = new SqlConnection(ConnectionString);
         var command = new SqlCommand(query, connection);
 
         connection.Open();
@@ -118,7 +118,7 @@ internal class Writer : Connector
         Dictionary<string, object?> columns = [];
         //Alle Spalten ermitteln
         string schemaQuery = $"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}'";
-        var schemaConnection = new SqlConnection(CONNECTION_STRING);
+        var schemaConnection = new SqlConnection(ConnectionString);
 
         using (var schemaCommand = new SqlCommand(schemaQuery, schemaConnection))
         {
@@ -157,7 +157,7 @@ internal class Writer : Connector
             query += string.Join(" AND ", condition);
         }
 
-        var connection = new SqlConnection(CONNECTION_STRING);
+        var connection = new SqlConnection(ConnectionString);
         var command = new SqlCommand(query, connection);
         connection.Open();
         command.ExecuteNonQuery();
@@ -173,7 +173,7 @@ internal class Writer : Connector
             query += " WHERE " + string.Join(" AND ", conditions);
         }
 
-        var connection = new SqlConnection(CONNECTION_STRING);
+        var connection = new SqlConnection(ConnectionString);
         var command = new SqlCommand(query, connection);
 
         connection.Open();

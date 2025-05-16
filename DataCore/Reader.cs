@@ -26,7 +26,7 @@ internal class Reader : Connector
             sql.Append(string.Join(" AND ", conditions));
         }
 
-        var connection = new SqlConnection(CONNECTION_STRING);
+        var connection = new SqlConnection(ConnectionString);
         connection.Open();
         using (var command = new SqlCommand(sql.ToString(), connection))
         {
