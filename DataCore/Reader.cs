@@ -7,11 +7,19 @@ namespace _4Time.DataCore;
 
 internal class Reader : Connector
 {
+    /// <summary>
+    /// Dynamischer Datenbank Reader.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="table"></param>
+    /// <param name="columns"></param>
+    /// <param name="conditions"></param>
+    /// <param name="password"></param>
+    /// <returns></returns>
     internal static List<T> Read<T>(string table, string[]? columns = null, string[]? conditions = null, string? password = null) where T : new()
     {
         var entries = new List<T>();
         var sql = new StringBuilder();
-
         // Spaltenauswahl
         string columnList = (columns != null && columns.Length > 0)
             ? string.Join(", ", columns)

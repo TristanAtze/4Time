@@ -2,7 +2,7 @@
 
 namespace _4Time.DataCore;
 
-internal class Connector 
+internal class Connector
 {
     /// <summary>
     /// Connection-String für die Verbindung zur Datenbank.
@@ -24,9 +24,9 @@ internal class Connector
     /// </summary>
     static Connector()
     {
-       (string, string) FirstLastName = GetCurrentUser();
-       FirstName = FirstLastName.Item1;
-       LastName = FirstLastName.Item2;
+        (string, string) FirstLastName = GetCurrentUser();
+        FirstName = FirstLastName.Item1;
+        LastName = FirstLastName.Item2;
     }
 
     /// <summary>
@@ -92,11 +92,11 @@ internal class Connector
     /// Ermittelt den aktuellen Windows-Benutzernamen und erstellt einen eindeutigen Schüssel für die Verschlüsselung von Daten.
     /// </summary>
     /// <returns></returns>
-    internal static (string,string) GetCurrentUser()
+    internal static (string, string) GetCurrentUser()
     {
         string userName = Environment.UserName;
         string[] userNameSplitted = userName.Split(".");
-        return (userNameSplitted[0],userNameSplitted[1]);
+        return (userNameSplitted[0], userNameSplitted[1]);
     }
 
     internal static void CloseConnection()

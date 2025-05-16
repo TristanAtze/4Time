@@ -51,7 +51,7 @@ internal class Writer : Connector
 
     internal static void Insert(string table, object obj)
     {
-        Dictionary<string,object?> columns = [];
+        Dictionary<string, object?> columns = [];
 
         //Alle Spalten ermitteln
         string schemaQuery = $"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}'";
@@ -61,7 +61,7 @@ internal class Writer : Connector
         schemaConnection.Open();
         var schemaReader = schemaCommand.ExecuteReader();
 
-        while(schemaReader.Read())
+        while (schemaReader.Read())
         {
             if (!UNSETTABLE_COLUMNS[obj.GetType()].Contains(schemaReader.GetString(0)))
                 columns.Add(schemaReader.GetString(0), null);
@@ -80,7 +80,7 @@ internal class Writer : Connector
         //INSERT-Statement erstellen
         string query = $"INSERT INTO [dbo].[{table}] ";
 
-        if(columns.Count > 0)
+        if (columns.Count > 0)
         {
             if (columns.TryGetValue("Start", out object? valueStart) && obj.GetType() == typeof(Entry))
             {
@@ -132,14 +132,15 @@ internal class Writer : Connector
                 }
             }
             schemaConnection.Close();
-        };
+        }
+        ;
 
         //Spalten mit Werten füllen
         foreach (var prop in obj.GetType().GetProperties())
         {
             if (columns.ContainsKey(prop.Name))
             {
-                if(prop.Name == "Start" || prop.Name == "End" || prop.Name == "Comment")
+                if (prop.Name == "Start" || prop.Name == "End" || prop.Name == "Comment")
                 {
                     columns[prop.Name] = Crypto.Encryption(prop.GetValue(obj)?.ToString() ?? "");
                 }

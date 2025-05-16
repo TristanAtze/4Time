@@ -1,9 +1,6 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Automation;
 
 public class YouTubeShortsBlocker
@@ -61,7 +58,7 @@ public class YouTubeShortsBlocker
             IntPtr foregroundWindowHandle = GetForegroundWindow();
             if (foregroundWindowHandle == IntPtr.Zero)
             {
-                Thread.Sleep(1000); 
+                Thread.Sleep(1000);
                 continue;
             }
 
@@ -72,7 +69,7 @@ public class YouTubeShortsBlocker
             {
                 process = Process.GetProcessById((int)processId);
             }
-            catch (ArgumentException) 
+            catch (ArgumentException)
             {
                 Thread.Sleep(1000);
                 continue;
@@ -106,7 +103,7 @@ public class YouTubeShortsBlocker
                 }
             }
 
-            Thread.Sleep(2000); 
+            Thread.Sleep(2000);
         }
     }
 

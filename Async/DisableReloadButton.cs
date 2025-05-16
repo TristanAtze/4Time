@@ -1,5 +1,5 @@
-﻿using _4Time.DataCore.Models;
-using _4Time.DataCore;
+﻿using _4Time.DataCore;
+using _4Time.DataCore.Models;
 
 namespace _4Time.Async;
 
@@ -16,7 +16,7 @@ public class DisableReloadButton
             [
                 $"[FirstName] = '{Connector.FirstName}'",
                 $"[LastName] = '{Connector.LastName}'"
-            ]).First().UserID}",                    
+            ]).First().UserID}",
         ]);
         await Task.Delay(5000);
     }
