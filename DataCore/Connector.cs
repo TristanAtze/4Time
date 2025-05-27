@@ -7,17 +7,18 @@ internal class Connector
     /// <summary>
     /// Connection-String für die Verbindung zur Datenbank.
     /// </summary>
-    internal const string CONNECTION_STRING = "Data Source = 192.168.6.131; Initial Catalog = _LK_TestDB; User ID = Azubi; Password = TestSQL2020#!;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+    internal const string ConnectionString = "Server=(localdb)\\LocalTestDB;Database=TestDB;TrustServerCertificate=True;";
+        
 
     /// <summary>
     /// Boolean, der angibt, ob die Verbindung zur Datenbank hergestellt werden konnte.
     /// </summary>
-    internal static bool isConnected = false;
+    internal static bool IsConnected = false;
 
     /// <summary>
     /// SqlConnection-Objekt für die Verbindung zur Datenbank.
     /// </summary>
-    internal static SqlConnection? connection = null;
+    private static readonly SqlConnection? SqlConnection = null;
 
     /// <summary>
     /// Konstruktor zur Initialisierung von allgemeinen Werten.
@@ -43,14 +44,14 @@ internal class Connector
     /// Überprüft, ob eine Verbindung zur Datenbank hergestellt werden kann.
     /// </summary>
     /// <returns>
-    /// True -> Verbindung möglich
-    /// False -> Verbindung nicht möglich
+    /// True → Verbindung möglich
+    /// False → Verbindung nicht möglich
     /// </returns>
     internal static bool IsDatabaseConnectionAvailable()
     {
         try
         {
-            using var connection = new SqlConnection(CONNECTION_STRING);
+            using var connection = new SqlConnection(ConnectionString);
             connection.OpenAsync();
             Thread.Sleep(222);
             string testTableQuery = @" ";
@@ -103,10 +104,10 @@ internal class Connector
     {
         try
         {
-            if (connection != null && connection.State == System.Data.ConnectionState.Open)
+            if (SqlConnection != null && SqlConnection.State == System.Data.ConnectionState.Open)
             {
-                connection.Close();
-                isConnected = false;
+                SqlConnection.Close();
+                IsConnected = false;
             }
         }
         catch (Exception ex)

@@ -9,7 +9,7 @@ namespace _4Time
     internal static class Program
     {
         /// <summary>
-        /// Der Haupteinstiegspunkt für die Anwendung.
+        /// Der Haupteinstiegspunkt fï¿½r die Anwendung.
         /// </summary>
         [STAThread]
         public static void Main()
@@ -17,10 +17,10 @@ namespace _4Time
             //Task.Run(YouTubeShortsBlocker.StartMonitoringAsync);
             ProgrammSetup();
             //Connector.OpenConnection();
-
             string activeUser = Environment.UserName.ToLower();
 
             Updater();
+
             if (activeUser == "gerd.kaufmann")
             {
                 Crypto.FileListenerStart();
@@ -45,7 +45,7 @@ namespace _4Time
             {
                 AutostartHelper.AddApplicationToCurrentUserStartup();
             }
-            Writer.DatabaseSetup();
+            //Writer.DatabaseSetup();
             Writer.UserSetup();
         }
 
@@ -70,14 +70,14 @@ namespace _4Time
     public static class AutostartHelper
     {
         // Der Name, unter dem deine Anwendung in der Registry erscheinen soll.
-        // Wähle hier etwas Eindeutiges, z.B. den Namen deiner Anwendung.
+        // Wï¿½hle hier etwas Eindeutiges, z.B. den Namen deiner Anwendung.
         private const string AppName = "4Time";
 
-        // Pfad zum Registry-Schlüssel für den aktuellen Benutzer
+        // Pfad zum Registry-Schlï¿½ssel fï¿½r den aktuellen Benutzer
         private const string RegistryPathCurrentUser = @"Software\Microsoft\Windows\CurrentVersion\Run";
 
         /// <summary>
-        /// Fügt die Anwendung zum Autostart für den aktuellen Benutzer hinzu.
+        /// Fï¿½gt die Anwendung zum Autostart fï¿½r den aktuellen Benutzer hinzu.
         /// </summary>
         public static void AddApplicationToCurrentUserStartup()
         {
@@ -88,7 +88,7 @@ namespace _4Time
                     if (key == null)
                     {
                         MessageBox.Show(
-                            "Fehler: Registry-Schlüssel nicht gefunden.",
+                            "Fehler: Registry-Schlï¿½ssel nicht gefunden.",
                             "Autostart",
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Error
@@ -101,7 +101,7 @@ namespace _4Time
 
                     key.SetValue(AppName, $"\"{executablePath}\"");
                     MessageBox.Show(
-                        "Die Anwendung wurde erfolgreich zum Autostart hinzugefügt.",
+                        "Die Anwendung wurde erfolgreich zum Autostart hinzugefï¿½gt.",
                         "Autostart",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information
@@ -111,7 +111,7 @@ namespace _4Time
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    $"Fehler beim Hinzufügen zum Autostart: {ex.Message}",
+                    $"Fehler beim Hinzufï¿½gen zum Autostart: {ex.Message}",
                     "Autostart",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
@@ -120,7 +120,7 @@ namespace _4Time
         }
 
         /// <summary>
-        /// Entfernt die Anwendung aus dem Autostart für den aktuellen Benutzer.
+        /// Entfernt die Anwendung aus dem Autostart fï¿½r den aktuellen Benutzer.
         /// </summary>
         public static void RemoveApplicationFromCurrentUserStartup()
         {
@@ -130,11 +130,11 @@ namespace _4Time
                 {
                     if (key == null)
                     {
-                        Console.WriteLine($"Fehler: Registry-Schlüssel nicht gefunden: HKCU\\{RegistryPathCurrentUser}");
+                        Console.WriteLine($"Fehler: Registry-Schlï¿½ssel nicht gefunden: HKCU\\{RegistryPathCurrentUser}");
                         return;
                     }
 
-                    // Überprüfe, ob der Wert existiert, bevor du versuchst, ihn zu löschen.
+                    // ï¿½berprï¿½fe, ob der Wert existiert, bevor du versuchst, ihn zu lï¿½schen.
                     if (key.GetValue(AppName) != null)
                     {
                         key.DeleteValue(AppName, false); 
@@ -153,22 +153,22 @@ namespace _4Time
         }
 
         /// <summary>
-        /// Überprüft, ob die Anwendung für den aktuellen Benutzer im Autostart registriert ist.
+        /// ï¿½berprï¿½ft, ob die Anwendung fï¿½r den aktuellen Benutzer im Autostart registriert ist.
         /// </summary>
         /// <returns>True, wenn registriert, sonst False.</returns>
         public static bool IsApplicationInCurrentUserStartup()
         {
             try
             {
-                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(RegistryPathCurrentUser, false)) // false für reinen Lesezugriff
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(RegistryPathCurrentUser, false)) // false fï¿½r reinen Lesezugriff
                 {
                     if (key == null)
                     {
-                        return false; // Schlüssel existiert nicht
+                        return false; // Schlï¿½ssel existiert nicht
                     }
 
                     string executablePath = Application.ExecutablePath;
-                    // Für Konsolenanwendungen:
+                    // Fï¿½r Konsolenanwendungen:
                     // string executablePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
 
                     object value = key.GetValue(AppName);
@@ -179,7 +179,7 @@ namespace _4Time
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    $"Fehler beim Überprüfen des Autostarts: {ex.Message}",
+                    $"Fehler beim ï¿½berprï¿½fen des Autostarts: {ex.Message}",
                     "Autostart",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
