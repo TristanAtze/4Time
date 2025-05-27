@@ -14,15 +14,13 @@ namespace _4Time
         [STAThread]
         public static void Main()
         {
+            //Task.Run(YouTubeShortsBlocker.StartMonitoringAsync);
             ProgrammSetup();
             //Connector.OpenConnection();
-            if (Connector.IsConnected)
-            {
-                Thread.Sleep(50);
-            }
-
             string activeUser = Environment.UserName.ToLower();
-            //Updater();
+
+            Updater();
+
             if (activeUser == "gerd.kaufmann")
             {
                 Crypto.FileListenerStart();

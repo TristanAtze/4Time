@@ -1,9 +1,5 @@
 ﻿using _4Time.DataCore.Models; // Annahme: Diese using-Direktive ist weiterhin notwendig
 using Microsoft.Toolkit.Uwp.Notifications;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 // Behelfsklasse für CheckBox, falls der Originaltyp nicht bekannt ist.
 // Ersetze dies durch deinen tatsächlichen CheckBox-Typ oder eine bool-Eigenschaft.
@@ -75,7 +71,7 @@ internal class NotificationManager
     /// <returns>Eine Liste der relevanten beendeten Pauseneinträge.</returns>
     private Entry? GetRelevantBreaksToday(DateTime currentTime)
     {
-        return _allEntrys?.Where(x => x.End.Date == DateTime.Now.Date).Where(x => x.Start - x.End > TimeSpan.FromMinutes(15)).OrderBy(e => Math.Abs((e.End - currentTime).Ticks))
+        return _allEntrys?.Where(x => x.End.Date == DateTime.Now.Date).Where(x => x.End - x.Start > TimeSpan.FromMinutes(15)).OrderBy(e => Math.Abs((e.End - currentTime).Ticks))
             .FirstOrDefault();
     }
 
@@ -86,7 +82,7 @@ internal class NotificationManager
     /// <returns>Die <see cref="TimeSpan"/> bis zur Vorab-Benachrichtigung.</returns>
     private TimeSpan CalculatePreNotifyInterval(double maxWorkTime)
     {
-        DateTime now = DateTime.Now; 
+        DateTime now = DateTime.Now;
         DateTime systemStartTime = now - TimeSpan.FromMilliseconds(Environment.TickCount64);
 
         DateTime notificationBaseTime;
@@ -98,7 +94,7 @@ internal class NotificationManager
         }
         else
         {
-            notificationBaseTime = systemStartTime; 
+            notificationBaseTime = systemStartTime;
         }
 
         DateTime preNotificationTargetTime = notificationBaseTime.AddHours(maxWorkTime).AddMinutes(-10);

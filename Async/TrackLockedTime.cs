@@ -1,8 +1,8 @@
 ﻿using _4Time.DataCore;
 using _4Time.DataCore.Models;
 using Microsoft.Win32;
-using Time4SellersApp;
 using System.Diagnostics;
+using Time4SellersApp;
 
 
 namespace _4Time.Async;
@@ -50,7 +50,7 @@ internal class TrackLockedTime
             case SessionSwitchReason.SessionUnlock:
                 _pcUnlockedTime = DateTime.Now;
                 Debug.WriteLine($"PC entsperrt um: {_pcUnlockedTime}");
-                AutoBookCaller(); 
+                AutoBookCaller();
                 ShowPauseMessageBox();
                 break;
         }
@@ -70,7 +70,7 @@ internal class TrackLockedTime
             .OrderBy(x => x.Start).FirstOrDefault();
 
         Entry? lastEntry = _mainUserViewInstance._allEntrys
-            .Where(x => x.End.Date == DateTime.Now.Date) 
+            .Where(x => x.End.Date == DateTime.Now.Date)
             .Where(x => x.End.TimeOfDay < DateTime.Now.TimeOfDay)
             .OrderByDescending(x => x.End).FirstOrDefault();
 
@@ -95,11 +95,11 @@ internal class TrackLockedTime
             return;
         }
 
-        var latestEntryEnd = entry.End; 
+        var latestEntryEnd = entry.End;
         var category = 1;
         string bookTypeString = "";
 
-        if (DateTime.Now.Hour >= 12) 
+        if (DateTime.Now.Hour >= 12)
         {
             bookTypeString = "Nachmittag"; category = 10;
         }
@@ -108,7 +108,7 @@ internal class TrackLockedTime
             bookTypeString = "Vormittag"; category = 9;
         }
 
-        Thread.Sleep(500); 
+        Thread.Sleep(500);
         if (_pcLockedTime.HasValue)
         {
             var ursprünglicheMinSize = _mainUserViewInstance.MinimumSize;
@@ -138,7 +138,7 @@ internal class TrackLockedTime
         }
     }
 
-    private static void ShowFirstEntryMessageBox(Entry? todaysFirstEntry) 
+    private static void ShowFirstEntryMessageBox(Entry? todaysFirstEntry)
     {
         if (_mainUserViewInstance == null)
         {
