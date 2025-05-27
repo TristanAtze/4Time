@@ -184,8 +184,7 @@ partial class UserView
             {
                 var entry = _allEntrys[rowIndex];
                 Writer.Delete("Entries", [$"[EntryID] = {entry.EntryID}"]);
-
-                _allEntrys.RemoveAt(rowIndex);
+                _allEntrys.Where(x => x.EntryID == entry.EntryID).ToList().ForEach(x => _allEntrys.Remove(x));
             }
 
             dgvEntries.Refresh();

@@ -202,6 +202,7 @@ namespace Time4SellersApp
             tabControl.SelectedIndex = 0;
             tabControl.Size = new Size(474, 561);
             tabControl.TabIndex = 0;
+            tabControl.Enter += tabControl_Enter;
             // 
             // tabUebersicht
             // 

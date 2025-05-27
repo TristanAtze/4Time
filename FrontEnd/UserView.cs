@@ -67,7 +67,6 @@ namespace Time4SellersApp
             NotificationManager notificationManager = new(dgvEntries, allCategorys, checkBox1, checkBox2);
 
             TrackLockedTime.InitializeAndStartTracking(this);
-
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -364,6 +363,15 @@ namespace Time4SellersApp
         private void button1_Click(object sender, EventArgs e)
         {
             MessageBox.Show($"{DadJokes.GetRandomJoke()}", "Dad jokes", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void tabControl_Enter(object sender, EventArgs e)
+        {
+            DateTime endzeit = _allEntrys.Where(x => x.Start.Date == DateTime.Now.Date).OrderByDescending(x => x.End).FirstOrDefault()?.End ?? DateTime.Now;
+
+            StartzeitEndzeitStart.Text = endzeit.ToString();
+            StartzeitDauerStart.Text = endzeit.ToString();
+            EndzeitDauerStart.Text = endzeit.ToString();
         }
     }
 }
