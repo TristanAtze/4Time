@@ -6,6 +6,7 @@ using _4Time.FrontEnd;
 using System.Data;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 
 namespace Time4SellersApp
@@ -14,8 +15,9 @@ namespace Time4SellersApp
     {
         private readonly IntPtr IconPointer;
         private List<(string Key, object Value)> _settingsToSave = [];
-        private readonly List<Category> _allCategorys = Reader.Read<Category>("Categories");
-        public List<Entry> _allEntrys = Reader.Read<Entry>("Entries", null,
+        private List<Category> _allCategorys = Reader.Read<Category>("Categories").Result;
+
+        private Task<List<Entry>> getAllEntrys = Task.Run(() => Reader.Read<Entry>("Entries", null,
         [
             $"[UserID] = {Reader.Read<User>("User",
             [
@@ -24,12 +26,12 @@ namespace Time4SellersApp
             [
                 $"[FirstName] = '{Connector.FirstName}'",
                 $"[LastName] = '{Connector.LastName}'"
-            ]).First().UserID}",
-        ]);
+            ]).Result.First().UserID}",
+        ]));
+        public List<Entry> _allEntrys;
 
         public UserView()
         {
-
             InitializeComponent();
             this.FormClosing += new FormClosingEventHandler(MainForm_FormClosing);
             MaximumSize = Size;
@@ -56,9 +58,11 @@ namespace Time4SellersApp
             colKommentar.HeaderText = "Kommentar";
             colDauer.HeaderText = "Dauer";
 
-            FillDataGridView();
             rbStartzeitEndzeit.Checked = true;
+
+
             FillValues();
+            FillDataGridView();
 
             LogginName.Text = Connector.FirstName + " " + Connector.LastName;
 
@@ -66,9 +70,16 @@ namespace Time4SellersApp
 
             NotificationManager notificationManager = new(dgvEntries, allCategorys, checkBox1, checkBox2);
 
+            PTMin.Text = NotificationManager.startPauseAt.ToString(@"t");
+
             TrackLockedTime.InitializeAndStartTracking(this);
         }
 
+        private async Task AwaitEntryTask()
+        {
+            await getAllEntrys;
+            _allEntrys = getAllEntrys.Result;
+        }
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)
@@ -111,8 +122,9 @@ namespace Time4SellersApp
             }
         }
 
-        private void FillValues()
+        private async Task FillValues()
         {
+            await AwaitEntryTask();
 
             Settings.Hide();
             DateTime My4SellersDateTime = dateTimePicker1.Value.Date;
@@ -210,8 +222,9 @@ namespace Time4SellersApp
             return LockTimeMin.Value;
         }
 
-        public void FillDataGridView()
+        public async Task FillDataGridView()
         {
+            await AwaitEntryTask();
             dgvEntries.DataSource = null;
             dgvEntries.Rows.Clear();
 
@@ -274,7 +287,7 @@ namespace Time4SellersApp
                 CategoryName = art,
                 Comment = bemerkung,
                 //TODO GetUser sollte u.a. einen User zurückgeben, welcher alle nötigen Werte (Vor- und Nachname + ID) enthält
-                UserID = Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).First().UserID,
+                UserID = Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).Result.First().UserID,
                 CategoryID = _allCategorys.Where(x => x.Description == art)
                     .Select(x => x.CategoryID)
                     .First()
@@ -365,13 +378,17 @@ namespace Time4SellersApp
             MessageBox.Show($"{DadJokes.GetRandomJoke()}", "Dad jokes", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void tabControl_Enter(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
             DateTime endzeit = _allEntrys.Where(x => x.Start.Date == DateTime.Now.Date).OrderByDescending(x => x.End).FirstOrDefault()?.End ?? DateTime.Now;
 
             StartzeitEndzeitStart.Text = endzeit.ToString();
             StartzeitDauerStart.Text = endzeit.ToString();
-            EndzeitDauerStart.Text = endzeit.ToString();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            OutlookCalendar.DoOutlookIntegration();
         }
     }
 }

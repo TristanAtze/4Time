@@ -15,7 +15,7 @@ internal class Writer : Connector
     /// <summary>
     /// Erstellt die Datenbank und die benötigten Tabellen, wenn sie nicht existieren.
     /// </summary>
-    internal static void DatabaseSetup()
+    internal static async Task DatabaseSetupAsync()
     {
         string query = File.ReadAllText("res/Setup.txt");
 
@@ -27,7 +27,7 @@ internal class Writer : Connector
         connection.Close();
     }
 
-    internal static void UserSetup()
+    internal static async Task UserSetupAsync()
     {
         string query = @"
                 IF(NOT EXISTS (SELECT 1 FROM [dbo].[User] WHERE [FirstName] = @firstName AND [LastName] = @lastName))

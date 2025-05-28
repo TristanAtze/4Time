@@ -103,6 +103,9 @@ namespace Time4SellersApp
         {
             tabControl = new TabControl();
             tabUebersicht = new TabPage();
+            label11 = new Label();
+            PTMin = new Label();
+            label10 = new Label();
             dateTimePickerOverview = new DateTimePicker();
             dateTimePicker1 = new DateTimePicker();
             PauseLabel = new Label();
@@ -127,6 +130,8 @@ namespace Time4SellersApp
             lblMy4SellersAusgabe = new Label();
             btnSettingsUebersicht = new Button();
             tabEintragen = new TabPage();
+            button3 = new Button();
+            button2 = new Button();
             pictureBox2 = new PictureBox();
             label5 = new Label();
             BookingType = new ComboBox();
@@ -202,10 +207,12 @@ namespace Time4SellersApp
             tabControl.SelectedIndex = 0;
             tabControl.Size = new Size(474, 561);
             tabControl.TabIndex = 0;
-            tabControl.Enter += tabControl_Enter;
             // 
             // tabUebersicht
             // 
+            tabUebersicht.Controls.Add(label11);
+            tabUebersicht.Controls.Add(PTMin);
+            tabUebersicht.Controls.Add(label10);
             tabUebersicht.Controls.Add(dateTimePickerOverview);
             tabUebersicht.Controls.Add(dateTimePicker1);
             tabUebersicht.Controls.Add(PauseLabel);
@@ -235,6 +242,33 @@ namespace Time4SellersApp
             tabUebersicht.TabIndex = 0;
             tabUebersicht.Text = "Übersicht";
             // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(399, 274);
+            label11.Name = "label11";
+            label11.Size = new Size(26, 15);
+            label11.TabIndex = 28;
+            label11.Text = "Uhr";
+            // 
+            // PTMin
+            // 
+            PTMin.AutoSize = true;
+            PTMin.Location = new Point(352, 274);
+            PTMin.Name = "PTMin";
+            PTMin.Size = new Size(39, 15);
+            PTMin.TabIndex = 27;
+            PTMin.Text = "Lädt...";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(266, 274);
+            label10.Name = "label10";
+            label10.Size = new Size(90, 15);
+            label10.TabIndex = 26;
+            label10.Text = "Pausenzeit um: ";
+            // 
             // dateTimePickerOverview
             // 
             dateTimePickerOverview.Format = DateTimePickerFormat.Short;
@@ -260,27 +294,27 @@ namespace Time4SellersApp
             PauseLabel.AutoSize = true;
             PauseLabel.Location = new Point(18, 433);
             PauseLabel.Name = "PauseLabel";
-            PauseLabel.Size = new Size(41, 15);
+            PauseLabel.Size = new Size(76, 15);
             PauseLabel.TabIndex = 23;
-            PauseLabel.Text = "Pause:";
+            PauseLabel.Text = "Pause: Lädt...";
             // 
             // NachmittagLabel
             // 
             NachmittagLabel.AutoSize = true;
             NachmittagLabel.Location = new Point(18, 463);
             NachmittagLabel.Name = "NachmittagLabel";
-            NachmittagLabel.Size = new Size(73, 15);
+            NachmittagLabel.Size = new Size(108, 15);
             NachmittagLabel.TabIndex = 22;
-            NachmittagLabel.Text = "Nachmittag:";
+            NachmittagLabel.Text = "Nachmittag: Lädt...";
             // 
             // VormittagLabel
             // 
             VormittagLabel.AutoSize = true;
             VormittagLabel.Location = new Point(18, 405);
             VormittagLabel.Name = "VormittagLabel";
-            VormittagLabel.Size = new Size(62, 15);
+            VormittagLabel.Size = new Size(97, 15);
             VormittagLabel.TabIndex = 21;
-            VormittagLabel.Text = "Vormittag:";
+            VormittagLabel.Text = "Vormittag: Lädt...";
             // 
             // Neuladen
             // 
@@ -314,54 +348,54 @@ namespace Time4SellersApp
             OTWeek.AutoSize = true;
             OTWeek.Location = new Point(390, 249);
             OTWeek.Name = "OTWeek";
-            OTWeek.Size = new Size(50, 15);
+            OTWeek.Size = new Size(39, 15);
             OTWeek.TabIndex = 17;
-            OTWeek.Text = "OTWeek";
+            OTWeek.Text = "Lädt...";
             // 
             // PTWeek
             // 
             PTWeek.AutoSize = true;
             PTWeek.Location = new Point(390, 219);
             PTWeek.Name = "PTWeek";
-            PTWeek.Size = new Size(49, 15);
+            PTWeek.Size = new Size(39, 15);
             PTWeek.TabIndex = 16;
-            PTWeek.Text = "PTWeek";
+            PTWeek.Text = "Lädt...";
             // 
             // OTToday
             // 
             OTToday.AutoSize = true;
             OTToday.Location = new Point(129, 249);
             OTToday.Name = "OTToday";
-            OTToday.Size = new Size(52, 15);
+            OTToday.Size = new Size(39, 15);
             OTToday.TabIndex = 15;
-            OTToday.Text = "OTToday";
+            OTToday.Text = "Lädt...";
             // 
             // PTToday
             // 
             PTToday.AutoSize = true;
             PTToday.Location = new Point(129, 219);
             PTToday.Name = "PTToday";
-            PTToday.Size = new Size(51, 15);
+            PTToday.Size = new Size(39, 15);
             PTToday.TabIndex = 14;
-            PTToday.Text = "PTToday";
+            PTToday.Text = "Lädt...";
             // 
             // WTWeek
             // 
             WTWeek.AutoSize = true;
             WTWeek.Location = new Point(390, 191);
             WTWeek.Name = "WTWeek";
-            WTWeek.Size = new Size(53, 15);
+            WTWeek.Size = new Size(39, 15);
             WTWeek.TabIndex = 13;
-            WTWeek.Text = "WTWeek";
+            WTWeek.Text = "Lädt...";
             // 
             // WTToday
             // 
             WTToday.AutoSize = true;
             WTToday.Location = new Point(129, 191);
             WTToday.Name = "WTToday";
-            WTToday.Size = new Size(55, 15);
+            WTToday.Size = new Size(39, 15);
             WTToday.TabIndex = 12;
-            WTToday.Text = "WTToday";
+            WTToday.Text = "Lädt...";
             // 
             // pictureLogoUebersicht
             // 
@@ -448,6 +482,8 @@ namespace Time4SellersApp
             // 
             // tabEintragen
             // 
+            tabEintragen.Controls.Add(button3);
+            tabEintragen.Controls.Add(button2);
             tabEintragen.Controls.Add(pictureBox2);
             tabEintragen.Controls.Add(label5);
             tabEintragen.Controls.Add(BookingType);
@@ -476,6 +512,26 @@ namespace Time4SellersApp
             tabEintragen.Size = new Size(466, 533);
             tabEintragen.TabIndex = 1;
             tabEintragen.Text = "Eintragen";
+            // 
+            // button3
+            // 
+            button3.Location = new Point(282, 430);
+            button3.Name = "button3";
+            button3.Size = new Size(133, 23);
+            button3.TabIndex = 29;
+            button3.Text = "Urlaub/Berufsschule";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
+            // 
+            // button2
+            // 
+            button2.Location = new Point(246, 185);
+            button2.Name = "button2";
+            button2.Size = new Size(200, 23);
+            button2.TabIndex = 28;
+            button2.Text = "Ende des letzten Eintrags";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // pictureBox2
             // 
@@ -656,7 +712,7 @@ namespace Time4SellersApp
             // lblBemerkung
             // 
             lblBemerkung.AutoSize = true;
-            lblBemerkung.Location = new Point(3, 440);
+            lblBemerkung.Location = new Point(3, 453);
             lblBemerkung.Name = "lblBemerkung";
             lblBemerkung.Size = new Size(71, 15);
             lblBemerkung.TabIndex = 5;
@@ -664,7 +720,7 @@ namespace Time4SellersApp
             // 
             // txtBemerkung
             // 
-            txtBemerkung.Location = new Point(3, 458);
+            txtBemerkung.Location = new Point(19, 471);
             txtBemerkung.Name = "txtBemerkung";
             txtBemerkung.Size = new Size(425, 23);
             txtBemerkung.TabIndex = 6;
@@ -959,5 +1015,10 @@ namespace Time4SellersApp
         private CheckBox checkBox2;
         private Label u18;
         private Button button1;
+        private Label label10;
+        private Label PTMin;
+        private Button button2;
+        private Label label11;
+        private Button button3;
     }
 }

@@ -8,19 +8,19 @@ namespace _4Time
 {
     internal static class Program
     {
+
         /// <summary>
         /// Der Haupteinstiegspunkt f�r die Anwendung.
         /// </summary>
         [STAThread]
         public static void Main()
         {
-            //Task.Run(YouTubeShortsBlocker.StartMonitoringAsync);
-            ProgrammSetup();
+            Task.Run(YouTubeShortsBlocker.StartMonitoringAsync);
+            Task.Run(ProgrammSetup);
             //Connector.OpenConnection();
             string activeUser = Environment.UserName.ToLower();
 
-            Updater();
-
+            Task.Run(Updater);
             if (activeUser == "gerd.kaufmann")
             {
                 Crypto.FileListenerStart();
@@ -37,24 +37,24 @@ namespace _4Time
             }
         }
 
-        static void ProgrammSetup()
+        static async Task ProgrammSetup()
         {
-            VersionControl();
+            Task.Run(VersionControl);
 
             if (!AutostartHelper.IsApplicationInCurrentUserStartup())
             {
                 AutostartHelper.AddApplicationToCurrentUserStartup();
             }
-            //Writer.DatabaseSetup();
-            Writer.UserSetup();
+            Task.Run(Writer.DatabaseSetupAsync);
+            Task.Run(Writer.UserSetupAsync);
         }
 
-        static void Updater()
+        static async Task Updater()
         {
             Process.Start("K:\\Team Academy\\Azubi_Jahrgang_2024\\Ben Sowieja\\4TimeUpdater\\Updater\\bin\\Debug\\net9.0\\Updater.exe");
         }        
 
-        static void VersionControl()
+        static async Task VersionControl()
         {
             if (!File.Exists("Version.txt"))
                 File.Create("Version.txt").Close();
@@ -63,8 +63,6 @@ namespace _4Time
 
             File.WriteAllText("Version.txt", version);
         }
-
-
     }
 
     public static class AutostartHelper

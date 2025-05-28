@@ -2,6 +2,7 @@
 using Microsoft.Data.SqlClient;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace _4Time.DataCore;
 
@@ -16,7 +17,7 @@ internal class Reader : Connector
     /// <param name="conditions"></param>
     /// <param name="password"></param>
     /// <returns></returns>
-    internal static List<T> Read<T>(string table, string[]? columns = null, string[]? conditions = null, string? password = null) where T : new()
+    internal static async Task<List<T>> Read<T>(string table, string[]? columns = null, string[]? conditions = null, string? password = null) where T : new()
     {
         var entries = new List<T>();
         var sql = new StringBuilder();
@@ -45,18 +46,23 @@ internal class Reader : Connector
             {
                 if (typeof(T) == typeof(Entry))
                 {
-                    var startDecrypted = Crypto.Decryption(reader.GetString(3), password).Result;
-                    var endDecrypted = Crypto.Decryption(reader.GetString(4), password).Result;
-                    var commentDecrypted = Crypto.Decryption(reader.GetString(6), password).Result;
+                    var d = reader.GetString(3);
+                    var e = reader.GetString(4);
+                    var g = reader.GetString(6);
 
+                    var startDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(3), password));
+                    var endDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(4), password));
+                    var commentDecrypted = Task.Run(() => Crypto.Decryption(reader.GetString(6), password));
+
+                    await Task.WhenAll(startDecrypted, endDecrypted, commentDecrypted);
                     entries.Add((T)(object)new Entry()
                     {
                         EntryID = reader.GetInt32(0),
                         UserID = reader.GetInt32(1),
                         CategoryID = reader.GetInt32(2),
-                        Start = DateTime.Parse(startDecrypted),
-                        End = DateTime.Parse(endDecrypted),
-                        Comment = commentDecrypted
+                        Start = DateTime.Parse(startDecrypted.Result),
+                        End = DateTime.Parse(endDecrypted.Result),
+                        Comment = commentDecrypted.Result
                     });
                 }
                 else
