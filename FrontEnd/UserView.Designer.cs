@@ -103,6 +103,9 @@ namespace Time4SellersApp
         {
             tabControl = new TabControl();
             tabUebersicht = new TabPage();
+            label11 = new Label();
+            PTMin = new Label();
+            label10 = new Label();
             dateTimePickerOverview = new DateTimePicker();
             dateTimePicker1 = new DateTimePicker();
             PauseLabel = new Label();
@@ -127,6 +130,7 @@ namespace Time4SellersApp
             lblMy4SellersAusgabe = new Label();
             btnSettingsUebersicht = new Button();
             tabEintragen = new TabPage();
+            button2 = new Button();
             pictureBox2 = new PictureBox();
             label5 = new Label();
             BookingType = new ComboBox();
@@ -174,6 +178,7 @@ namespace Time4SellersApp
             LockTimeMin = new NumericUpDown();
             label7 = new Label();
             LockedTimeMin = new Label();
+            button3 = new Button();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureLogoUebersicht).BeginInit();
@@ -202,10 +207,12 @@ namespace Time4SellersApp
             tabControl.SelectedIndex = 0;
             tabControl.Size = new Size(474, 561);
             tabControl.TabIndex = 0;
-            tabControl.Enter += tabControl_Enter;
             // 
             // tabUebersicht
             // 
+            tabUebersicht.Controls.Add(label11);
+            tabUebersicht.Controls.Add(PTMin);
+            tabUebersicht.Controls.Add(label10);
             tabUebersicht.Controls.Add(dateTimePickerOverview);
             tabUebersicht.Controls.Add(dateTimePicker1);
             tabUebersicht.Controls.Add(PauseLabel);
@@ -234,6 +241,33 @@ namespace Time4SellersApp
             tabUebersicht.Size = new Size(466, 533);
             tabUebersicht.TabIndex = 0;
             tabUebersicht.Text = "Übersicht";
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(399, 274);
+            label11.Name = "label11";
+            label11.Size = new Size(26, 15);
+            label11.TabIndex = 28;
+            label11.Text = "Uhr";
+            // 
+            // PTMin
+            // 
+            PTMin.AutoSize = true;
+            PTMin.Location = new Point(352, 274);
+            PTMin.Name = "PTMin";
+            PTMin.Size = new Size(41, 15);
+            PTMin.TabIndex = 27;
+            PTMin.Text = "PTMin";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(266, 274);
+            label10.Name = "label10";
+            label10.Size = new Size(90, 15);
+            label10.TabIndex = 26;
+            label10.Text = "Pausenzeit um: ";
             // 
             // dateTimePickerOverview
             // 
@@ -448,6 +482,8 @@ namespace Time4SellersApp
             // 
             // tabEintragen
             // 
+            tabEintragen.Controls.Add(button3);
+            tabEintragen.Controls.Add(button2);
             tabEintragen.Controls.Add(pictureBox2);
             tabEintragen.Controls.Add(label5);
             tabEintragen.Controls.Add(BookingType);
@@ -476,6 +512,16 @@ namespace Time4SellersApp
             tabEintragen.Size = new Size(466, 533);
             tabEintragen.TabIndex = 1;
             tabEintragen.Text = "Eintragen";
+            // 
+            // button2
+            // 
+            button2.Location = new Point(246, 185);
+            button2.Name = "button2";
+            button2.Size = new Size(200, 23);
+            button2.TabIndex = 28;
+            button2.Text = "Ende des letzten Eintrags";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // pictureBox2
             // 
@@ -656,7 +702,7 @@ namespace Time4SellersApp
             // lblBemerkung
             // 
             lblBemerkung.AutoSize = true;
-            lblBemerkung.Location = new Point(3, 440);
+            lblBemerkung.Location = new Point(3, 453);
             lblBemerkung.Name = "lblBemerkung";
             lblBemerkung.Size = new Size(71, 15);
             lblBemerkung.TabIndex = 5;
@@ -664,7 +710,7 @@ namespace Time4SellersApp
             // 
             // txtBemerkung
             // 
-            txtBemerkung.Location = new Point(3, 458);
+            txtBemerkung.Location = new Point(19, 471);
             txtBemerkung.Name = "txtBemerkung";
             txtBemerkung.Size = new Size(425, 23);
             txtBemerkung.TabIndex = 6;
@@ -919,6 +965,16 @@ namespace Time4SellersApp
             LockedTimeMin.TabIndex = 1;
             LockedTimeMin.Text = "Pc Sperrzeit Schwelle:";
             // 
+            // button3
+            // 
+            button3.Location = new Point(282, 430);
+            button3.Name = "button3";
+            button3.Size = new Size(133, 23);
+            button3.TabIndex = 29;
+            button3.Text = "Urlaub/Berufsschule";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
+            // 
             // UserView
             // 
             ClientSize = new Size(474, 561);
@@ -959,5 +1015,10 @@ namespace Time4SellersApp
         private CheckBox checkBox2;
         private Label u18;
         private Button button1;
+        private Label label10;
+        private Label PTMin;
+        private Button button2;
+        private Label label11;
+        private Button button3;
     }
 }

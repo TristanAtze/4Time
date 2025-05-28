@@ -534,6 +534,11 @@ public static class Crypto
     private static string allKeysFilePath = "K:\\Team Academy\\Azubi_Jahrgang_2024\\Lorenz_Kupfer\\Konsolen Programme\\AllKeysEncrypted.4Time";
     private static FileSystemWatcher watcher = new();
 
+    static Crypto()
+    {
+        FirstCallOnly();
+    }
+
     public static void WriteKey()
     {
         //TODO Registry Implementierung des KeyWritten.4Time
@@ -697,7 +702,6 @@ public static class Crypto
 
     public static string Encryption(string plainText)
     {
-        FirstCallOnly();
         string encryptedData = "";
         SecureString loadedSecurePassword = WindowsCredentialManager.LoadPassword(AppCredentialName) ?? new();
 
@@ -738,7 +742,6 @@ public static class Crypto
 
     public static Task<string> Decryption(string encryptedData, string? password = null)
     {
-        FirstCallOnly();
         SecureString? loadedSecurePassword = new();
 
         if (password == null)
@@ -753,9 +756,7 @@ public static class Crypto
             }
         }
 
-
-
-            string decryptedData = "";
+        string decryptedData = "";
         if (loadedSecurePassword != null)
         {
             // --- Schritt 3: Geladenes Passwort für Entschlüsselung nutzen ---

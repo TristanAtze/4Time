@@ -12,6 +12,7 @@ internal class NotificationManager
 {
     private readonly List<Entry> _allEntrys = [];
     private readonly List<Category> _allCategorys;
+    public static DateTime startPauseAt; 
 
     /// <summary>
     /// Initialisiert eine neue Instanz der <see cref="NotificationManager"/> Klasse.
@@ -153,6 +154,8 @@ internal class NotificationManager
         }
 
         DateTime mainNotificationTargetTime = notificationBaseTime.AddHours(maxWorkTime);
+
+        startPauseAt = mainNotificationTargetTime;
 
         if (mainNotificationTargetTime < now) return TimeSpan.MinValue;
         if (mainNotificationTargetTime == now) return TimeSpan.Zero;

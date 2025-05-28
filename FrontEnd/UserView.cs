@@ -29,7 +29,6 @@ namespace Time4SellersApp
 
         public UserView()
         {
-
             InitializeComponent();
             this.FormClosing += new FormClosingEventHandler(MainForm_FormClosing);
             MaximumSize = Size;
@@ -56,15 +55,18 @@ namespace Time4SellersApp
             colKommentar.HeaderText = "Kommentar";
             colDauer.HeaderText = "Dauer";
 
-            FillDataGridView();
             rbStartzeitEndzeit.Checked = true;
+
             FillValues();
+            FillDataGridView();
 
             LogginName.Text = Connector.FirstName + " " + Connector.LastName;
 
             LoadSettings();
 
             NotificationManager notificationManager = new(dgvEntries, allCategorys, checkBox1, checkBox2);
+
+            PTMin.Text = NotificationManager.startPauseAt.ToString(@"t");
 
             TrackLockedTime.InitializeAndStartTracking(this);
         }
@@ -113,7 +115,6 @@ namespace Time4SellersApp
 
         private void FillValues()
         {
-
             Settings.Hide();
             DateTime My4SellersDateTime = dateTimePicker1.Value.Date;
 
@@ -365,13 +366,17 @@ namespace Time4SellersApp
             MessageBox.Show($"{DadJokes.GetRandomJoke()}", "Dad jokes", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void tabControl_Enter(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
             DateTime endzeit = _allEntrys.Where(x => x.Start.Date == DateTime.Now.Date).OrderByDescending(x => x.End).FirstOrDefault()?.End ?? DateTime.Now;
 
             StartzeitEndzeitStart.Text = endzeit.ToString();
             StartzeitDauerStart.Text = endzeit.ToString();
-            EndzeitDauerStart.Text = endzeit.ToString();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            OutlookCalendar.DoOutlookIntegration();
         }
     }
 }
