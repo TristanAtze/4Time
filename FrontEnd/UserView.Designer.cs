@@ -256,9 +256,9 @@ namespace Time4SellersApp
             PTMin.AutoSize = true;
             PTMin.Location = new Point(352, 274);
             PTMin.Name = "PTMin";
-            PTMin.Size = new Size(39, 15);
+            PTMin.Size = new Size(65, 15);
             PTMin.TabIndex = 27;
-            PTMin.Text = "Lädt...";
+            PTMin.Text = "Berechne...";
             // 
             // label10
             // 
@@ -791,7 +791,7 @@ namespace Time4SellersApp
             btnNeuladenAuslesen.Size = new Size(100, 30);
             btnNeuladenAuslesen.TabIndex = 2;
             btnNeuladenAuslesen.Text = "Neuladen";
-            btnNeuladenAuslesen.Click += BtnNeuladenAuslesen_Click;
+            btnNeuladenAuslesen.Click += Neuladen_Click;
             // 
             // dgvEntries
             // 

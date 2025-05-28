@@ -141,6 +141,7 @@ partial class UserView
 
             this.FillDataGridView();
             this.FillValues();
+            PTMin.Text = NotificationManager.startPauseAt.ToString(@"t");
         }
         catch (Exception ex)
         {
@@ -195,6 +196,15 @@ partial class UserView
 
     public async void Neuladen_Click(object sender, EventArgs e)
     {
+
+        PTToday.Text = "Lädt...";
+        PTWeek.Text = "Lädt...";
+        WTToday.Text = "Lädt...";
+        WTWeek.Text = "Lädt...";
+        OTToday.Text = "Lädt...";
+        OTWeek.Text = "Lädt...";
+
+
         this.Neuladen.Enabled = false;
         this.btnNeuladenAuslesen.Enabled = false;
 
@@ -204,6 +214,7 @@ partial class UserView
 
             this.FillDataGridView();
             this.FillValues();
+            PTMin.Text = NotificationManager.startPauseAt.ToString(@"t");
         }
         catch (Exception ex)
         {

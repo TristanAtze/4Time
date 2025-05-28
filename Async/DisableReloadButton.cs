@@ -18,6 +18,5 @@ public class DisableReloadButton
                 $"[LastName] = '{Connector.LastName}'"
             ]).Result.First().UserID}",
         ]).Result;
-        await Task.Delay(5000);
     }
 }

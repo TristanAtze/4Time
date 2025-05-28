@@ -33,6 +33,10 @@ namespace Time4SellersApp
         public UserView()
         {
             InitializeComponent();
+            label11.Hide();
+            btnNeuladenAuslesen.Enabled = false;
+            Neuladen.Enabled = false;
+
             this.FormClosing += new FormClosingEventHandler(MainForm_FormClosing);
             MaximumSize = Size;
             MinimumSize = Size;
@@ -67,10 +71,6 @@ namespace Time4SellersApp
             LogginName.Text = Connector.FirstName + " " + Connector.LastName;
 
             LoadSettings();
-
-            NotificationManager notificationManager = new(dgvEntries, allCategorys, checkBox1, checkBox2);
-
-            PTMin.Text = NotificationManager.startPauseAt.ToString(@"t");
 
             TrackLockedTime.InitializeAndStartTracking(this);
         }
@@ -211,6 +211,15 @@ namespace Time4SellersApp
             WTWeek.Text = $"{workWeekHours}:{workWeek.Minutes} std";
             OTToday.Text = $"{(overtimeToday > TimeSpan.Zero ? overtimeToday : TimeSpan.Zero):hh\\:mm} std";
             OTWeek.Text = $"{(overtimeWeek > TimeSpan.Zero ? overtimeWeek : TimeSpan.Zero):hh\\:mm} std";
+
+            await Task.Delay(2500);
+
+            NotificationManager notificationManager = new(dgvEntries, allCategorys, checkBox1, checkBox2);
+
+            PTMin.Text = NotificationManager.startPauseAt.ToString(@"t");
+            label11.Show();
+            btnNeuladenAuslesen.Enabled = true;
+            Neuladen.Enabled = true;
         }
 
         /// <summary>
@@ -225,6 +234,7 @@ namespace Time4SellersApp
         public async Task FillDataGridView()
         {
             await AwaitEntryTask();
+
             dgvEntries.DataSource = null;
             dgvEntries.Rows.Clear();
 
