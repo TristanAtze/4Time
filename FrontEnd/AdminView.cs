@@ -7,7 +7,7 @@ namespace Time4SellersApp
     public partial class AdminView : Form
     {
         private static string simulatedUser = "";
-        private readonly List<Category> _allCategorys = Reader.Read<Category>("Categories");
+        private readonly List<Category> _allCategorys = Reader.Read<Category>("Categories").Result;
         private List<Entry> _allEntrys = Reader.Read<Entry>("Entries", null,
         [
             $"[UserID] = {Reader.Read<User>("User",
@@ -17,10 +17,10 @@ namespace Time4SellersApp
             [
                 $"[FirstName] = '{Connector.FirstName}'",
                 $"[LastName] = '{Connector.LastName}'"
-            ]).First().UserID}",
-        ]);
+            ]).Result.First().UserID}",
+        ]).Result;
 
-        private readonly List<User> _allUsers = [.. Reader.Read<User>("User").Where(x => x.FirstName != "gerd" && x.LastName != "kaufmann")];
+        private readonly List<User> _allUsers = [.. Reader.Read<User>("User").Result.Where(x => x.FirstName != "gerd" && x.LastName != "kaufmann")];
 
         public AdminView()
         {
@@ -148,8 +148,8 @@ namespace Time4SellersApp
                 [
                     $"[FirstName] = '{comboBox1.Text.Split(" ")[0]}'",
                     $"[LastName] = '{comboBox1.Text.Split(" ")[1]}'"
-                ]).First().UserID}",
-            ], Crypto.GetUserKeys());
+                ]).Result.First().UserID}",
+            ], Crypto.GetUserKeys()).Result;
 
             FillDataGridView();
             FillValues();

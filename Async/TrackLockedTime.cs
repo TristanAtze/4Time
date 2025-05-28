@@ -127,7 +127,7 @@ internal class TrackLockedTime
             {
                 Writer.Insert("Entries", new Entry
                 {
-                    UserID = Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).First().UserID,
+                    UserID = Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).Result.First().UserID,
                     Start = latestEntryEnd,
                     End = _pcLockedTime.Value,
                     CategoryID = category,
@@ -168,7 +168,7 @@ internal class TrackLockedTime
             {
                 Writer.Insert("Entries", new Entry
                 {
-                    UserID = Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).First().UserID,
+                    UserID = Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).Result.First().UserID,
                     Start = pcStartedAt,
                     End = _pcLockedTime.Value,
                     CategoryID = 9,
@@ -206,7 +206,7 @@ internal class TrackLockedTime
             {
                 Writer.Insert("Entries", new Entry
                 {
-                    UserID = Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).First().UserID,
+                    UserID = Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).Result.First().UserID,
                     Start = _pcLockedTime.Value,
                     End = _pcUnlockedTime.Value,
                     CategoryID = 3,

@@ -740,7 +740,7 @@ public static class Crypto
         return encryptedData;
     }
 
-    public static Task<string> Decryption(string encryptedData, string? password = null)
+    public static async Task<string> Decryption(string encryptedData, string? password = null)
     {
         SecureString? loadedSecurePassword = new();
 
@@ -774,7 +774,7 @@ public static class Crypto
                 // Der string passwordStringForDecryption wird vom GC aufgeräumt
             }
         }
-        return Task.FromResult(decryptedData);
+        return Task.FromResult(decryptedData).Result;
     }
 
     public static void FirstCallOnly()

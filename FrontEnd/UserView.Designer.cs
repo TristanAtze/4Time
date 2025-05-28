@@ -130,6 +130,7 @@ namespace Time4SellersApp
             lblMy4SellersAusgabe = new Label();
             btnSettingsUebersicht = new Button();
             tabEintragen = new TabPage();
+            button3 = new Button();
             button2 = new Button();
             pictureBox2 = new PictureBox();
             label5 = new Label();
@@ -178,7 +179,6 @@ namespace Time4SellersApp
             LockTimeMin = new NumericUpDown();
             label7 = new Label();
             LockedTimeMin = new Label();
-            button3 = new Button();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureLogoUebersicht).BeginInit();
@@ -256,9 +256,9 @@ namespace Time4SellersApp
             PTMin.AutoSize = true;
             PTMin.Location = new Point(352, 274);
             PTMin.Name = "PTMin";
-            PTMin.Size = new Size(41, 15);
+            PTMin.Size = new Size(39, 15);
             PTMin.TabIndex = 27;
-            PTMin.Text = "PTMin";
+            PTMin.Text = "Lädt...";
             // 
             // label10
             // 
@@ -294,27 +294,27 @@ namespace Time4SellersApp
             PauseLabel.AutoSize = true;
             PauseLabel.Location = new Point(18, 433);
             PauseLabel.Name = "PauseLabel";
-            PauseLabel.Size = new Size(41, 15);
+            PauseLabel.Size = new Size(76, 15);
             PauseLabel.TabIndex = 23;
-            PauseLabel.Text = "Pause:";
+            PauseLabel.Text = "Pause: Lädt...";
             // 
             // NachmittagLabel
             // 
             NachmittagLabel.AutoSize = true;
             NachmittagLabel.Location = new Point(18, 463);
             NachmittagLabel.Name = "NachmittagLabel";
-            NachmittagLabel.Size = new Size(73, 15);
+            NachmittagLabel.Size = new Size(108, 15);
             NachmittagLabel.TabIndex = 22;
-            NachmittagLabel.Text = "Nachmittag:";
+            NachmittagLabel.Text = "Nachmittag: Lädt...";
             // 
             // VormittagLabel
             // 
             VormittagLabel.AutoSize = true;
             VormittagLabel.Location = new Point(18, 405);
             VormittagLabel.Name = "VormittagLabel";
-            VormittagLabel.Size = new Size(62, 15);
+            VormittagLabel.Size = new Size(97, 15);
             VormittagLabel.TabIndex = 21;
-            VormittagLabel.Text = "Vormittag:";
+            VormittagLabel.Text = "Vormittag: Lädt...";
             // 
             // Neuladen
             // 
@@ -348,54 +348,54 @@ namespace Time4SellersApp
             OTWeek.AutoSize = true;
             OTWeek.Location = new Point(390, 249);
             OTWeek.Name = "OTWeek";
-            OTWeek.Size = new Size(50, 15);
+            OTWeek.Size = new Size(39, 15);
             OTWeek.TabIndex = 17;
-            OTWeek.Text = "OTWeek";
+            OTWeek.Text = "Lädt...";
             // 
             // PTWeek
             // 
             PTWeek.AutoSize = true;
             PTWeek.Location = new Point(390, 219);
             PTWeek.Name = "PTWeek";
-            PTWeek.Size = new Size(49, 15);
+            PTWeek.Size = new Size(39, 15);
             PTWeek.TabIndex = 16;
-            PTWeek.Text = "PTWeek";
+            PTWeek.Text = "Lädt...";
             // 
             // OTToday
             // 
             OTToday.AutoSize = true;
             OTToday.Location = new Point(129, 249);
             OTToday.Name = "OTToday";
-            OTToday.Size = new Size(52, 15);
+            OTToday.Size = new Size(39, 15);
             OTToday.TabIndex = 15;
-            OTToday.Text = "OTToday";
+            OTToday.Text = "Lädt...";
             // 
             // PTToday
             // 
             PTToday.AutoSize = true;
             PTToday.Location = new Point(129, 219);
             PTToday.Name = "PTToday";
-            PTToday.Size = new Size(51, 15);
+            PTToday.Size = new Size(39, 15);
             PTToday.TabIndex = 14;
-            PTToday.Text = "PTToday";
+            PTToday.Text = "Lädt...";
             // 
             // WTWeek
             // 
             WTWeek.AutoSize = true;
             WTWeek.Location = new Point(390, 191);
             WTWeek.Name = "WTWeek";
-            WTWeek.Size = new Size(53, 15);
+            WTWeek.Size = new Size(39, 15);
             WTWeek.TabIndex = 13;
-            WTWeek.Text = "WTWeek";
+            WTWeek.Text = "Lädt...";
             // 
             // WTToday
             // 
             WTToday.AutoSize = true;
             WTToday.Location = new Point(129, 191);
             WTToday.Name = "WTToday";
-            WTToday.Size = new Size(55, 15);
+            WTToday.Size = new Size(39, 15);
             WTToday.TabIndex = 12;
-            WTToday.Text = "WTToday";
+            WTToday.Text = "Lädt...";
             // 
             // pictureLogoUebersicht
             // 
@@ -512,6 +512,16 @@ namespace Time4SellersApp
             tabEintragen.Size = new Size(466, 533);
             tabEintragen.TabIndex = 1;
             tabEintragen.Text = "Eintragen";
+            // 
+            // button3
+            // 
+            button3.Location = new Point(282, 430);
+            button3.Name = "button3";
+            button3.Size = new Size(133, 23);
+            button3.TabIndex = 29;
+            button3.Text = "Urlaub/Berufsschule";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
             // 
             // button2
             // 
@@ -964,16 +974,6 @@ namespace Time4SellersApp
             LockedTimeMin.Size = new Size(243, 32);
             LockedTimeMin.TabIndex = 1;
             LockedTimeMin.Text = "Pc Sperrzeit Schwelle:";
-            // 
-            // button3
-            // 
-            button3.Location = new Point(282, 430);
-            button3.Name = "button3";
-            button3.Size = new Size(133, 23);
-            button3.TabIndex = 29;
-            button3.Text = "Urlaub/Berufsschule";
-            button3.UseVisualStyleBackColor = true;
-            button3.Click += button3_Click;
             // 
             // UserView
             // 
