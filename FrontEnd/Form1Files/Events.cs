@@ -141,6 +141,7 @@ partial class UserView
 
             this.FillDataGridView();
             this.FillValues();
+            PTMin.Text = NotificationManager.startPauseAt.ToString(@"t");
         }
         catch (Exception ex)
         {
@@ -204,6 +205,7 @@ partial class UserView
 
             this.FillDataGridView();
             this.FillValues();
+            PTMin.Text = NotificationManager.startPauseAt.ToString(@"t");
         }
         catch (Exception ex)
         {

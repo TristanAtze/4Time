@@ -323,7 +323,7 @@ namespace Time4SellersApp
             Neuladen.Size = new Size(100, 30);
             Neuladen.TabIndex = 20;
             Neuladen.Text = "Neuladen";
-            Neuladen.Click += Neuladen_Click;
+            Neuladen.Click += this.Neuladen_Click;
             // 
             // LogginName
             // 
@@ -791,7 +791,7 @@ namespace Time4SellersApp
             btnNeuladenAuslesen.Size = new Size(100, 30);
             btnNeuladenAuslesen.TabIndex = 2;
             btnNeuladenAuslesen.Text = "Neuladen";
-            btnNeuladenAuslesen.Click += BtnNeuladenAuslesen_Click;
+            btnNeuladenAuslesen.Click += this.Neuladen_Click;
             // 
             // dgvEntries
             // 
