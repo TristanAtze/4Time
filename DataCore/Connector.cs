@@ -7,7 +7,7 @@ internal class Connector
     /// <summary>
     /// Connection-String für die Verbindung zur Datenbank.
     /// </summary>
-    internal const string ConnectionString = "Data Source = 192.168.6.131; Initial Catalog = _LK_TestDB; User ID = Azubi; Password = TestSQL2020#!;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultipleActiveResultSets=True;";
+    internal const string ConnectionString = "Server=(localdb)\\LocalTestDB;Database=TestDB;Integrated Security=True;";
         
 
     /// <summary>
@@ -96,7 +96,7 @@ internal class Connector
     internal static (string, string) GetCurrentUser()
     {
         string userName = Environment.UserName;
-        string[] userNameSplitted = userName.Split(".");
+        string[] userNameSplitted = userName.Split(" ");
         return (userNameSplitted[0], userNameSplitted[1]);
     }
 
