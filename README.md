@@ -92,18 +92,7 @@ Welcome to **4Time**! This isn't just another time tracker; it's a smart, secure
 Enjoy tracking your time with **4Time**! May your work be productive and your breaks filled with excellent dad jokes! 😄
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+---
 # ------------------------------DE------------------------------
 # 🕒 4Time - Dein ultimativer Zeiterfassungs-Begleiter! 🚀
 
