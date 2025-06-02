@@ -28,7 +28,7 @@ namespace Time4SellersApp
                 $"[LastName] = '{Connector.LastName}'"
             ]).Result.First().UserID}",
         ]));
-        public List<Entry> _allEntrys;
+        public List<Entry> AllEntrys;
 
         public UserView()
         {
@@ -64,9 +64,7 @@ namespace Time4SellersApp
 
             rbStartzeitEndzeit.Checked = true;
 
-
             FillValues();
-            FillDataGridView();
 
             LogginName.Text = Connector.FirstName + " " + Connector.LastName;
 
@@ -78,7 +76,7 @@ namespace Time4SellersApp
         private async Task AwaitEntryTask()
         {
             await getAllEntrys;
-            _allEntrys = getAllEntrys.Result;
+            AllEntrys = getAllEntrys.Result;
         }
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -122,15 +120,18 @@ namespace Time4SellersApp
             }
         }
 
-        private async Task FillValues()
+        private async Task FillValues(bool awaitEntryTask = true)
         {
-            await AwaitEntryTask();
+            if (awaitEntryTask)
+            {
+                await AwaitEntryTask();
+            }
 
             DateTime My4SellersDateTime = dateTimePicker1.Value.Date;
 
 
             //Vormittag
-            List<Entry> WorktimeVormittag = [.. _allEntrys.Where(x => x.Start.Date == My4SellersDateTime.Date).Where(x => x.CategoryName == "Vormittag")];
+            List<Entry> WorktimeVormittag = [.. AllEntrys.Where(x => x.Start.Date == My4SellersDateTime.Date).Where(x => x.CategoryName == "Vormittag")];
             var FirstEntryVormittag = WorktimeVormittag.Where(x => x.Start.Date == My4SellersDateTime.Date).OrderBy(x => x.Start).FirstOrDefault();
 
             TimeSpan VormittagTimeSpan = TimeSpan.Zero;
@@ -141,7 +142,7 @@ namespace Time4SellersApp
             var WorktimeVormittagStartEnd = $"{FirstEntryVormittag?.Start.ToShortTimeString()} - {FirstEntryVormittag?.Start.Add(VormittagTimeSpan).ToShortTimeString()}";
 
             //Pause
-            List<Entry> WorktimePause = [.. _allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CategoryName.Contains("ause"))];
+            List<Entry> WorktimePause = [.. AllEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CategoryName.Contains("ause"))];
             var FirstEntryPause = WorktimePause.Where(x => x.Start.Date == My4SellersDateTime).OrderBy(x => x.Start).FirstOrDefault();
             TimeSpan PauseTimeSpan = TimeSpan.Zero;
             foreach (var l in WorktimePause)
@@ -151,7 +152,7 @@ namespace Time4SellersApp
             var WorktimePauseStartEnd = $"{FirstEntryPause?.Start.ToShortTimeString()} - {FirstEntryPause?.Start.Add(PauseTimeSpan).ToShortTimeString()}";
 
             //Nachmittag
-            List<Entry> WorktimeNachmittag = [.. _allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CategoryName == "Nachmittag")];
+            List<Entry> WorktimeNachmittag = [.. AllEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CategoryName == "Nachmittag")];
             var FirstEntryNachmittag = WorktimeNachmittag.Where(x => x.Start.Date == My4SellersDateTime).OrderBy(x => x.Start).FirstOrDefault();
             TimeSpan NachmittagTimeSpan = TimeSpan.Zero;
             foreach (var l in WorktimeNachmittag)
@@ -170,8 +171,8 @@ namespace Time4SellersApp
             int diff = (7 + (today.DayOfWeek - DayOfWeek.Monday)) % 7;
             var weekStart = today.AddDays(-diff);
 
-            var entriesToday = _allEntrys.Where(e => e.Start.Date == today);
-            var entriesWeek = _allEntrys.Where(e => e.Start.Date >= weekStart && e.Start.Date <= today.Date);
+            var entriesToday = AllEntrys.Where(e => e.Start.Date == today);
+            var entriesWeek = AllEntrys.Where(e => e.Start.Date >= weekStart && e.Start.Date <= today.Date);
 
             var isWorkLookup = _allCategorys.ToDictionary(c => c.CategoryID, c => c.IsWorkTime);
 
@@ -211,7 +212,7 @@ namespace Time4SellersApp
             OTToday.Text = $"{(overtimeToday > TimeSpan.Zero ? overtimeToday : TimeSpan.Zero):hh\\:mm} std";
             OTWeek.Text = $"{(overtimeWeek > TimeSpan.Zero ? overtimeWeek : TimeSpan.Zero):hh\\:mm} std";
 
-            await Task.Delay(2500);
+            await FillDataGridView(awaitEntryTask);
 
             NotificationManager notificationManager = new(dgvEntries, allCategorys, checkBox1, checkBox2);
 
@@ -230,14 +231,17 @@ namespace Time4SellersApp
             return LockTimeMin.Value;
         }
 
-        public async Task FillDataGridView()
+        public async Task FillDataGridView(bool awaitEntryTask = true)
         {
-            await AwaitEntryTask();
+            if (awaitEntryTask)
+            {
+                await AwaitEntryTask();
+            }
 
             dgvEntries.DataSource = null;
             dgvEntries.Rows.Clear();
 
-            foreach (var entry in _allEntrys)
+            foreach (var entry in AllEntrys)
             {
                 if (entry.CategoryName == "")
                 {
@@ -313,7 +317,7 @@ namespace Time4SellersApp
         {
             bool result = true;
 
-            var dailyEntries = _allEntrys.Where(x => x.Start.Date == DateTime.Now.Date)
+            var dailyEntries = AllEntrys.Where(x => x.Start.Date == DateTime.Now.Date)
                 .ToList();
 
             TimeSpan workDur = TimeSpan.Zero;

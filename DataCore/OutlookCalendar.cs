@@ -1,4 +1,5 @@
 ﻿using _4Time.DataCore.Models;
+using Microsoft.Office.Interop.Outlook;
 
 public class OutlookCalendar
 {
@@ -6,25 +7,43 @@ public class OutlookCalendar
     {
         List<Entry> entries = new List<Entry>();
         Microsoft.Office.Interop.Outlook.Application outlook = new Microsoft.Office.Interop.Outlook.Application();
-        Microsoft.Office.Interop.Outlook.NameSpace nameSpace = outlook.GetNamespace("MAPI");
+        NameSpace nameSpace = outlook.GetNamespace("MAPI");
 
-        Microsoft.Office.Interop.Outlook.MAPIFolder calendarFolder = nameSpace.GetDefaultFolder(Microsoft.Office.Interop.Outlook.OlDefaultFolders.olFolderCalendar);
+        MAPIFolder calendarFolder = nameSpace.GetDefaultFolder(OlDefaultFolders.olFolderCalendar);
 
-        Microsoft.Office.Interop.Outlook.Items calendarItems = calendarFolder.Items;
+        Items calendarItems = calendarFolder.Items;
         calendarItems.IncludeRecurrences = true;
         calendarItems.Sort("[Start]");
 
+        List<AppointmentItem> appointments = new List<AppointmentItem>();
+
         foreach (object item in calendarItems)
         {
-            if (item is Microsoft.Office.Interop.Outlook.AppointmentItem appointment)
+            if (item is AppointmentItem appointment)
             {
-                if (appointment.Subject == "[Urlaub]" || appointment.Subject == "Jahresurlaub" || appointment.Subject == "Berufsschule")
-                {
-                    Console.WriteLine($"Termin: {appointment.Subject} am {appointment.Start}");
-                }
+                //Überprüfung, ob der Termin länger als 1 Tag ist
+                if (!appointment.AllDayEvent)
+                    continue;
+
+                // Überprüfung, ob der Termin ein Arbeitszeit-Termin ist
+                int dayOfWeek = (int)appointment.Start.DayOfWeek;
+                if (dayOfWeek == 0 || dayOfWeek == 6)
+                    continue;
+
+                appointments.Add(appointment);
             }
-            if (item != null) System.Runtime.InteropServices.Marshal.ReleaseComObject(item);
         }
+
+        //Filtert alle doppelten Termine heraus
+        appointments = [.. appointments.Distinct()];
+
+        appointments.Sort((a, b) => a.Start.CompareTo(b.Start));
+
+        foreach (AppointmentItem appointment in appointments)
+        {
+
+        }
+
 
         if (calendarItems != null) System.Runtime.InteropServices.Marshal.ReleaseComObject(calendarItems);
         if (calendarFolder != null) System.Runtime.InteropServices.Marshal.ReleaseComObject(calendarFolder);
