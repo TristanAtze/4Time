@@ -24,7 +24,6 @@ namespace Time4SellersApp
         private Label lblPausenzeitWoche;
         private Label lblUeberstundenWoche;
         private Label lblMy4SellersAusgabe;
-        private Button btnSettingsUebersicht;
         private RadioButton rbStartzeitEndzeit;
         private RadioButton rbStartzeitDauer;
         private RadioButton rbEndzeitDauer;
@@ -32,7 +31,6 @@ namespace Time4SellersApp
         private TextBox txtBemerkung;
         private Label lblBemerkung;
         private Button btnSpeichern;
-        private Button btnSettingsEintragen;
         private Button btnSettingsAuslesen;
         public Button btnNeuladenAuslesen;
         private DataGridView dgvEntries;
@@ -128,7 +126,6 @@ namespace Time4SellersApp
             lblPausenzeitWoche = new Label();
             lblUeberstundenWoche = new Label();
             lblMy4SellersAusgabe = new Label();
-            btnSettingsUebersicht = new Button();
             tabEintragen = new TabPage();
             button3 = new Button();
             button2 = new Button();
@@ -154,7 +151,6 @@ namespace Time4SellersApp
             lblBemerkung = new Label();
             txtBemerkung = new TextBox();
             btnSpeichern = new Button();
-            btnSettingsEintragen = new Button();
             tabAuslesen = new TabPage();
             Löschen = new Button();
             pictureBox1 = new PictureBox();
@@ -239,7 +235,6 @@ namespace Time4SellersApp
             tabUebersicht.Controls.Add(lblPausenzeitWoche);
             tabUebersicht.Controls.Add(lblUeberstundenWoche);
             tabUebersicht.Controls.Add(lblMy4SellersAusgabe);
-            tabUebersicht.Controls.Add(btnSettingsUebersicht);
             tabUebersicht.Location = new Point(4, 24);
             tabUebersicht.Name = "tabUebersicht";
             tabUebersicht.Size = new Size(466, 533);
@@ -475,15 +470,6 @@ namespace Time4SellersApp
             lblMy4SellersAusgabe.TabIndex = 7;
             lblMy4SellersAusgabe.Text = "My 4Sellers Ausgabe";
             // 
-            // btnSettingsUebersicht
-            // 
-            btnSettingsUebersicht.Location = new Point(3, 500);
-            btnSettingsUebersicht.Name = "btnSettingsUebersicht";
-            btnSettingsUebersicht.Size = new Size(100, 30);
-            btnSettingsUebersicht.TabIndex = 8;
-            btnSettingsUebersicht.Text = "Settings";
-            btnSettingsUebersicht.Click += SettingsButton_Click;
-            // 
             // tabEintragen
             // 
             tabEintragen.Controls.Add(button3);
@@ -510,7 +496,6 @@ namespace Time4SellersApp
             tabEintragen.Controls.Add(lblBemerkung);
             tabEintragen.Controls.Add(txtBemerkung);
             tabEintragen.Controls.Add(btnSpeichern);
-            tabEintragen.Controls.Add(btnSettingsEintragen);
             tabEintragen.Location = new Point(4, 24);
             tabEintragen.Name = "tabEintragen";
             tabEintragen.Size = new Size(466, 533);
@@ -519,9 +504,9 @@ namespace Time4SellersApp
             // 
             // button3
             // 
-            button3.Location = new Point(282, 430);
+            button3.Location = new Point(3, 502);
             button3.Name = "button3";
-            button3.Size = new Size(133, 23);
+            button3.Size = new Size(133, 28);
             button3.TabIndex = 29;
             button3.Text = "Urlaub/Berufsschule";
             button3.UseVisualStyleBackColor = true;
@@ -737,15 +722,6 @@ namespace Time4SellersApp
             btnSpeichern.TabIndex = 7;
             btnSpeichern.Text = "Speichern";
             btnSpeichern.Click += BtnSpeichern_Click;
-            // 
-            // btnSettingsEintragen
-            // 
-            btnSettingsEintragen.Location = new Point(3, 500);
-            btnSettingsEintragen.Name = "btnSettingsEintragen";
-            btnSettingsEintragen.Size = new Size(100, 30);
-            btnSettingsEintragen.TabIndex = 9;
-            btnSettingsEintragen.Text = "Settings";
-            btnSettingsEintragen.Click += SettingsButton_Click;
             // 
             // tabAuslesen
             // 

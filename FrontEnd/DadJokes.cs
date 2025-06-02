@@ -2,6 +2,8 @@
 {
     internal class DadJokes
     {
+        private static Random random = new Random();
+        private static int autismCounter = 0; // Zähler für die Anzahl der aufgerufenen Witze
         private static Dictionary<int, string> DadJokesDic = new Dictionary<int, string>
         {
             {1, "Was ist grün und steht vor der Tür? Ein Klopfsalat!"},
@@ -108,9 +110,20 @@
 
         internal static string GetRandomJoke()
         {
-            Random random = new Random();
+            if (DadJokesDic.Count == 0)
+            {
+                return "How did u get here? " + (autismCounter < Int32.MaxValue ? ++autismCounter : "Bro es reicht...");
+            }
             int randomIndex = random.Next(1, DadJokesDic.Count + 1);
-            return DadJokesDic[randomIndex];
+            string currentJoke;
+            if (!DadJokesDic.TryGetValue(randomIndex, out string? value))
+            {
+                randomIndex = DadJokesDic.First().Key;
+                currentJoke = DadJokesDic.First().Value; // Gibt den ersten Witz zurück, falls der zufällige Index nicht existiert
+            }
+            else currentJoke = value;
+            DadJokesDic.Remove(randomIndex); // Entfernt den Witz, um Duplikate zu vermeiden
+            return currentJoke;
         }
     }
 }

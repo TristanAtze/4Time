@@ -126,7 +126,6 @@ namespace Time4SellersApp
         {
             await AwaitEntryTask();
 
-            Settings.Hide();
             DateTime My4SellersDateTime = dateTimePicker1.Value.Date;
 
 
@@ -365,8 +364,6 @@ namespace Time4SellersApp
         {
             Restart();
         }
-
-
 
         /// <summary>
         /// Restartet die Anwendung, nachdem die Einstellungen gespeichert wurden.

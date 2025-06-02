@@ -131,30 +131,6 @@ partial class UserView
         btnSpeichern.Enabled = true;
     }
 
-    private async void BtnNeuladenAuslesen_Click(object sender, EventArgs e)
-    {
-        this.Neuladen.Enabled = false;
-        this.btnNeuladenAuslesen.Enabled = false;
-
-        try
-        {
-            await Task.Run(() => DisableReloadButton.PerformDataReloadAsync(this));
-
-            this.FillDataGridView();
-            this.FillValues();
-            PTMin.Text = NotificationManager.startPauseAt.ToString(@"t");
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"Ein Fehler ist beim Neuladen aufgetreten: {ex.Message}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-        finally
-        {
-            this.Neuladen.Enabled = true;
-            this.btnNeuladenAuslesen.Enabled = true;
-        }
-    }
-
     private void Löschen_Click(object sender, EventArgs e)
     {
         if (dgvEntries.SelectedRows.Count == 0)
@@ -197,13 +173,13 @@ partial class UserView
 
     public async void Neuladen_Click(object sender, EventArgs e)
     {
-
         PTToday.Text = "Lädt...";
         PTWeek.Text = "Lädt...";
         WTToday.Text = "Lädt...";
         WTWeek.Text = "Lädt...";
         OTToday.Text = "Lädt...";
         OTWeek.Text = "Lädt...";
+        PTMin.Text = "Berechne...";
 
 
         this.Neuladen.Enabled = false;
@@ -215,7 +191,6 @@ partial class UserView
 
             this.FillDataGridView();
             this.FillValues();
-            PTMin.Text = NotificationManager.startPauseAt.ToString(@"t");
         }
         catch (Exception ex)
         {
@@ -280,6 +255,7 @@ partial class UserView
     private void button1_Click(object sender, EventArgs e)
     {
         MessageBox.Show($"{DadJokes.GetRandomJoke()}", "Dad jokes", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
     }
 
     private void button2_Click(object sender, EventArgs e)
