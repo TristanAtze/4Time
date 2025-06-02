@@ -24,7 +24,6 @@ namespace Time4SellersApp
         private Label lblPausenzeitWoche;
         private Label lblUeberstundenWoche;
         private Label lblMy4SellersAusgabe;
-        private Button btnSettingsUebersicht;
         private RadioButton rbStartzeitEndzeit;
         private RadioButton rbStartzeitDauer;
         private RadioButton rbEndzeitDauer;
@@ -32,7 +31,6 @@ namespace Time4SellersApp
         private TextBox txtBemerkung;
         private Label lblBemerkung;
         private Button btnSpeichern;
-        private Button btnSettingsEintragen;
         private Button btnSettingsAuslesen;
         public Button btnNeuladenAuslesen;
         private DataGridView dgvEntries;
@@ -128,7 +126,6 @@ namespace Time4SellersApp
             lblPausenzeitWoche = new Label();
             lblUeberstundenWoche = new Label();
             lblMy4SellersAusgabe = new Label();
-            btnSettingsUebersicht = new Button();
             tabEintragen = new TabPage();
             button3 = new Button();
             button2 = new Button();
@@ -154,7 +151,6 @@ namespace Time4SellersApp
             lblBemerkung = new Label();
             txtBemerkung = new TextBox();
             btnSpeichern = new Button();
-            btnSettingsEintragen = new Button();
             tabAuslesen = new TabPage();
             Löschen = new Button();
             pictureBox1 = new PictureBox();
@@ -167,6 +163,9 @@ namespace Time4SellersApp
             colKommentar = new DataGridViewTextBoxColumn();
             colDauer = new DataGridViewTextBoxColumn();
             Settings = new TabPage();
+            LockPcTime = new NumericUpDown();
+            label13 = new Label();
+            label12 = new Label();
             button1 = new Button();
             u18Description = new Label();
             checkBox2 = new CheckBox();
@@ -192,6 +191,7 @@ namespace Time4SellersApp
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvEntries).BeginInit();
             Settings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)LockPcTime).BeginInit();
             ((System.ComponentModel.ISupportInitialize)LockTimeMin).BeginInit();
             SuspendLayout();
             // 
@@ -235,7 +235,6 @@ namespace Time4SellersApp
             tabUebersicht.Controls.Add(lblPausenzeitWoche);
             tabUebersicht.Controls.Add(lblUeberstundenWoche);
             tabUebersicht.Controls.Add(lblMy4SellersAusgabe);
-            tabUebersicht.Controls.Add(btnSettingsUebersicht);
             tabUebersicht.Location = new Point(4, 24);
             tabUebersicht.Name = "tabUebersicht";
             tabUebersicht.Size = new Size(466, 533);
@@ -471,15 +470,6 @@ namespace Time4SellersApp
             lblMy4SellersAusgabe.TabIndex = 7;
             lblMy4SellersAusgabe.Text = "My 4Sellers Ausgabe";
             // 
-            // btnSettingsUebersicht
-            // 
-            btnSettingsUebersicht.Location = new Point(3, 500);
-            btnSettingsUebersicht.Name = "btnSettingsUebersicht";
-            btnSettingsUebersicht.Size = new Size(100, 30);
-            btnSettingsUebersicht.TabIndex = 8;
-            btnSettingsUebersicht.Text = "Settings";
-            btnSettingsUebersicht.Click += SettingsButton_Click;
-            // 
             // tabEintragen
             // 
             tabEintragen.Controls.Add(button3);
@@ -506,7 +496,6 @@ namespace Time4SellersApp
             tabEintragen.Controls.Add(lblBemerkung);
             tabEintragen.Controls.Add(txtBemerkung);
             tabEintragen.Controls.Add(btnSpeichern);
-            tabEintragen.Controls.Add(btnSettingsEintragen);
             tabEintragen.Location = new Point(4, 24);
             tabEintragen.Name = "tabEintragen";
             tabEintragen.Size = new Size(466, 533);
@@ -515,9 +504,9 @@ namespace Time4SellersApp
             // 
             // button3
             // 
-            button3.Location = new Point(282, 430);
+            button3.Location = new Point(3, 502);
             button3.Name = "button3";
-            button3.Size = new Size(133, 23);
+            button3.Size = new Size(133, 28);
             button3.TabIndex = 29;
             button3.Text = "Urlaub/Berufsschule";
             button3.UseVisualStyleBackColor = true;
@@ -734,15 +723,6 @@ namespace Time4SellersApp
             btnSpeichern.Text = "Speichern";
             btnSpeichern.Click += BtnSpeichern_Click;
             // 
-            // btnSettingsEintragen
-            // 
-            btnSettingsEintragen.Location = new Point(3, 500);
-            btnSettingsEintragen.Name = "btnSettingsEintragen";
-            btnSettingsEintragen.Size = new Size(100, 30);
-            btnSettingsEintragen.TabIndex = 9;
-            btnSettingsEintragen.Text = "Settings";
-            btnSettingsEintragen.Click += SettingsButton_Click;
-            // 
             // tabAuslesen
             // 
             tabAuslesen.Controls.Add(Löschen);
@@ -835,6 +815,9 @@ namespace Time4SellersApp
             // 
             // Settings
             // 
+            Settings.Controls.Add(LockPcTime);
+            Settings.Controls.Add(label13);
+            Settings.Controls.Add(label12);
             Settings.Controls.Add(button1);
             Settings.Controls.Add(u18Description);
             Settings.Controls.Add(checkBox2);
@@ -854,6 +837,35 @@ namespace Time4SellersApp
             Settings.TabIndex = 3;
             Settings.Text = "Settings";
             Settings.UseVisualStyleBackColor = true;
+            // 
+            // LockPcTime
+            // 
+            LockPcTime.Font = new Font("Segoe UI", 10F);
+            LockPcTime.Location = new Point(196, 221);
+            LockPcTime.Name = "LockPcTime";
+            LockPcTime.Size = new Size(41, 25);
+            LockPcTime.TabIndex = 15;
+            LockPcTime.ValueChanged += LockPcTime_ValueChanged;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Font = new Font("Segoe UI", 9F);
+            label13.Location = new Point(8, 249);
+            label13.Name = "label13";
+            label13.Size = new Size(391, 15);
+            label13.TabIndex = 14;
+            label13.Text = "Bestimmt nach welcher inaktivitäts Zeit der Pc automatisch gesperrt wird";
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Font = new Font("Segoe UI", 18F);
+            label12.Location = new Point(8, 217);
+            label12.Name = "label12";
+            label12.Size = new Size(190, 32);
+            label12.TabIndex = 13;
+            label12.Text = "Pc Sperren nach:";
             // 
             // button1
             // 
@@ -879,7 +891,7 @@ namespace Time4SellersApp
             // 
             checkBox2.AutoSize = true;
             checkBox2.Font = new Font("Segoe UI", 18F);
-            checkBox2.Location = new Point(222, 169);
+            checkBox2.Location = new Point(214, 169);
             checkBox2.Name = "checkBox2";
             checkBox2.Size = new Size(15, 14);
             checkBox2.TabIndex = 10;
@@ -1000,6 +1012,7 @@ namespace Time4SellersApp
             ((System.ComponentModel.ISupportInitialize)dgvEntries).EndInit();
             Settings.ResumeLayout(false);
             Settings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)LockPcTime).EndInit();
             ((System.ComponentModel.ISupportInitialize)LockTimeMin).EndInit();
             ResumeLayout(false);
         }
@@ -1020,5 +1033,8 @@ namespace Time4SellersApp
         private Button button2;
         private Label label11;
         private Button button3;
+        private NumericUpDown LockPcTime;
+        private Label label13;
+        private Label label12;
     }
 }
