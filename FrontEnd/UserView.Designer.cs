@@ -33,7 +33,7 @@ namespace Time4SellersApp
         private Button btnSpeichern;
         private Button btnSettingsAuslesen;
         public Button btnNeuladenAuslesen;
-        private DataGridView dgvEntries;
+        public DataGridView dgvEntries;
         private List<Entry> allEntrys = [];
         private List<Category> allCategorys = [];
 
@@ -79,6 +79,7 @@ namespace Time4SellersApp
         private DateTimePicker dateTimePicker1;
         private DateTimePicker dateTimePickerOverview;
         private TabPage Settings;
+
 
         /// <summary>
         /// Verwendete Ressourcen bereinigen.

@@ -2,6 +2,7 @@
 using _4Time.DataCore;
 using _4Time.DataCore.Models;
 using _4Time.FrontEnd;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Time4SellersApp;
 
@@ -46,7 +47,7 @@ partial class UserView
     private void BtnSpeichern_Click(object sender, EventArgs e)
     {
         int? oldId = selectedBookingIndex.HasValue
-                         ? _allEntrys[selectedBookingIndex.Value].EntryID
+                         ? AllEntrys[selectedBookingIndex.Value].EntryID
                          : (int?)null;
 
         var entry = ProcessValues();
@@ -80,7 +81,7 @@ partial class UserView
         {
             //Ändert die Werte des gewählten Objekts auf der "Auslesen"-Seite
             var idx = selectedBookingIndex.Value;
-            var k = _allEntrys[idx];
+            var k = AllEntrys[idx];
             k.CategoryID = entry.CategoryID;
             k.Start = entry.Start;
             k.End = entry.End;
@@ -89,7 +90,7 @@ partial class UserView
         }
         else
         {
-            _allEntrys.Add(new Entry
+            AllEntrys.Add(new Entry
             {
                 CategoryID = entry.CategoryID,
                 Start = entry.Start,
@@ -119,7 +120,7 @@ partial class UserView
         if (e.RowIndex < 0) return;
 
         selectedBookingIndex = e.RowIndex;
-        var entry = _allEntrys[e.RowIndex];
+        var entry = AllEntrys[e.RowIndex];
 
         BookingType.SelectedItem = entry.CategoryName;
         txtBemerkung.Text = entry.Comment;
@@ -131,8 +132,9 @@ partial class UserView
         btnSpeichern.Enabled = true;
     }
 
-    private void Löschen_Click(object sender, EventArgs e)
+    private async void Löschen_Click(object sender, EventArgs e)
     {
+        btnNeuladenAuslesen.Enabled = false;
         if (dgvEntries.SelectedRows.Count == 0)
         {
             MessageBox.Show(
@@ -145,7 +147,7 @@ partial class UserView
         }
         var result = MessageBox.Show(
             "Möchten Sie den ausgewählten Eintrag wirklich löschen?",
-            "Einträge löschen",
+            "Löschen",
             MessageBoxButtons.YesNo,
             MessageBoxIcon.Question
         );
@@ -160,14 +162,15 @@ partial class UserView
 
             foreach (int rowIndex in indices)
             {
-                var entry = _allEntrys[rowIndex];
+                var entry = AllEntrys[rowIndex];
                 Writer.Delete("Entries", [$"[EntryID] = {entry.EntryID}"]);
-                _allEntrys.Where(x => x.EntryID == entry.EntryID).ToList().ForEach(x => _allEntrys.Remove(x));
+                AllEntrys.Where(x => x.EntryID == entry.EntryID).ToList().ForEach(x => AllEntrys.Remove(x));
             }
 
             dgvEntries.Refresh();
-            FillValues();
-            FillDataGridView();
+            await FillValues(false);
+            await FillDataGridView(false);
+            btnNeuladenAuslesen.Enabled = true;
         }
     }
 
@@ -180,17 +183,16 @@ partial class UserView
         OTToday.Text = "Lädt...";
         OTWeek.Text = "Lädt...";
         PTMin.Text = "Berechne...";
-
+        label11.Visible = false;
 
         this.Neuladen.Enabled = false;
         this.btnNeuladenAuslesen.Enabled = false;
 
         try
         {
+            AllEntrys.Clear();
             await Task.Run(() => DisableReloadButton.PerformDataReloadAsync(this));
-
-            this.FillDataGridView();
-            this.FillValues();
+            await FillValues(false);
         }
         catch (Exception ex)
         {
@@ -200,6 +202,7 @@ partial class UserView
         {
             this.Neuladen.Enabled = true;
             this.btnNeuladenAuslesen.Enabled = true;
+            label11.Visible = true;
         }
     }
 
@@ -239,9 +242,9 @@ partial class UserView
         }
     }
 
-    private void UebersichtDTP_ValueChanged(object sender, EventArgs e)
+    private async void UebersichtDTP_ValueChanged(object sender, EventArgs e)
     {
-        FillValues();
+       await FillValues();
     }
 
     private void SettingsButton_Click(object sender, EventArgs e)
@@ -260,7 +263,7 @@ partial class UserView
 
     private void button2_Click(object sender, EventArgs e)
     {
-        DateTime endzeit = _allEntrys.Where(x => x.Start.Date == DateTime.Now.Date).OrderByDescending(x => x.End).FirstOrDefault()?.End ?? DateTime.Now;
+        DateTime endzeit = AllEntrys.Where(x => x.Start.Date == DateTime.Now.Date).OrderByDescending(x => x.End).FirstOrDefault()?.End ?? DateTime.Now;
 
         StartzeitEndzeitStart.Text = endzeit.ToString();
         StartzeitDauerStart.Text = endzeit.ToString();
@@ -268,7 +271,16 @@ partial class UserView
 
     private void button3_Click(object sender, EventArgs e)
     {
-        OutlookCalendar.DoOutlookIntegration();
+        List<Entry> OutlookEntries = OutlookCalendar.DoOutlookIntegration();
+        if (OutlookEntries.IsNullOrEmpty())
+        {
+            MessageBox.Show("Keine Einträge aus Outlook gefunden.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return;
+        }
+        foreach (var Oe in OutlookEntries)
+        {
+            //Writer.Insert("Entries", Oe);
+        }
     }
 
     private void LockPcTime_ValueChanged(object sender, EventArgs e)
