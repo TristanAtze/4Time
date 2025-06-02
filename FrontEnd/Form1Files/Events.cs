@@ -1,6 +1,7 @@
-﻿using _4Time.DataCore.Models;
+﻿using _4Time.Async;
 using _4Time.DataCore;
-using _4Time.Async;
+using _4Time.DataCore.Models;
+using _4Time.FrontEnd;
 
 namespace Time4SellersApp;
 
@@ -274,5 +275,33 @@ partial class UserView
         Settings.Show();
         Settings.BringToFront();
         Settings.Focus();
+    }
+
+    private void button1_Click(object sender, EventArgs e)
+    {
+        MessageBox.Show($"{DadJokes.GetRandomJoke()}", "Dad jokes", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    }
+
+    private void button2_Click(object sender, EventArgs e)
+    {
+        DateTime endzeit = _allEntrys.Where(x => x.Start.Date == DateTime.Now.Date).OrderByDescending(x => x.End).FirstOrDefault()?.End ?? DateTime.Now;
+
+        StartzeitEndzeitStart.Text = endzeit.ToString();
+        StartzeitDauerStart.Text = endzeit.ToString();
+    }
+
+    private void button3_Click(object sender, EventArgs e)
+    {
+        OutlookCalendar.DoOutlookIntegration();
+    }
+
+    private void LockPcTime_ValueChanged(object sender, EventArgs e)
+    {
+        NumericUpDown numericUpDownControl = sender as NumericUpDown;
+        if (numericUpDownControl != null)
+        {
+            decimal newLockMinutes = numericUpDownControl.Value;
+            Task.Run(() => LockPcWhenInaktive.SetLockPcTime(newLockMinutes));
+        }
     }
 }

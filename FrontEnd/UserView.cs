@@ -104,21 +104,21 @@ namespace Time4SellersApp
             var lockTimeMin = settings.FirstOrDefault(x => x.Key == "LockTimeMin");
             var checkBox1Value = settings.FirstOrDefault(x => x.Key == "checkBox1");
             var checkBox2Value = settings.FirstOrDefault(x => x.Key == "checkBox2");
+            var lockPcTime = settings.FirstOrDefault(x => x.Key == "LockPcTime");
 
             if (settings != null)
             {
                 if (lockTimeMin.Key != null)
-                {
                     LockTimeMin.Value = Convert.ToInt64(lockTimeMin.Value);
-                }
+
                 if (checkBox1Value.Key != null)
-                {
                     checkBox1.Checked = Convert.ToBoolean(checkBox1Value.Value);
-                }
+
                 if (checkBox2Value.Key != null)
-                {
                     checkBox2.Checked = Convert.ToBoolean(checkBox2Value.Value);
-                }
+
+                if (lockPcTime.Key != null)
+                    LockPcTime.Value = Convert.ToInt64(lockPcTime.Value);
             }
         }
 
@@ -358,6 +358,7 @@ namespace Time4SellersApp
             _settingsToSave.Add(("LockTimeMin", LockTimeMin.Value));
             _settingsToSave.Add(("checkBox1", checkBox1.Checked));
             _settingsToSave.Add(("checkBox2", checkBox2.Checked));
+            _settingsToSave.Add(("LockPcTime", LockPcTime.Value));
         }
 
         private void label9_Click(object sender, EventArgs e)
@@ -381,24 +382,6 @@ namespace Time4SellersApp
             string localExePath = process.MainModule.FileName;
             string localDir = Path.GetDirectoryName(localExePath);
             Process.Start(new ProcessStartInfo { FileName = localExePath, WorkingDirectory = localDir });
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show($"{DadJokes.GetRandomJoke()}", "Dad jokes", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            DateTime endzeit = _allEntrys.Where(x => x.Start.Date == DateTime.Now.Date).OrderByDescending(x => x.End).FirstOrDefault()?.End ?? DateTime.Now;
-
-            StartzeitEndzeitStart.Text = endzeit.ToString();
-            StartzeitDauerStart.Text = endzeit.ToString();
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            OutlookCalendar.DoOutlookIntegration();
         }
     }
 }

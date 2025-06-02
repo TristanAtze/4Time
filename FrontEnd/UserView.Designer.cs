@@ -167,6 +167,9 @@ namespace Time4SellersApp
             colKommentar = new DataGridViewTextBoxColumn();
             colDauer = new DataGridViewTextBoxColumn();
             Settings = new TabPage();
+            LockPcTime = new NumericUpDown();
+            label13 = new Label();
+            label12 = new Label();
             button1 = new Button();
             u18Description = new Label();
             checkBox2 = new CheckBox();
@@ -192,6 +195,7 @@ namespace Time4SellersApp
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvEntries).BeginInit();
             Settings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)LockPcTime).BeginInit();
             ((System.ComponentModel.ISupportInitialize)LockTimeMin).BeginInit();
             SuspendLayout();
             // 
@@ -835,6 +839,9 @@ namespace Time4SellersApp
             // 
             // Settings
             // 
+            Settings.Controls.Add(LockPcTime);
+            Settings.Controls.Add(label13);
+            Settings.Controls.Add(label12);
             Settings.Controls.Add(button1);
             Settings.Controls.Add(u18Description);
             Settings.Controls.Add(checkBox2);
@@ -854,6 +861,35 @@ namespace Time4SellersApp
             Settings.TabIndex = 3;
             Settings.Text = "Settings";
             Settings.UseVisualStyleBackColor = true;
+            // 
+            // LockPcTime
+            // 
+            LockPcTime.Font = new Font("Segoe UI", 10F);
+            LockPcTime.Location = new Point(196, 221);
+            LockPcTime.Name = "LockPcTime";
+            LockPcTime.Size = new Size(41, 25);
+            LockPcTime.TabIndex = 15;
+            LockPcTime.ValueChanged += LockPcTime_ValueChanged;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Font = new Font("Segoe UI", 9F);
+            label13.Location = new Point(8, 249);
+            label13.Name = "label13";
+            label13.Size = new Size(391, 15);
+            label13.TabIndex = 14;
+            label13.Text = "Bestimmt nach welcher inaktivitäts Zeit der Pc automatisch gesperrt wird";
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Font = new Font("Segoe UI", 18F);
+            label12.Location = new Point(8, 217);
+            label12.Name = "label12";
+            label12.Size = new Size(190, 32);
+            label12.TabIndex = 13;
+            label12.Text = "Pc Sperren nach:";
             // 
             // button1
             // 
@@ -879,7 +915,7 @@ namespace Time4SellersApp
             // 
             checkBox2.AutoSize = true;
             checkBox2.Font = new Font("Segoe UI", 18F);
-            checkBox2.Location = new Point(222, 169);
+            checkBox2.Location = new Point(214, 169);
             checkBox2.Name = "checkBox2";
             checkBox2.Size = new Size(15, 14);
             checkBox2.TabIndex = 10;
@@ -1000,6 +1036,7 @@ namespace Time4SellersApp
             ((System.ComponentModel.ISupportInitialize)dgvEntries).EndInit();
             Settings.ResumeLayout(false);
             Settings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)LockPcTime).EndInit();
             ((System.ComponentModel.ISupportInitialize)LockTimeMin).EndInit();
             ResumeLayout(false);
         }
@@ -1020,5 +1057,8 @@ namespace Time4SellersApp
         private Button button2;
         private Label label11;
         private Button button3;
+        private NumericUpDown LockPcTime;
+        private Label label13;
+        private Label label12;
     }
 }
