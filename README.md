@@ -1,4 +1,4 @@
-#-------------------------------------------EN-------------------------------------------
+# -------------------------------------------EN-------------------------------------------
 # 🕒 4Time - Your Ultimate Time Tracking Companion! 🚀
 
 Welcome to **4Time**! This isn't just another time tracker; it's a smart, secure, and fun way to manage your work hours, breaks, and productivity. Built with C# and .NET 8, 4Time is designed to keep you on top of your schedule with a sprinkle of humor and some neat automation tricks!
@@ -92,7 +92,7 @@ Welcome to **4Time**! This isn't just another time tracker; it's a smart, secure
 Enjoy tracking your time with **4Time**! May your work be productive and your breaks filled with excellent dad jokes! 😄
 
 
-#-------------------------------------------DE-------------------------------------------
+# -------------------------------------------DE-------------------------------------------
 # 🕒 4Time - Dein ultimativer Zeiterfassungs-Begleiter! 🚀
 
 Willkommen bei **4Time**! Das ist nicht nur ein weiterer Zeit-Tracker; es ist eine intelligente, sichere und unterhaltsame Methode, um deine Arbeitsstunden, Pausen und Produktivität zu managen. Entwickelt mit C# und .NET 8, ist 4Time darauf ausgelegt, dich mit einem Augenzwinkern und einigen cleveren Automatisierungstricks auf dem Laufenden zu halten!
