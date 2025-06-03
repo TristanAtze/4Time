@@ -49,6 +49,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\_N1a2b3\_N1a2b3.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="4TimeKeyConstructor">
+      <HintPath>..\..\..\..\Desktop\Microsoft.OfficeLine.Outlook.Tools.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Res\4TIMELogo.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

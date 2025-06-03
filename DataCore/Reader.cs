@@ -44,6 +44,7 @@ internal class Reader : Connector
 
             while (reader.Read())
             {
+                //TODO Das hier alles Asynchron machen
                 if (typeof(T) == typeof(Entry))
                 {
                     var d = reader.GetString(3);

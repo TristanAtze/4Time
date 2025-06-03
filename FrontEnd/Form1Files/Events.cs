@@ -110,8 +110,6 @@ partial class UserView
         { 
             NotificationManager notificationManager = new(dgvEntries, allCategorys, checkBox1, checkBox2); 
         }
-        
-        FillDataGridView();
         FillValues();
     }
 
@@ -169,7 +167,6 @@ partial class UserView
 
             dgvEntries.Refresh();
             await FillValues(false);
-            await FillDataGridView(false);
             btnNeuladenAuslesen.Enabled = true;
         }
     }
