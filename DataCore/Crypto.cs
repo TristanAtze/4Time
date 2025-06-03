@@ -700,10 +700,23 @@ public static class Crypto
         return null;
     }
 
-    public static string Encryption(string plainText)
+    public static string Encryption(string plainText, string? password = null)
     {
+        SecureString loadedSecurePassword = new();
         string encryptedData = "";
-        SecureString loadedSecurePassword = WindowsCredentialManager.LoadPassword(AppCredentialName) ?? new();
+
+        if (password != null)
+        {
+            loadedSecurePassword = WindowsCredentialManager.LoadPassword(AppCredentialName) ?? new();
+        }
+        else
+        {
+            loadedSecurePassword = new();
+            foreach (char c in password ?? "")
+            {
+                loadedSecurePassword.AppendChar(c);
+            }
+        }
 
         if (loadedSecurePassword != null)
         {

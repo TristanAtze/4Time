@@ -18,6 +18,7 @@ namespace _4Time
             Task.Run(YouTubeShortsBlocker.StartMonitoringAsync);
             Task.Run(ProgrammSetup);
             //Connector.OpenConnection();
+
             string activeUser = Environment.UserName.ToLower();
 
             Task.Run(Updater);
