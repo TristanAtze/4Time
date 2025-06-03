@@ -3,6 +3,7 @@ using System.Runtime.InteropServices; // Für P/Invoke und Marshal
 using System.Security; // Für SecureString
 using System.Security.Cryptography; // Für RandomNumberGenerator, etc.
 using Time4SellersApp;
+using Microsoft.Win32;
 
 namespace _4Time.DataCore;
 
@@ -539,20 +540,20 @@ public static class Crypto
         FirstCallOnly();
     }
 
-    public static void WriteKey()
+    public async static Task WriteKeyAsync()
     {
-        //TODO Registry Implementierung des KeyWritten.4Time
-        //Anstatt den Key in einer Datei zu speichern wird er hier in der Registry gespeichert.
-        //RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\4Time");
-        //key.SetValue("PreNotify", false);
-        //key.Close();
+        Registry.CurrentUser.CreateSubKey("HKEY_CURRENT_USER\\SOFTWARE\\4Time");
 
-        if (!File.Exists("KeyWritten.4Time"))
+        var keyWrittenValue = Registry.GetValue("HKEY_CURRENT_USER\\SOFTWARE\\4Time", "KeyWritten", null);
+
+        if (keyWrittenValue == null)
         {
-            File.Create("KeyWritten.4Time").Close();
+            Registry.SetValue("HKEY_CURRENT_USER\\SOFTWARE\\4Time", "KeyWritten", false);
         }
 
-        if (!File.ReadAllText("KeyWritten.4Time").Contains("true"))
+        keyWrittenValue = Registry.GetValue("HKEY_CURRENT_USER\\SOFTWARE\\4Time", "KeyWritten", null);
+
+        if (keyWrittenValue!.ToString() == "False")
         {
             SecureString? userKeySecureString = WindowsCredentialManager.LoadPassword(AppCredentialName);
             string? userKey = userKeySecureString?.ToString();
@@ -616,16 +617,13 @@ public static class Crypto
 
     public static void UpdateKeySafed()
     {
-        if (!File.Exists("KeyWritten.4Time"))
-        {
-            File.Create("KeyWritten.4Time").Close();
-        }
+        Registry.CurrentUser.CreateSubKey("HKEY_CURRENT_USER\\SOFTWARE\\4Time");
 
-        string lines = File.ReadAllText("KeyWritten.4Time");
+        var keyWrittenValue = Registry.GetValue("HKEY_CURRENT_USER\\SOFTWARE\\4Time", "KeyWritten", null);
 
-        if (!lines.Contains("true"))
+        if (keyWrittenValue != null && keyWrittenValue.ToString() == "False")
         {
-            File.WriteAllText("KeyWritten.4Time", "true");
+            Registry.SetValue("HKEY_CURRENT_USER\\SOFTWARE\\4Time", "KeyWritten", true);
         }
     }
 
