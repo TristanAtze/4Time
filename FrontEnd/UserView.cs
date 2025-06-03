@@ -16,24 +16,20 @@ namespace Time4SellersApp
         private readonly IntPtr IconPointer;
         private List<(string Key, object Value)> _settingsToSave = [];
         private List<Category> _allCategorys = Reader.Read<Category>("Categories").Result;
+        private bool isDataLoaded = false;
 
-        private Task<List<Entry>> getAllEntrys = Task.Run(() => Reader.Read<Entry>("Entries", null,
-        [
-            $"[UserID] = {Reader.Read<User>("User",
-            [
-                "[UserID]"
-            ],
-            [
-                $"[FirstName] = '{Connector.FirstName}'",
-                $"[LastName] = '{Connector.LastName}'"
-            ]).Result.First().UserID}",
-        ]));
+        private Task<List<Entry>> getAllEntrys = GetAllEntriesAsync();
         public List<Entry> AllEntrys;
 
         public UserView()
         {
+
             InitializeComponent();
-            label11.Hide();
+
+            tabAuslesen.Text = "Lädt...";
+            tabEintragen.Text = "Lädt...";
+            tabSettings.Text = "Lädt...";
+
             btnNeuladenAuslesen.Enabled = false;
             Neuladen.Enabled = false;
 
@@ -71,6 +67,27 @@ namespace Time4SellersApp
             LoadSettings();
 
             TrackLockedTime.InitializeAndStartTracking(this);
+        }
+
+        private static async Task<List<Entry>> GetAllEntriesAsync()
+        {
+            List<User> users = await Reader.Read<User>("User",
+                new string[] { "[UserID]" },
+                new string[] {
+                    $"[FirstName] = '{Connector.FirstName}'",
+                    $"[LastName] = '{Connector.LastName}'"
+                });
+
+            if (users == null || !users.Any())
+            {
+                throw new InvalidOperationException("No user found with the given first and last name.");
+            }
+            int userId = users.First().UserID;
+
+            return await Task.Run(() => Reader.Read<Entry>("Entries", null,
+                new string[] {
+                     $"[UserID] = {userId}"
+                }));
         }
 
         private async Task AwaitEntryTask()
@@ -220,6 +237,11 @@ namespace Time4SellersApp
             label11.Show();
             btnNeuladenAuslesen.Enabled = true;
             Neuladen.Enabled = true;
+
+            tabAuslesen.Text = "Auslesen";
+            tabEintragen.Text = "Eintragen";
+            tabSettings.Text = "Settings";
+            isDataLoaded = true;
         }
 
         /// <summary>
