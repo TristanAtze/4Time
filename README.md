@@ -1,187 +1,136 @@
-# ------------------------------EN------------------------------
-# 🕒 4Time - Your Ultimate Time Tracking Companion! 🚀
+# 🕒 4Time - Dein Produktivitäts-Booster! 🚀
 
-Welcome to **4Time**! This isn't just another time tracker; it's a smart, secure, and fun way to manage your work hours, breaks, and productivity. Built with C# and .NET 8, 4Time is designed to keep you on top of your schedule with a sprinkle of humor and some neat automation tricks!
+Willkommen bei **4Time**! Tauche ein in eine intelligente und sichere Welt der Zeiterfassung, die dich dabei unterstützt, den Überblick über deine Arbeitsstunden und Pausen zu behalten. Entwickelt in C# und .NET 8, verbindet 4Time Professionalität mit cleveren Automatisierungsfeatures – und einer Prise Humor!
 
-## ✨ Features That Make 4Time Shine ✨
+## ✨ Kernfunktionen, die 4Time einzigartig machen ✨
 
-* **👨‍💼 Dual Views:**
-    * **User View:** For everyday time tracking, viewing personal stats, and managing entries.
-    * **Admin View:** Special access for administrators (Hello, Gerd Kaufmann! 👋) to oversee other users' time data.
-* **⏱️ Comprehensive Time Tracking:**
-    * Log work hours, breaks (lunch, smoke, general), and other activities like vacation, sick leave, or vocational school.
-    * Flexible entry methods: Start Time - End Time, Start Time + Duration, or End Time - Duration.
-    * Automatic suggestions for booking time when your PC unlocks after being locked. Never lose track of those impromptu breaks!
-* **🔒 Top-Notch Security & Encryption:**
-    * Your time entries (start, end, comments) are encrypted using **AES-256 GCM** for maximum security.
-    * Master encryption keys are securely stored using the **Windows Credential Manager**.
-    * A versioned ciphertext format ensures robustness.
-* **📊 Insightful Overview:**
-    * Dashboard displaying daily and weekly summaries:
-        * Total Work Time  трудовое время
-        * Total Pause Time ⏸️
-        * Overtime Calculated 📈
-    * Special "My 4Sellers" section showing Vormittag (morning), Nachmittag (afternoon), and Pause times based on your entries.
-* **🚀 Autostart & Updates:**
-    * 4Time conveniently starts with Windows, so it's always ready when you are.
-    * Built-in updater to keep you on the latest version. (Checks `update.xml`)
-* **🔔 Smart Notifications:**
-    * Get timely reminders to take breaks, helping you comply with work regulations (especially for U18 users!).
-    * Configurable pre-notifications (10 minutes before a mandatory pause).
-* **🚫 YouTube Shorts Blocker:**
-    * Stay focused! 4Time includes an experimental feature to detect and close YouTube Shorts playing in your browser (Chrome, Firefox, Edge).
-* **⚙️ Customizable Settings:**
-    * Adjust settings like the minimum PC lock time to trigger auto-booking suggestions.
-    * Toggle notification preferences.
-    * All settings are saved locally in `settings.json`.
-* **🤣 Dad Joke Dispenser:**
-    * Need a chuckle? Click the "Dad Joke" button for a randomly selected, quality groan-inducer!
-* **📅 Outlook Calendar Integration (Basic):**
-    * Ability to read Outlook calendar for entries like "Urlaub" (Vacation) or "Berufsschule" (Vocational School).
-* **🗃️ Robust Data Management:**
-    * All data is stored in a SQL Server database.
-    * Database schema includes tables for Users, Categories, Entries, Automatics, and a special Shutdown log.
-    * Automatic database and user setup on first run.
-
-## 🛠️ How It Works - A Glimpse Under the Hood
-
-1.  **Startup:** `Program.cs` kicks things off!
-    * Initializes YouTube Shorts Blocker & Autostart.
-    * Sets up the database schema (`Res/Setup.txt`) and user profile if needed.
-    * Checks for updates via an external `Updater.exe`.
-    * Loads the appropriate view (`UserView` or `AdminView`) based on the Windows username.
-2.  **User Identification:** Your Windows username (e.g., `firstname.lastname`) is used to identify you in the system.
-3.  **Encryption is Key:**
-    * A unique encryption key for the application is generated on first use (if not already present) and stored securely in the Windows Credential Manager under the name "4Time/DatenVerschluesselung".
-    * For admin functionalities involving other users' data, a system involving a shared (but encrypted) key file (`AllKeysEncrypted.4Time`) is used.
-    * Sensitive time entry data (Start, End, Comment) is encrypted before being written to the database and decrypted when read.
-4.  **Time Entries:**
-    * When you save an entry through `UserView`, the data goes through `Writer.cs` to be stored.
-    * When you view entries, `Reader.cs` fetches and decrypts them.
-5.  **PC Lock Tracking (`TrackLockedTime.cs`):**
-    * Monitors session lock/unlock events.
-    * On unlock, it calculates the locked duration and time since the last entry or PC start.
-    * Prompts you to auto-book this time as work or a break.
-6.  **Pause Notifications (`NotificationManager.cs`):**
-    * Calculates your work duration since the last significant break or system start.
-    * Sends toast notifications to remind you to take a pause, configurable based on whether you're under 18.
-7.  **Settings (`SettingsController.cs`):**
-    * Your preferences (like notification settings or lock time threshold) are saved in a local `settings.json` file.
-8.  **Admin Power (`AdminView.cs`):**
-    * If you're "gerd.kaufmann", you get the admin view.
-    * This view allows selecting another user and viewing their decrypted time entries, leveraging the `Crypto.GetUserKeys()` mechanism.
-
-## ⚙️ Technical Details
-
-* **Framework:** .NET 8
-* **Language:** C#
-* **Database:** SQL Server (Connection string in `Connector.cs`, schema in `Res/Setup.txt`)
-* **Encryption:** AES-256 GCM for data, Windows Credential Manager for master key storage.
-* **UI:** Windows Forms
-* **Current App Version (as per internal version file):** 2.1.0.01
-
-## 🚀 Getting Started
-
-4Time is designed to be plug-and-play!
-1.  On first launch, it will attempt to set up necessary database tables and register the current user.
-2.  It will also try to add itself to Windows Autostart for your convenience.
-3.  Make sure the database server specified in `Connector.cs` is accessible. (For developers: you might need to adjust this!).
-
----
-
-Enjoy tracking your time with **4Time**! May your work be productive and your breaks filled with excellent dad jokes! 😄
-
-
----
-# ------------------------------DE------------------------------
-# 🕒 4Time - Dein ultimativer Zeiterfassungs-Begleiter! 🚀
-
-Willkommen bei **4Time**! Das ist nicht nur ein weiterer Zeit-Tracker; es ist eine intelligente, sichere und unterhaltsame Methode, um deine Arbeitsstunden, Pausen und Produktivität zu managen. Entwickelt mit C# und .NET 8, ist 4Time darauf ausgelegt, dich mit einem Augenzwinkern und einigen cleveren Automatisierungstricks auf dem Laufenden zu halten!
-
-## ✨ Funktionen, die 4Time zum Strahlen bringen ✨
-
-* **👨‍💼 Zwei Ansichten:**
-    * **Benutzeransicht:** Für die tägliche Zeiterfassung, das Anzeigen persönlicher Statistiken und die Verwaltung von Einträgen.
-    * **Admin-Ansicht:** Spezieller Zugriff für Administratoren (Hallo, Gerd Kaufmann! 👋), um die Zeitdaten anderer Benutzer einzusehen.
-* **⏱️ Umfassende Zeiterfassung:**
-    * Erfasse Arbeitsstunden, Pausen (Mittag, Rauchen, Allgemein) und andere Aktivitäten wie Urlaub, Krankheit oder Berufsschule.
-    * Flexible Eingabemethoden: Startzeit - Endzeit, Startzeit + Dauer oder Endzeit - Dauer.
-    * Automatische Vorschläge zur Zeitbuchung, wenn dein PC nach einer Sperre entsperrt wird. Verliere nie wieder den Überblick über spontane Unterbrechungen!
-* **🔒 Erstklassige Sicherheit & Verschlüsselung:**
-    * Deine Zeiteinträge (Start, Ende, Kommentare) werden mit **AES-256 GCM** für maximale Sicherheit verschlüsselt.
-    * Hauptverschlüsselungsschlüssel werden sicher über die **Windows-Anmeldeinformationsverwaltung** gespeichert.
-    * Ein versioniertes Chiffretextformat sorgt für Robustheit.
-* **📊 Aufschlussreiche Übersicht:**
-    * Dashboard mit täglichen und wöchentlichen Zusammenfassungen:
-        * Gesamte Arbeitszeit 💼
-        * Gesamte Pausenzeit ⏸️
-        * Berechnete Überstunden 📈
-    * Spezieller "My 4Sellers"-Bereich, der Vormittags-, Nachmittags- und Pausenzeiten basierend auf deinen Einträgen anzeigt.
-* **🚀 Autostart & Updates:**
-    * 4Time startet bequem mit Windows und ist somit immer einsatzbereit, wenn du es bist.
-    * Integrierter Updater, um dich auf der neuesten Version zu halten (prüft `update.xml`).
-* **🔔 Intelligente Benachrichtigungen:**
-    * Erhalte rechtzeitige Erinnerungen für Pausen, die dir helfen, Arbeitsvorschriften einzuhalten (besonders für U18-Nutzer!).
-    * Konfigurierbare Vorab-Benachrichtigungen (10 Minuten vor einer Pflichtpause).
-* **🚫 YouTube Shorts Blocker:**
-    * Bleib fokussiert! 4Time enthält eine experimentelle Funktion, um YouTube Shorts in deinem Browser (Chrome, Firefox, Edge) zu erkennen und zu schließen.
+* **👨‍💼 Zwei maßgeschneiderte Ansichten:**
+    * **Benutzeransicht:** Dein täglicher Begleiter für die persönliche Zeiterfassung, das Anzeigen von Statistiken und die Verwaltung deiner Einträge.
+    * **Admin-Ansicht:** Speziell für Administratoren (ja, Gerd Kaufmann, wir sprechen von dir! 👋) – hier können die Zeitdaten anderer Benutzer eingesehen und verwaltet werden.
+* **⏱️ Umfassende und flexible Zeiterfassung:**
+    * Erfasse präzise Arbeitsstunden, verschiedene Pausen (Mittag, Raucherpause, allgemeine Pause) und andere Aktivitäten wie Urlaub, Krankheit oder Berufsschule.
+    * Wähle die für dich passende Eingabemethode: Gib eine Start- und Endzeit an, eine Startzeit plus Dauer oder eine Endzeit minus Dauer.
+    * Profitiere von automatischen Vorschlägen zur Zeitbuchung, sobald dein PC nach einer Inaktivität entsperrt wird. So gehen keine spontanen Pausen oder Arbeitsbeginne verloren!
+* **🔒 Maximale Sicherheit durch fortschrittliche Verschlüsselung:**
+    * Deine sensiblen Zeiteinträge (Startzeiten, Endzeiten, Kommentare) werden mit dem robusten **AES-256 GCM**-Algorithmus verschlüsselt, um höchste Datensicherheit zu gewährleisten.
+    * Die Hauptverschlüsselungsschlüssel werden sicher über die **Windows-Anmeldeinformationsverwaltung** gespeichert, um den Zugriff unberechtigter Dritter zu verhindern.
+    * Ein integriertes versioniertes Chiffretextformat sorgt für zusätzliche Robustheit und Zukunftssicherheit.
+* **📊 Aussagekräftige Übersichten und Statistiken:**
+    * Ein übersichtliches Dashboard zeigt dir tägliche und wöchentliche Zusammenfassungen deiner Arbeits- und Pausenzeiten.
+        * **Gesamte Arbeitszeit** 💼
+        * **Gesamte Pausenzeit** ⏸️
+        * **Berechnete Überstunden** 📈
+    * Der spezielle "My 4Sellers"-Bereich bietet detaillierte Aufschlüsselungen der Vormittags-, Nachmittags- und Pausenzeiten basierend auf deinen erfassten Einträgen.
+* **🚀 Reibungsloser Autostart und automatische Updates:**
+    * 4Time startet bequem mit Windows, sodass die Anwendung immer sofort einsatzbereit ist.
+    * Ein integrierter Updater sorgt dafür, dass du stets die neueste Version nutzt und von Verbesserungen profitierst.
+* **🔔 Intelligente Benachrichtigungen für Pausen:**
+    * Erhalte rechtzeitige Erinnerungen, um deine Pausen einzuhalten und Arbeitsvorschriften zu befolgen – besonders wichtig für Benutzer unter 18 Jahren!
+    * Konfiguriere Vorab-Benachrichtigungen, die dich 10 Minuten vor einer verpflichtenden Pause informieren.
+* **🚫 YouTube Shorts Blocker (Experimentell):**
+    * Bleib fokussiert! 4Time enthält eine experimentelle Funktion, die YouTube Shorts in gängigen Browsern (Chrome, Firefox, Edge) erkennt und das entsprechende Browser-Fenster schließt, um Ablenkungen zu minimieren.
 * **⚙️ Anpassbare Einstellungen:**
-    * Passe Einstellungen an, wie z.B. die minimale PC-Sperrzeit, die Auto-Buchungsvorschläge auslöst.
-    * Schalte Benachrichtigungspräferenzen um.
-    * Alle Einstellungen werden lokal in `settings.json` gespeichert.
+    * Lege fest, nach welcher Inaktivitätszeit der PC automatisch gesperrt werden soll, um eine nahtlose Auto-Buchung zu ermöglichen.
+    * Passe deine Benachrichtigungspräferenzen an.
+    * Alle Einstellungen werden lokal in einer `settings.json`-Datei gespeichert.
 * **🤣 Papa-Witz-Spender:**
-    * Brauchst du was zum Schmunzeln? Klicke auf den "Dad Joke"-Button für einen zufällig ausgewählten Witz, der garantiert für ein Augenrollen sorgt!
+    * Manchmal braucht man einfach einen guten Witz! Klicke auf den "Dad Joke"-Button und lass dich von einem zufällig ausgewählten, garantiert augenrollwürdigen Papa-Witz unterhalten!
 * **📅 Outlook Kalender Integration (Basis):**
-    * Möglichkeit, Outlook-Kalendereinträge wie "Urlaub" oder "Berufsschule" auszulesen.
-* **🗃️ Robuste Datenverwaltung:**
-    * Alle Daten werden in einer SQL Server-Datenbank gespeichert.
-    * Das Datenbankschema umfasst Tabellen für Benutzer, Kategorien, Einträge, Automatisierungen und ein spezielles Shutdown-Protokoll.
-    * Automatische Datenbank- und Benutzer-Einrichtung beim ersten Start.
+    * Möglichkeit, Kalendereinträge aus Outlook zu lesen, um Aktivitäten wie "Urlaub" oder "Berufsschule" direkt zu übernehmen.
+* **🗃️ Robuste Datenverwaltung mit SQL Server:**
+    * Alle Zeiterfassungsdaten werden sicher in einer SQL Server-Datenbank gespeichert.
+    * Das Datenbankschema umfasst klar strukturierte Tabellen für Benutzer, Kategorien, Einträge, Automatisierungen und ein spezielles Shutdown-Protokoll.
+    * Die automatische Datenbank- und Benutzer-Einrichtung erfolgt beim ersten Start der Anwendung.
 
-## 🛠️ Wie es funktioniert - Ein Blick unter die Haube
+## 🛠️ Ein Blick unter die Haube – Wie 4Time funktioniert
 
-1.  **Start:** `Program.cs` legt los!
-    * Initialisiert den YouTube Shorts Blocker & Autostart.
-    * Richtet bei Bedarf das Datenbankschema (`Res/Setup.txt`) und das Benutzerprofil ein.
-    * Sucht nach Updates über eine externe `Updater.exe`.
-    * Lädt die passende Ansicht (`UserView` oder `AdminView`) basierend auf dem Windows-Benutzernamen.
-2.  **Benutzeridentifikation:** Dein Windows-Benutzername (z.B. `vorname.nachname`) wird verwendet, um dich im System zu identifizieren.
-3.  **Verschlüsselung ist der Schlüssel:**
-    * Ein einzigartiger Verschlüsselungsschlüssel für die Anwendung wird bei der ersten Verwendung generiert (falls nicht vorhanden) und sicher in der Windows-Anmeldeinformationsverwaltung unter dem Namen "4Time/DatenVerschluesselung" gespeichert.
-    * Für Admin-Funktionen, die Daten anderer Benutzer betreffen, wird ein System mit einer gemeinsamen (aber verschlüsselten) Schlüsseldatei (`AllKeysEncrypted.4Time`) verwendet.
-    * Sensible Zeiterfassungsdaten (Start, Ende, Kommentar) werden vor dem Schreiben in die Datenbank verschlüsselt und beim Lesen entschlüsselt.
-4.  **Zeiteinträge:**
-    * Wenn du einen Eintrag über `UserView` speicherst, gehen die Daten durch `Writer.cs` zur Speicherung.
-    * Wenn du Einträge ansiehst, holt und entschlüsselt `Reader.cs` diese.
-5.  **PC-Sperrverfolgung (`TrackLockedTime.cs`):**
-    * Überwacht Sitzungssperr-/-entsperrereignisse.
-    * Beim Entsperren berechnet es die Sperrdauer und die Zeit seit dem letzten Eintrag oder PC-Start.
-    * Fordert dich auf, diese Zeit automatisch als Arbeit oder Pause zu buchen.
-6.  **Pausenbenachrichtigungen (`NotificationManager.cs`):**
-    * Berechnet deine Arbeitsdauer seit der letzten signifikanten Pause oder dem Systemstart.
-    * Sendet Toast-Benachrichtigungen, um dich an Pausen zu erinnern, konfigurierbar je nachdem, ob du unter 18 bist.
-7.  **Einstellungen (`SettingsController.cs`):**
-    * Deine Präferenzen (wie Benachrichtigungseinstellungen oder Sperrzeit-Schwellenwert) werden in einer lokalen `settings.json`-Datei gespeichert.
-8.  **Admin-Macht (`AdminView.cs`):**
-    * Wenn du "gerd.kaufmann" bist, erhältst du die Admin-Ansicht.
-    * Diese Ansicht ermöglicht die Auswahl eines anderen Benutzers und die Anzeige seiner entschlüsselten Zeiteinträge unter Nutzung des `Crypto.GetUserKeys()`-Mechanismus.
+1.  **Start der Anwendung:** Die Ausführung beginnt in `Program.cs`.
+    * Der YouTube Shorts Blocker (`CloseYTShorts.cs`) und der Autostart-Mechanismus (`AutostartHelper` in `Program.cs`) werden asynchron initialisiert, um eine reaktionsschnelle Startphase zu gewährleisten.
+    * Das Datenbankschema (`Res/Setup.txt`) und das Benutzerprofil werden bei Bedarf über `Writer.DatabaseSetupAsync()` und `Writer.UserSetupAsync()` eingerichtet. Diese Vorgänge sind robust gegenüber wiederholten Aufrufen.
+    * Ein externer `Updater.exe` wird gestartet, um die Anwendung auf dem neuesten Stand zu halten, was eine Entkopplung des Update-Prozesses von der Hauptanwendung ermöglicht.
+    * Basierend auf dem Windows-Benutzernamen (`vorname.nachname`) wird die entsprechende Benutzeroberfläche (`UserView` oder `AdminView`) dynamisch geladen.
+2.  **Benutzeridentifikation:** Dein Windows-Benutzername wird über `Connector.GetCurrentUser()` extrahiert und zur eindeutigen Identifizierung und Personalisierung im System verwendet.
+3.  **Verschlüsselung – Dein Schutzschild (`Crypto.cs`):**
+    * Beim ersten Start wird ein kryptographisch starker, einzigartiger Verschlüsselungsschlüssel generiert und sicher über die `WindowsCredentialManager` API in der Windows-Anmeldeinformationsverwaltung persistiert. Dies verhindert die Speicherung sensibler Schlüssel im Dateisystem.
+    * Sensible Zeiteinträge (Start, Ende, Kommentar) werden mittels `HighlySecureAuthenticatedVersionedCipher` unter Verwendung von **AES-256 GCM** ver- und entschlüsselt. Dieser Modus bietet nicht nur Vertraulichkeit, sondern auch Authentifizierung und Integrität der Daten, um Manipulationen zu erkennen.
+    * Für Admin-Funktionen, die den Zugriff auf Daten anderer Benutzer erfordern, wird ein komplexes System mit einer gemeinsam genutzten, jedoch ebenfalls verschlüsselten Schlüsseldatei (`AllKeysEncrypted.4Time`) eingesetzt, deren Zugriff sorgfältig über `Crypto.GetUserKeys()` verwaltet wird.
+4.  **Verwaltung der Zeiteinträge:**
+    * Die `Writer.cs`-Klasse ist für die persistente Speicherung und Aktualisierung von Daten in der SQL Server-Datenbank zuständig. Sie nutzt Reflection, um Objekte dynamisch in Datenbankspalten zu mappen, und berücksichtigt dabei nicht setzbare Spalten zur Wahrung der Datenintegrität.
+    * `Reader.cs` implementiert eine asynchrone und parallele Datenleselogik mit `SemaphoreSlim` zur Steuerung des Grades der Parallelität. Dies ermöglicht effizientes Abrufen und Entschlüsseln von Zeiteinträgen unter Verwendung von `Task.WhenAll` für simultane Entschlüsselungsvorgänge.
+5.  **Tracking der PC-Sperrzeit (`TrackLockedTime.cs`):**
+    * Die Implementierung überwacht `SystemEvents.SessionSwitch`-Ereignisse, um präzise den Zeitpunkt des Sperrens und Entsperrens des PCs zu erfassen.
+    * Anhand dieser Zeitpunkte werden die Leerlaufzeiten berechnet und dem Benutzer proaktiv als Vorschlag zur Buchung präsentiert, wobei komplexe Zeitlogiken (z.B. Beginn des Arbeitstages vs. letzte Buchung) berücksichtigt werden.
+6.  **Pausen-Benachrichtigungen (`NotificationManager.cs`):**
+    * Der `NotificationManager` analysiert die erfassten Arbeitszeiten und sendet Windows-Toast-Benachrichtigungen. Die Logik berücksichtigt dabei Arbeitszeitgesetze (insbesondere für U18-Regelungen) und plant Vorab-Benachrichtigungen dynamisch basierend auf der bisherigen Arbeitsdauer und dem Zeitpunkt der letzten Pause.
+7.  **Deine Einstellungen (`SettingsController.cs`):**
+    * Die Anwendungseinstellungen werden über `SettingsController.cs` in einer `settings.json`-Datei im JSON-Format verwaltet. Dies ermöglicht eine flexible Speicherung verschiedener Datentypen und deren Typkonvertierung beim Laden.
+8.  **Admin-Funktionen (`AdminView.cs`):**
+    * Die `AdminView` bietet erweiterte Funktionalitäten, einschließlich der Simulation von Benutzerkonten für die Datenanalyse und der dynamischen Aktualisierung der angezeigten Zeitdaten basierend auf der Benutzerauswahl.
 
-## ⚙️ Technische Details
+## ⚙️ Technische Details & Projektstruktur
 
 * **Framework:** .NET 8
 * **Sprache:** C#
-* **Datenbank:** SQL Server (Verbindungszeichenfolge in `Connector.cs`, Schema in `Res/Setup.txt`)
-* **Verschlüsselung:** AES-256 GCM für Daten, Windows-Anmeldeinformationsverwaltung für die Speicherung des Hauptschlüssels.
-* **UI:** Windows Forms
-* **Aktuelle App-Version (laut interner Versionsdatei):** 2.1.0.01
+* **Datenbank:** SQL Server
+    * Der Connection String ist in `Connector.cs` definiert.
+    * Das Datenbankschema (`dbo.Automatics`, `dbo.User`, `dbo.Categories`, `dbo.Shutdown`, `dbo.Entries`) wird über das SQL-Skript in `Res/Setup.txt` beim ersten Start erstellt und mit initialen Daten (`dbo.Categories`) befüllt.
+    * Die Datenbankinteraktion erfolgt über `Microsoft.Data.SqlClient`, wobei asynchrone Operationen (`OpenAsync`, `ReadAsync`) für eine nicht-blockierende Ausführung eingesetzt werden.
+* **Verschlüsselung:**
+    * **AES-256 GCM:** Implementiert in `HighlySecureAuthenticatedVersionedCipher` innerhalb von `Crypto.cs`. Dies beinhaltet die Ableitung kryptographisch sicherer Schlüssel mittels PBKDF2 mit hoher Iterationszahl, die Generierung von Zufalls-Nonces und die Nutzung von Authentifizierungs-Tags zur Sicherstellung der Datenintegrität und -authentizität.
+    * **Windows Credential Manager:** Genutzt über P/Invoke-Aufrufe (`DllImport` und `LibraryImport` in `Crypto.cs` für `CredReadW`, `CredWriteW`, `CredDeleteW`) zur sicheren Speicherung sensibler Anmeldeinformationen im Betriebssystem. Die sichere Umwandlung von `SecureString` zu Bytes und deren Löschung (`ClearBytes`) ist ebenfalls integriert.
+* **Benutzeroberfläche:** Windows Forms. Die Trennung von Designer-Code (`.Designer.cs`) und Logik (`.cs`) fördert eine saubere Codebasis und Wartbarkeit.
+* **Asynchrone Programmierung:** Umfangreicher Einsatz von `async`/`await` und `Task`-basierten Operationen (`Task.Run`, `Task.WhenAll`) zur Verbesserung der Responsivität der Anwendung, insbesondere bei datenbankintensiven oder langlaufenden Prozessen.
+* **System-Interaktionen:** Direkte Interaktionen mit dem Betriebssystem, z.B. über `DllImport` für `user32.dll` (`GetForegroundWindow`, `GetWindowText`, `LockWorkStation`) und `advapi32.dll` (Credential Manager), sowie die Nutzung von `Microsoft.Win32.SystemEvents` für die Überwachung von Session-Statusänderungen.
+* **Aktuelle App-Version (gemäß interner Versionsdatei):** 2.3.1.00
+
+### 📁 Projektstruktur (Auszug)
+
+```
+4Time/
+├── Async/
+│   ├── CloseYTShorts.cs                # Implementiert die Logik zum Erkennen und Schließen von YouTube Shorts in Browsern unter Verwendung von UI Automation und P/Invoke.
+│   ├── DisableReloadButton.cs          # Kapselt die asynchrone Datenneuladung für die Benutzeroberfläche.
+│   ├── LockPcWhenInaktive.cs           # Enthält die P/Invoke-Definitionen und Logik zur automatischen PC-Sperrung nach definierter Inaktivität.
+│   └── TrackLockedTime.cs              # Abonniert Systemereignisse für Session-Sperrung/-Entsperrung und initialisiert automatische Buchungsvorschläge.
+├── DataCore/
+│   ├── Connector.cs                    # Verwaltet die SQL Server-Datenbankverbindung und die Extraktion des aktuellen Windows-Benutzernamens.
+│   ├── Crypto.cs                       # Kern der Sicherheitsarchitektur, umfasst AES-256 GCM Verschlüsselung und sichere Interaktion mit dem Windows Credential Manager.
+│   ├── OutlookCalendar.cs              # Bietet eine grundlegende Schnittstelle zur Interaktion mit Outlook-Kalenderdaten.
+│   ├── Settings.cs                     # Steuert das Laden, Speichern und Verwalten von Anwendungseinstellungen als JSON-Datei.
+│   ├── Writer.cs                       # Verantwortlich für das Einfügen, Aktualisieren und Löschen von Daten in der Datenbank, inklusive Verschlüsselung von Einträgen.
+│   └── Models/
+│       ├── Automatics.cs               # Datenmodell für automatische Prozesse.
+│       ├── Category.cs                 # Datenmodell für verschiedene Zeitkategorien (Arbeit, Pause, Urlaub).
+│       ├── Entry.cs                    # Hauptdatenmodell für einzelne Zeiteinträge, inklusive berechneter Dauer.
+│       └── User.cs                     # Datenmodell für Benutzerprofile.
+│   └── Reader/
+│       ├── EntrySpecificRowData.cs     # Hilfsstruktur zur Entkapselung von Rohdaten spezifischer Zeiteinträge vor der Entschlüsselung.
+│       ├── Reader.cs                   # Implementiert eine parallele und asynchrone Datenleselogik für die Datenbank, inklusive Entschlüsselung und dynamischem Objekt-Mapping.
+│       └── RowDataHolder.cs            # Universeller Container für Rohdaten aus Datenbankzeilen.
+├── FrontEnd/
+│   ├── AdminView.Designer.cs           # Automatisch generierter Code für das Design der Admin-Oberfläche.
+│   ├── AdminView.cs                    # Geschäftslogik und Event-Handler für die Admin-Ansicht, inklusive Benutzer-Simulation.
+│   ├── DadJokes.cs                     # Kapselt eine Sammlung von Text-Witzen.
+│   ├── Form1Files/
+│   │   └── Events.cs                   # Spezifische Event-Handler und Validierungslogik für die Benutzer-Ansicht.
+│   ├── NotificationManager.cs          # Verwaltet die Zeitplanung und das Senden von Desktop-Benachrichtigungen.
+│   ├── UserView.Designer.cs            # Automatisch generierter Code für das Design der Benutzer-Oberfläche.
+│   └── UserView.cs                     # Hauptlogik der Benutzer-Ansicht, Datenaggregation und Interaktion mit anderen Modulen.
+├── Program.cs                          # Der Anwendungseinstiegspunkt, orchestriert den Start von Diensten und der Benutzeroberfläche.
+└── Res/
+    ├── Setup.txt                       # SQL-DDL-Skript für die Erstellung der Datenbanktabellen und Trigger, inklusive initialer Daten und SQL Server Agent Job Definitionen.
+    └── Version.txt                     # Enthält die aktuelle Versionsnummer der Anwendung.
+```
 
 ## 🚀 Erste Schritte
 
-4Time ist darauf ausgelegt, sofort einsatzbereit zu sein!
-1.  Beim ersten Start versucht es, die notwendigen Datenbanktabellen einzurichten und den aktuellen Benutzer zu registrieren.
-2.  Es wird auch versuchen, sich selbst zum Windows-Autostart hinzuzufügen.
-3.  Stelle sicher, dass der in `Connector.cs` angegebene Datenbankserver erreichbar ist. (Für Entwickler: Dies muss möglicherweise angepasst werden!).
+4Time ist darauf ausgelegt, schnell und unkompliziert einsatzbereit zu sein!
+1.  Beim ersten Start versucht die Anwendung, die notwendigen Datenbanktabellen einzurichten und den aktuellen Benutzer zu registrieren.
+2.  Zudem wird versucht, sich automatisch zum Windows-Autostart hinzuzufügen.
+3.  Stelle sicher, dass der in `Connector.cs` angegebene Datenbankserver erreichbar ist. (Entwickler-Hinweis: Dies muss eventuell angepasst werden!).
 
 ---
 
-Viel Spaß beim Erfassen deiner Zeit mit **4Time**! Möge deine Arbeit produktiv sein und deine Pausen gefüllt mit exzellenten Papa-Witzen! 😄
+Viel Spaß beim effektiven Managen deiner Zeit mit **4Time**! Mögen deine Arbeitstage produktiv und deine Pausen von großartigen Dad-Jokes begleitet sein! 😄
+
+```
