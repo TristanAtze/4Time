@@ -703,7 +703,7 @@ public static class Crypto
         SecureString loadedSecurePassword = new();
         string encryptedData = "";
 
-        if (password != null)
+        if (password == null)
         {
             loadedSecurePassword = WindowsCredentialManager.LoadPassword(AppCredentialName) ?? new();
         }

@@ -41,7 +41,7 @@ namespace _4Time.DataCore
                     await connection.OpenAsync();
                     using (var command = new SqlCommand(sql.ToString(), connection))
                     {
-                        using (var dbReader = await command.ExecuteReaderAsync())
+                        using (var dbReader = command.ExecuteReader())
                         {
                             while (await dbReader.ReadAsync())
                             {

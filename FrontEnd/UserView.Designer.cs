@@ -164,6 +164,9 @@ namespace Time4SellersApp
             colKommentar = new DataGridViewTextBoxColumn();
             colDauer = new DataGridViewTextBoxColumn();
             tabSettings = new TabPage();
+            label15 = new Label();
+            autostartCheckBox = new CheckBox();
+            label14 = new Label();
             LockPcTime = new NumericUpDown();
             label13 = new Label();
             label12 = new Label();
@@ -179,9 +182,6 @@ namespace Time4SellersApp
             LockTimeMin = new NumericUpDown();
             label7 = new Label();
             LockedTimeMin = new Label();
-            label14 = new Label();
-            autostartCheckBox = new CheckBox();
-            label15 = new Label();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureLogoUebersicht).BeginInit();
@@ -846,10 +846,42 @@ namespace Time4SellersApp
             tabSettings.Text = "Settings";
             tabSettings.UseVisualStyleBackColor = true;
             // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Font = new Font("Segoe UI", 9F);
+            label15.Location = new Point(8, 314);
+            label15.Name = "label15";
+            label15.Size = new Size(359, 15);
+            label15.TabIndex = 18;
+            label15.Text = "Bestimmt, ob die Anwendung bei Pc start mit gestartet werden soll";
+            // 
+            // autostartCheckBox
+            // 
+            autostartCheckBox.AutoSize = true;
+            autostartCheckBox.Font = new Font("Segoe UI", 18F);
+            autostartCheckBox.Location = new Point(130, 289);
+            autostartCheckBox.Name = "autostartCheckBox";
+            autostartCheckBox.Size = new Size(15, 14);
+            autostartCheckBox.TabIndex = 17;
+            autostartCheckBox.Tag = "";
+            autostartCheckBox.UseVisualStyleBackColor = true;
+            autostartCheckBox.CheckedChanged += autostartCheckBox_CheckedChanged;
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Font = new Font("Segoe UI", 18F);
+            label14.Location = new Point(8, 279);
+            label14.Name = "label14";
+            label14.Size = new Size(116, 32);
+            label14.TabIndex = 16;
+            label14.Text = "Autostart:";
+            // 
             // LockPcTime
             // 
             LockPcTime.Font = new Font("Segoe UI", 10F);
-            LockPcTime.Location = new Point(196, 221);
+            LockPcTime.Location = new Point(215, 224);
             LockPcTime.Name = "LockPcTime";
             LockPcTime.Size = new Size(41, 25);
             LockPcTime.TabIndex = 15;
@@ -871,9 +903,9 @@ namespace Time4SellersApp
             label12.Font = new Font("Segoe UI", 18F);
             label12.Location = new Point(8, 217);
             label12.Name = "label12";
-            label12.Size = new Size(190, 32);
+            label12.Size = new Size(213, 32);
             label12.TabIndex = 13;
-            label12.Text = "Pc Sperren nach:";
+            label12.Text = "PC-Sperrung nach:";
             // 
             // button1
             // 
@@ -932,15 +964,15 @@ namespace Time4SellersApp
             label6.Font = new Font("Segoe UI", 9F);
             label6.Location = new Point(8, 112);
             label6.Name = "label6";
-            label6.Size = new Size(421, 15);
+            label6.Size = new Size(356, 15);
             label6.TabIndex = 7;
-            label6.Text = "10 min vor bevor du zu lange garbeitet hast eine Benachrichtigung bekommen";
+            label6.Text = "10 min vor deiner Plichtpause eine benachrichtitigung bekommen";
             // 
             // checkBox1
             // 
             checkBox1.AutoSize = true;
             checkBox1.Font = new Font("Segoe UI", 18F);
-            checkBox1.Location = new Point(347, 95);
+            checkBox1.Location = new Point(351, 95);
             checkBox1.Name = "checkBox1";
             checkBox1.Size = new Size(15, 14);
             checkBox1.TabIndex = 6;
@@ -961,16 +993,16 @@ namespace Time4SellersApp
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 18F);
-            label8.Location = new Point(294, 12);
+            label8.Location = new Point(306, 12);
             label8.Name = "label8";
-            label8.Size = new Size(56, 32);
+            label8.Size = new Size(55, 32);
             label8.TabIndex = 4;
-            label8.Text = "Min";
+            label8.Text = "min";
             // 
             // LockTimeMin
             // 
             LockTimeMin.Font = new Font("Segoe UI", 10F);
-            LockTimeMin.Location = new Point(247, 19);
+            LockTimeMin.Location = new Point(262, 19);
             LockTimeMin.Name = "LockTimeMin";
             LockTimeMin.Size = new Size(41, 25);
             LockTimeMin.TabIndex = 3;
@@ -991,41 +1023,9 @@ namespace Time4SellersApp
             LockedTimeMin.Font = new Font("Segoe UI", 18F);
             LockedTimeMin.Location = new Point(8, 12);
             LockedTimeMin.Name = "LockedTimeMin";
-            LockedTimeMin.Size = new Size(243, 32);
+            LockedTimeMin.Size = new Size(248, 32);
             LockedTimeMin.TabIndex = 1;
-            LockedTimeMin.Text = "Pc Sperrzeit Schwelle:";
-            // 
-            // label14
-            // 
-            label14.AutoSize = true;
-            label14.Font = new Font("Segoe UI", 18F);
-            label14.Location = new Point(8, 279);
-            label14.Name = "label14";
-            label14.Size = new Size(116, 32);
-            label14.TabIndex = 16;
-            label14.Text = "Autostart:";
-            // 
-            // autostartCheckBox
-            // 
-            autostartCheckBox.AutoSize = true;
-            autostartCheckBox.Font = new Font("Segoe UI", 18F);
-            autostartCheckBox.Location = new Point(130, 289);
-            autostartCheckBox.Name = "autostartCheckBox";
-            autostartCheckBox.Size = new Size(15, 14);
-            autostartCheckBox.TabIndex = 17;
-            autostartCheckBox.Tag = "";
-            autostartCheckBox.UseVisualStyleBackColor = true;
-            autostartCheckBox.CheckedChanged += autostartCheckBox_CheckedChanged;
-            // 
-            // label15
-            // 
-            label15.AutoSize = true;
-            label15.Font = new Font("Segoe UI", 9F);
-            label15.Location = new Point(8, 314);
-            label15.Name = "label15";
-            label15.Size = new Size(356, 15);
-            label15.TabIndex = 18;
-            label15.Text = "Bestimmt ob die Anwendung bei Pc start mit gestartet werden soll";
+            LockedTimeMin.Text = "PC Sperrzeit Schwelle:";
             // 
             // UserView
             // 

@@ -318,6 +318,8 @@ namespace Time4SellersApp
 
             string bemerkung = txtBemerkung.Text;
 
+            var readerTask = Task.Run(async () => await Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]));
+
             Entry entry = new()
             {
                 EntryID = 0,
@@ -325,7 +327,7 @@ namespace Time4SellersApp
                 End = endzeit,
                 CategoryName = art,
                 Comment = bemerkung,
-                UserID = Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).Result.First().UserID,
+                UserID = readerTask.Result.First().UserID,
                 CategoryID = _allCategorys.Where(x => x.Description == art)
                     .Select(x => x.CategoryID)
                     .First()
