@@ -171,6 +171,11 @@ partial class UserView
         }
     }
 
+    private void tabControl_Selecting(object sender, TabControlCancelEventArgs e)
+    {
+        e.Cancel = !isDataLoaded;
+    }
+
     public async void Neuladen_Click(object sender, EventArgs e)
     {
         PTToday.Text = "Lädt...";
@@ -246,10 +251,10 @@ partial class UserView
 
     private void SettingsButton_Click(object sender, EventArgs e)
     {
-        Settings.Select();
-        Settings.Show();
-        Settings.BringToFront();
-        Settings.Focus();
+        tabSettings.Select();
+        tabSettings.Show();
+        tabSettings.BringToFront();
+        tabSettings.Focus();
     }
 
     private void button1_Click(object sender, EventArgs e)

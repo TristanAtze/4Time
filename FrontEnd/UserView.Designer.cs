@@ -78,7 +78,7 @@ namespace Time4SellersApp
         private Label VormittagLabel;
         private DateTimePicker dateTimePicker1;
         private DateTimePicker dateTimePickerOverview;
-        private TabPage Settings;
+        private TabPage tabSettings;
 
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace Time4SellersApp
             colArt = new DataGridViewTextBoxColumn();
             colKommentar = new DataGridViewTextBoxColumn();
             colDauer = new DataGridViewTextBoxColumn();
-            Settings = new TabPage();
+            tabSettings = new TabPage();
             LockPcTime = new NumericUpDown();
             label13 = new Label();
             label12 = new Label();
@@ -191,7 +191,7 @@ namespace Time4SellersApp
             tabAuslesen.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvEntries).BeginInit();
-            Settings.SuspendLayout();
+            tabSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)LockPcTime).BeginInit();
             ((System.ComponentModel.ISupportInitialize)LockTimeMin).BeginInit();
             SuspendLayout();
@@ -201,13 +201,14 @@ namespace Time4SellersApp
             tabControl.Controls.Add(tabUebersicht);
             tabControl.Controls.Add(tabEintragen);
             tabControl.Controls.Add(tabAuslesen);
-            tabControl.Controls.Add(Settings);
+            tabControl.Controls.Add(tabSettings);
             tabControl.Dock = DockStyle.Fill;
             tabControl.Location = new Point(0, 0);
             tabControl.Name = "tabControl";
             tabControl.SelectedIndex = 0;
             tabControl.Size = new Size(474, 561);
             tabControl.TabIndex = 0;
+            tabControl.Selecting += tabControl_Selecting;
             // 
             // tabUebersicht
             // 
@@ -814,30 +815,30 @@ namespace Time4SellersApp
             colDauer.Name = "colDauer";
             colDauer.ReadOnly = true;
             // 
-            // Settings
+            // tabSettings
             // 
-            Settings.Controls.Add(LockPcTime);
-            Settings.Controls.Add(label13);
-            Settings.Controls.Add(label12);
-            Settings.Controls.Add(button1);
-            Settings.Controls.Add(u18Description);
-            Settings.Controls.Add(checkBox2);
-            Settings.Controls.Add(u18);
-            Settings.Controls.Add(label9);
-            Settings.Controls.Add(label6);
-            Settings.Controls.Add(checkBox1);
-            Settings.Controls.Add(Benach);
-            Settings.Controls.Add(label8);
-            Settings.Controls.Add(LockTimeMin);
-            Settings.Controls.Add(label7);
-            Settings.Controls.Add(LockedTimeMin);
-            Settings.Location = new Point(4, 24);
-            Settings.Name = "Settings";
-            Settings.Padding = new Padding(3);
-            Settings.Size = new Size(466, 533);
-            Settings.TabIndex = 3;
-            Settings.Text = "Settings";
-            Settings.UseVisualStyleBackColor = true;
+            tabSettings.Controls.Add(LockPcTime);
+            tabSettings.Controls.Add(label13);
+            tabSettings.Controls.Add(label12);
+            tabSettings.Controls.Add(button1);
+            tabSettings.Controls.Add(u18Description);
+            tabSettings.Controls.Add(checkBox2);
+            tabSettings.Controls.Add(u18);
+            tabSettings.Controls.Add(label9);
+            tabSettings.Controls.Add(label6);
+            tabSettings.Controls.Add(checkBox1);
+            tabSettings.Controls.Add(Benach);
+            tabSettings.Controls.Add(label8);
+            tabSettings.Controls.Add(LockTimeMin);
+            tabSettings.Controls.Add(label7);
+            tabSettings.Controls.Add(LockedTimeMin);
+            tabSettings.Location = new Point(4, 24);
+            tabSettings.Name = "tabSettings";
+            tabSettings.Padding = new Padding(3);
+            tabSettings.Size = new Size(466, 533);
+            tabSettings.TabIndex = 3;
+            tabSettings.Text = "Settings";
+            tabSettings.UseVisualStyleBackColor = true;
             // 
             // LockPcTime
             // 
@@ -1011,8 +1012,8 @@ namespace Time4SellersApp
             tabAuslesen.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvEntries).EndInit();
-            Settings.ResumeLayout(false);
-            Settings.PerformLayout();
+            tabSettings.ResumeLayout(false);
+            tabSettings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)LockPcTime).EndInit();
             ((System.ComponentModel.ISupportInitialize)LockTimeMin).EndInit();
             ResumeLayout(false);

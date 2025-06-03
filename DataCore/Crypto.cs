@@ -685,7 +685,7 @@ public static class Crypto
             }
             else if (key[0] == 'A')
             {
-                string decryptedKey = Crypto.Decryption(key).Result;
+                string decryptedKey = Crypto.DecryptionAsync(key).Result;
                 if (decryptedKey.Contains(AdminView.ReturnSimulatedUser().Replace(" ", ".")))
                 {
                     return decryptedKey.Replace(AdminView.ReturnSimulatedUser().Replace(" ", "."), "");
@@ -753,7 +753,7 @@ public static class Crypto
         return encryptedData;
     }
 
-    public static async Task<string> Decryption(string encryptedData, string? password = null)
+    public static async Task<string> DecryptionAsync(string encryptedData, string? password = null)
     {
         SecureString? loadedSecurePassword = new();
 
