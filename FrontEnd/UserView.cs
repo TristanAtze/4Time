@@ -120,6 +120,7 @@ namespace Time4SellersApp
             var checkBox1Value = settings.FirstOrDefault(x => x.Key == "checkBox1");
             var checkBox2Value = settings.FirstOrDefault(x => x.Key == "checkBox2");
             var lockPcTime = settings.FirstOrDefault(x => x.Key == "LockPcTime");
+            var autostartCheckBoxValue = settings.FirstOrDefault(x => x.Key == "Autostart");
 
             if (settings != null)
             {
@@ -134,6 +135,9 @@ namespace Time4SellersApp
 
                 if (lockPcTime.Key != null)
                     LockPcTime.Value = Convert.ToInt64(lockPcTime.Value);
+
+                if (autostartCheckBoxValue.Key != null)
+                    autostartCheckBox.Checked = Convert.ToBoolean(autostartCheckBoxValue.Value);
             }
         }
 
@@ -321,7 +325,6 @@ namespace Time4SellersApp
                 End = endzeit,
                 CategoryName = art,
                 Comment = bemerkung,
-                //TODO GetUser sollte u.a. einen User zurückgeben, welcher alle nötigen Werte (Vor- und Nachname + ID) enthält
                 UserID = Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).Result.First().UserID,
                 CategoryID = _allCategorys.Where(x => x.Description == art)
                     .Select(x => x.CategoryID)
@@ -384,6 +387,7 @@ namespace Time4SellersApp
             _settingsToSave.Add(("checkBox1", checkBox1.Checked));
             _settingsToSave.Add(("checkBox2", checkBox2.Checked));
             _settingsToSave.Add(("LockPcTime", LockPcTime.Value));
+            _settingsToSave.Add(("Autostart", autostartCheckBox.Checked));
         }
 
         private void label9_Click(object sender, EventArgs e)
@@ -405,6 +409,23 @@ namespace Time4SellersApp
             string localExePath = process.MainModule.FileName;
             string localDir = Path.GetDirectoryName(localExePath);
             Process.Start(new ProcessStartInfo { FileName = localExePath, WorkingDirectory = localDir });
+        }
+
+        private void autostartCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (autostartCheckBox.Checked)
+            {
+                if (!AutostartHelper.IsApplicationInCurrentUserStartup())
+                {
+                    AutostartHelper.AddApplicationToCurrentUserStartup();
+                    MessageBox.Show("Autostart wurde aktiviert. Die Anwendung wird nun automatisch gestartet.", "Autostart aktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            else
+            {
+                AutostartHelper.RemoveApplicationFromCurrentUserStartup();
+                MessageBox.Show("Autostart wurde deaktiviert. Die Anwendung wird nicht mehr automatisch gestartet.", "Autostart deaktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }
