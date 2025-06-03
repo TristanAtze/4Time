@@ -7,7 +7,7 @@ public class DisableReloadButton
 {
     public static async Task PerformDataReloadAsync(Time4SellersApp.UserView userViewInstance)
     {
-        userViewInstance.AllEntrys = Reader.Read<Entry>("Entries", null,
+        userViewInstance.AllEntrys = await Reader.Read<Entry>("Entries", null,
         [
         $"[UserID] = {Reader.Read<User>("User",
             [
@@ -17,6 +17,6 @@ public class DisableReloadButton
                 $"[FirstName] = '{Connector.FirstName}'",
                 $"[LastName] = '{Connector.LastName}'"
             ]).Result.First().UserID}",
-        ]).Result;
+        ]);
     }
 }
