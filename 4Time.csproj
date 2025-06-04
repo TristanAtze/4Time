@@ -48,12 +48,6 @@
     <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="9.0.5" />
     <PackageReference Include="System.Text.Json" Version="9.0.5" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <Reference Include="4TimeKeyConstructor">
-      <HintPath>..\..\..\..\Desktop\Microsoft.OfficeLine.Outlook.Tools.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 
   <ItemGroup>
     <None Update="Res\4TIMELogo.gif">
