@@ -81,7 +81,7 @@ Willkommen bei **4Time**! Tauche ein in eine intelligente und sichere Welt der Z
 * **Benutzeroberfläche:** Windows Forms. Die Trennung von Designer-Code (`.Designer.cs`) und Logik (`.cs`) fördert eine saubere Codebasis und Wartbarkeit.
 * **Asynchrone Programmierung:** Umfangreicher Einsatz von `async`/`await` und `Task`-basierten Operationen (`Task.Run`, `Task.WhenAll`) zur Verbesserung der Responsivität der Anwendung, insbesondere bei datenbankintensiven oder langlaufenden Prozessen.
 * **System-Interaktionen:** Direkte Interaktionen mit dem Betriebssystem, z.B. über `DllImport` für `user32.dll` (`GetForegroundWindow`, `GetWindowText`, `LockWorkStation`) und `advapi32.dll` (Credential Manager), sowie die Nutzung von `Microsoft.Win32.SystemEvents` für die Überwachung von Session-Statusänderungen.
-* **Aktuelle App-Version (gemäß interner Versionsdatei):** 2.3.1.00
+* **Aktuelle App-Version (gemäß interner Versionsdatei):** 3.0.0.00
 
 ### 📁 Projektstruktur (Auszug)
 
