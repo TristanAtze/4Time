@@ -112,7 +112,7 @@ partial class UserView
         { 
             NotificationManager notificationManager = new(dgvEntries, allCategorys, checkBox1, checkBox2); 
         }
-        await FillValues(false);
+        await FillValues();
     }
 
     private void DgvEntries_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -168,7 +168,7 @@ partial class UserView
             }
 
             dgvEntries.Refresh();
-            await FillValues(false);
+            await FillValues();
             btnNeuladenAuslesen.Enabled = true;
         }
     }
