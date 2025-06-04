@@ -102,6 +102,8 @@ namespace Time4SellersApp
         {
             tabControl = new TabControl();
             tabUebersicht = new TabPage();
+            OTgesamt = new Label();
+            label16 = new Label();
             label11 = new Label();
             PTMin = new Label();
             label10 = new Label();
@@ -164,6 +166,7 @@ namespace Time4SellersApp
             colKommentar = new DataGridViewTextBoxColumn();
             colDauer = new DataGridViewTextBoxColumn();
             tabSettings = new TabPage();
+            button4 = new Button();
             label15 = new Label();
             autostartCheckBox = new CheckBox();
             label14 = new Label();
@@ -182,8 +185,6 @@ namespace Time4SellersApp
             LockTimeMin = new NumericUpDown();
             label7 = new Label();
             LockedTimeMin = new Label();
-            label16 = new Label();
-            OTgesamt = new Label();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureLogoUebersicht).BeginInit();
@@ -249,6 +250,24 @@ namespace Time4SellersApp
             tabUebersicht.Size = new Size(466, 533);
             tabUebersicht.TabIndex = 0;
             tabUebersicht.Text = "Übersicht";
+            // 
+            // OTgesamt
+            // 
+            OTgesamt.AutoSize = true;
+            OTgesamt.Location = new Point(144, 274);
+            OTgesamt.Name = "OTgesamt";
+            OTgesamt.Size = new Size(39, 15);
+            OTgesamt.TabIndex = 30;
+            OTgesamt.Text = "Lädt...";
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(18, 274);
+            label16.Name = "label16";
+            label16.Size = new Size(120, 15);
+            label16.TabIndex = 29;
+            label16.Text = "Überstunden gesamt:";
             // 
             // label11
             // 
@@ -824,6 +843,7 @@ namespace Time4SellersApp
             // 
             // tabSettings
             // 
+            tabSettings.Controls.Add(button4);
             tabSettings.Controls.Add(label15);
             tabSettings.Controls.Add(autostartCheckBox);
             tabSettings.Controls.Add(label14);
@@ -849,6 +869,16 @@ namespace Time4SellersApp
             tabSettings.TabIndex = 3;
             tabSettings.Text = "Settings";
             tabSettings.UseVisualStyleBackColor = true;
+            // 
+            // button4
+            // 
+            button4.Location = new Point(86, 489);
+            button4.Name = "button4";
+            button4.Size = new Size(122, 23);
+            button4.TabIndex = 19;
+            button4.Text = "Programming-Joke";
+            button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
             // 
             // label15
             // 
@@ -917,7 +947,7 @@ namespace Time4SellersApp
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 12;
-            button1.Text = "Dad joke";
+            button1.Text = "Dad-Joke";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
@@ -1031,24 +1061,6 @@ namespace Time4SellersApp
             LockedTimeMin.TabIndex = 1;
             LockedTimeMin.Text = "PC Sperrzeit Schwelle:";
             // 
-            // label16
-            // 
-            label16.AutoSize = true;
-            label16.Location = new Point(18, 274);
-            label16.Name = "label16";
-            label16.Size = new Size(120, 15);
-            label16.TabIndex = 29;
-            label16.Text = "Überstunden gesamt:";
-            // 
-            // OTgesamt
-            // 
-            OTgesamt.AutoSize = true;
-            OTgesamt.Location = new Point(144, 274);
-            OTgesamt.Name = "OTgesamt";
-            OTgesamt.Size = new Size(39, 15);
-            OTgesamt.TabIndex = 30;
-            OTgesamt.Text = "Lädt...";
-            // 
             // UserView
             // 
             ClientSize = new Size(474, 561);
@@ -1103,5 +1115,6 @@ namespace Time4SellersApp
         private Label label14;
         private Label OTgesamt;
         private Label label16;
+        private Button button4;
     }
 }

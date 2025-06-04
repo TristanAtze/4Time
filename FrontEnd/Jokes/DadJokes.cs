@@ -108,7 +108,7 @@
             {100, "Warum essen Elefanten keine Computer? Weil sie zu viele Bytes haben!"}
         };
 
-        internal static string GetRandomJoke()
+        internal static string GetRandomDadJoke()
         {
             if (DadJokesDic.Count == 0)
             {
