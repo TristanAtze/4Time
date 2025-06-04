@@ -58,16 +58,13 @@ namespace Time4SellersApp
 
             rbStartzeitEndzeit.Checked = true;
 
-            FillValues();
+            _ = FillValues();
 
             LogginName.Text = Connector.FirstName + " " + Connector.LastName;
 
             LoadSettings();
 
             TrackLockedTime.InitializeAndStartTracking(this);
-
-            dateTimePicker1.Value = DateTime.Now.Date;
-            dateTimePickerOverview.Value = DateTime.Now.Date;
         }
 
         public static async Task<List<Entry>> GetAllEntriesAsync()
@@ -142,10 +139,26 @@ namespace Time4SellersApp
 
         private async Task FillValues(bool reloadDataGrid = true, bool isDatetimePicker = false)
         {
-            await AwaitEntryTask();
+            DateTime My4SellersDateTime;    
 
-            DateTime My4SellersDateTime = dateTimePicker1.Value.Date;
+            if (!isDatetimePicker)
+            {
+                await AwaitEntryTask();
+            }
 
+            My4SellersDateTime = dateTimePicker1.Value.Date;
+
+            if (!isDatetimePicker)
+            {
+                dateTimePicker1.Value = DateTime.Now.Date;
+                dateTimePickerOverview.Value = DateTime.Now.Date;
+            }
+            else
+            {
+                My4SellersDateTime = DateTime.Now.Date;
+            }
+
+            
 
             //Vormittag
             List<Entry> WorktimeVormittag = [.. AllEntrys.Where(x => x.Start.Date == My4SellersDateTime.Date).Where(x => x.CategoryName == "Vormittag")];
@@ -180,22 +193,24 @@ namespace Time4SellersApp
 
             VormittagLabel.Text = $"Vormittag:    {WorktimeVormittagStartEnd} (Interne Buchung)" ?? $"Vormittag: 00:00";
             NachmittagLabel.Text = $"Nachmittag: {WorktimeNachmittagStartEnd} (Interne Buchung)" ?? $"Nachmittag: 00:00";
-            PauseLabel.Text = $"Pause:           {WorktimePauseStartEnd} (gesetzl. Pausenzeiten für Auszubildende)" ?? $"Pause: 00:00";
+            PauseLabel.Text = $"Pause:          {WorktimePauseStartEnd} (gesetzl. Pausenzeiten für Auszubildende)" ?? $"Pause: 00:00";
 
             btnSpeichern.Enabled = false;
 
-            var today = dateTimePickerOverview.Value.Date;
+            var today = dateTimePickerOverview.Value.Date; // Dies ist der ausgewählte Tag im dateTimePickerOverview
             int diff = (7 + (today.DayOfWeek - DayOfWeek.Monday)) % 7;
             var weekStart = today.AddDays(-diff);
+            var weekEnd = weekStart.AddDays(4); // Annahme: Woche geht von Montag bis Freitag (5 Arbeitstage)
 
             var entriesToday = AllEntrys.Where(e => e.Start.Date == today);
-            var entriesWeek = AllEntrys.Where(e => e.Start.Date >= weekStart && e.Start.Date <= today.Date);
+            var entriesWeek = AllEntrys.Where(e => e.Start.Date >= weekStart && e.Start.Date <= weekEnd.Date);
 
             var isWorkLookup = _allCategorys.ToDictionary(c => c.CategoryID, c => c.IsWorkTime);
 
             TimeSpan pauseToday = TimeSpan.Zero, workToday = TimeSpan.Zero;
             TimeSpan pauseWeek = TimeSpan.Zero, workWeek = TimeSpan.Zero;
 
+            // Berechnung für den ausgewählten Tag (today)
             foreach (var e in entriesToday)
             {
                 var dur = e.End - e.Start;
@@ -205,6 +220,7 @@ namespace Time4SellersApp
                     pauseToday += dur;
             }
 
+            // Berechnung für die gesamte Woche
             foreach (var e in entriesWeek)
             {
                 var dur = e.End - e.Start;
@@ -214,8 +230,33 @@ namespace Time4SellersApp
                     pauseWeek += dur;
             }
 
-            TimeSpan overtimeToday = workToday - TimeSpan.FromHours(8);
-            TimeSpan overtimeWeek = workWeek - TimeSpan.FromHours(40);
+            TimeSpan overtimeToday = workToday - TimeSpan.FromHours(8); // Annahme: 8 Stunden Sollarbeitszeit pro Tag
+            TimeSpan overtimeWeek = workWeek - TimeSpan.FromHours(40); // Annahme: 40 Stunden Sollarbeitszeit pro Woche
+
+            TimeSpan summedDailyOvertime = TimeSpan.Zero;
+
+            for (DateTime date = weekStart; date <= weekEnd; date = date.AddDays(1))
+            {
+                TimeSpan workTimeForDay = TimeSpan.Zero;
+                var entriesForSpecificDayInWeek = AllEntrys.Where(e => e.Start.Date == date);
+
+                foreach (var e in entriesForSpecificDayInWeek)
+                {
+                    var dur = e.End - e.Start;
+                    if (isWorkLookup.TryGetValue(e.CategoryID, out var isWork) && isWork)
+                    {
+                        workTimeForDay += dur;
+                    }
+                }
+
+                TimeSpan dailyOvertime = workTimeForDay - TimeSpan.FromHours(8);
+
+                if (dailyOvertime > TimeSpan.Zero)
+                {
+                    summedDailyOvertime += dailyOvertime;
+                }
+            }
+            OTgesamt.Text = $"{summedDailyOvertime:hh\\:mm} std";
 
             var workWeekHours = workWeek.Hours + workWeek.Days * 24;
 
@@ -233,29 +274,35 @@ namespace Time4SellersApp
             if (pauseWeek.Minutes < 10)
                 pauseWeekMinutesStr = "0" + pauseWeek.Minutes;
 
-            if(workWeekHours < 10)
+            if (workWeekHours < 10)
                 workWeekHoursStr = "0" + workWeekHours;
 
             if (workWeek.Minutes < 10)
                 WorkWeekMinutesStr = "0" + workWeek.Minutes;
 
-            PTToday.Text = $"{pauseToday:hh\\:mm} std";
-            PTWeek.Text = $"{pauseWeekHoursStr}:{pauseWeekMinutesStr} std";
-            WTToday.Text = $"{workToday:hh\\:mm} std";
-            WTWeek.Text = $"{workWeekHoursStr}:{WorkWeekMinutesStr} std";
-            OTToday.Text = $"{(overtimeToday > TimeSpan.Zero ? overtimeToday : TimeSpan.Zero):hh\\:mm} std";
-            OTWeek.Text = $"{(overtimeWeek > TimeSpan.Zero ? overtimeWeek : TimeSpan.Zero):hh\\:mm} std";
+            PTToday.Text = $"{pauseToday:hh\\:mm} std";
+            PTWeek.Text = $"{pauseWeekHoursStr}:{pauseWeekMinutesStr} std";
+            WTToday.Text = $"{workToday:hh\\:mm} std";
+            WTWeek.Text = $"{workWeekHoursStr}:{WorkWeekMinutesStr} std";
+            OTToday.Text = $"{(overtimeToday > TimeSpan.Zero ? overtimeToday : TimeSpan.Zero):hh\\:mm} std";
+            OTWeek.Text = $"{(overtimeWeek > TimeSpan.Zero ? overtimeWeek : TimeSpan.Zero):hh\\:mm} std";
 
-            if(reloadDataGrid)
+            if (reloadDataGrid)
                 await FillDataGridView();
 
-            NotificationManager notificationManager = new(dgvEntries, allCategorys, checkBox1, checkBox2);
+            if (!isDataLoaded && !isDatetimePicker)
+            {
+                NotificationManager notificationManager = new(dgvEntries, allCategorys, checkBox1, checkBox2);
+            }
+
 
             PTMin.Text = NotificationManager.startPauseAt.ToString(@"t");
             label11.Show();
             btnNeuladenAuslesen.Enabled = true;
             Neuladen.Enabled = true;
 
+            
+           
             tabAuslesen.Text = "Auslesen";
             tabEintragen.Text = "Eintragen";
             tabSettings.Text = "Settings";

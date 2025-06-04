@@ -182,6 +182,8 @@ namespace Time4SellersApp
             LockTimeMin = new NumericUpDown();
             label7 = new Label();
             LockedTimeMin = new Label();
+            label16 = new Label();
+            OTgesamt = new Label();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureLogoUebersicht).BeginInit();
@@ -215,6 +217,8 @@ namespace Time4SellersApp
             // 
             // tabUebersicht
             // 
+            tabUebersicht.Controls.Add(OTgesamt);
+            tabUebersicht.Controls.Add(label16);
             tabUebersicht.Controls.Add(label11);
             tabUebersicht.Controls.Add(PTMin);
             tabUebersicht.Controls.Add(label10);
@@ -332,7 +336,7 @@ namespace Time4SellersApp
             // LogginName
             // 
             LogginName.AutoSize = true;
-            LogginName.Location = new Point(108, 274);
+            LogginName.Location = new Point(108, 296);
             LogginName.Name = "LogginName";
             LogginName.Size = new Size(76, 15);
             LogginName.TabIndex = 19;
@@ -341,7 +345,7 @@ namespace Time4SellersApp
             // loggedInAs
             // 
             loggedInAs.AutoSize = true;
-            loggedInAs.Location = new Point(18, 274);
+            loggedInAs.Location = new Point(18, 296);
             loggedInAs.Name = "loggedInAs";
             loggedInAs.Size = new Size(84, 15);
             loggedInAs.TabIndex = 18;
@@ -1027,6 +1031,24 @@ namespace Time4SellersApp
             LockedTimeMin.TabIndex = 1;
             LockedTimeMin.Text = "PC Sperrzeit Schwelle:";
             // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(18, 274);
+            label16.Name = "label16";
+            label16.Size = new Size(120, 15);
+            label16.TabIndex = 29;
+            label16.Text = "Überstunden gesamt:";
+            // 
+            // OTgesamt
+            // 
+            OTgesamt.AutoSize = true;
+            OTgesamt.Location = new Point(144, 274);
+            OTgesamt.Name = "OTgesamt";
+            OTgesamt.Size = new Size(39, 15);
+            OTgesamt.TabIndex = 30;
+            OTgesamt.Text = "Lädt...";
+            // 
             // UserView
             // 
             ClientSize = new Size(474, 561);
@@ -1079,5 +1101,7 @@ namespace Time4SellersApp
         private Label label15;
         private CheckBox autostartCheckBox;
         private Label label14;
+        private Label OTgesamt;
+        private Label label16;
     }
 }
