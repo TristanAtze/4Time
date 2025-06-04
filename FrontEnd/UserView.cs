@@ -187,9 +187,10 @@ namespace Time4SellersApp
             var today = dateTimePickerOverview.Value.Date;
             int diff = (7 + (today.DayOfWeek - DayOfWeek.Monday)) % 7;
             var weekStart = today.AddDays(-diff);
+            var weekEnd = weekStart.AddDays(5);
 
             var entriesToday = AllEntrys.Where(e => e.Start.Date == today);
-            var entriesWeek = AllEntrys.Where(e => e.Start.Date >= weekStart && e.Start.Date <= today.Date);
+            var entriesWeek = AllEntrys.Where(e => e.Start.Date >= weekStart && e.Start.Date <= weekEnd.Date);
 
             var isWorkLookup = _allCategorys.ToDictionary(c => c.CategoryID, c => c.IsWorkTime);
 
