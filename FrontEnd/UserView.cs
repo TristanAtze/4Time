@@ -222,10 +222,27 @@ namespace Time4SellersApp
             pauseWeek = TimeSpan.FromHours(pauseWeek.TotalDays * 24);
             var pauseWeekHours = pauseWeek.Hours + pauseWeek.Days * 24;
 
+            string pauseWeekHoursStr = pauseWeekHours.ToString();
+            string pauseWeekMinutesStr = pauseWeek.Minutes.ToString();
+            string workWeekHoursStr = workWeekHours.ToString();
+            string WorkWeekMinutesStr = workWeek.Minutes.ToString();
+
+            if (pauseWeekHours < 10)
+                pauseWeekHoursStr = "0" + pauseWeekHours;
+
+            if (pauseWeek.Minutes < 10)
+                pauseWeekMinutesStr = "0" + pauseWeek.Minutes;
+
+            if(workWeekHours < 10)
+                workWeekHoursStr = "0" + workWeekHours;
+
+            if (workWeek.Minutes < 10)
+                WorkWeekMinutesStr = "0" + workWeek.Minutes;
+
             PTToday.Text = $"{pauseToday:hh\\:mm} std";
-            PTWeek.Text = $"{pauseWeekHours}:{pauseWeek.Minutes} std";
+            PTWeek.Text = $"{pauseWeekHoursStr}:{pauseWeekMinutesStr} std";
             WTToday.Text = $"{workToday:hh\\:mm} std";
-            WTWeek.Text = $"{workWeekHours}:{workWeek.Minutes} std";
+            WTWeek.Text = $"{workWeekHoursStr}:{WorkWeekMinutesStr} std";
             OTToday.Text = $"{(overtimeToday > TimeSpan.Zero ? overtimeToday : TimeSpan.Zero):hh\\:mm} std";
             OTWeek.Text = $"{(overtimeWeek > TimeSpan.Zero ? overtimeWeek : TimeSpan.Zero):hh\\:mm} std";
 
