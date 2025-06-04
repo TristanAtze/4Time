@@ -8,6 +8,8 @@ namespace Time4SellersApp;
 
 partial class UserView
 {
+    private static bool _isOutlookImporting = false;
+
     private void RbStartzeitEndzeit_CheckedChanged(object sender, EventArgs e)
     {
         StartzeitDauerStart.Enabled = false;
@@ -271,19 +273,34 @@ partial class UserView
         StartzeitEndzeitStart.Text = endzeit.ToString();
         StartzeitDauerStart.Text = endzeit.ToString();
     }
-
+    
     private void button3_Click(object sender, EventArgs e)
     {
-        List<Entry> OutlookEntries = OutlookCalendar.DoOutlookIntegration();
-        if (OutlookEntries.IsNullOrEmpty())
+        if (_isOutlookImporting) return;
+        _isOutlookImporting = true;
+        button3.Text = "Lädt...";
+        button3.Invalidate();
+        button3.Update();
+        Task.Run(async () =>
         {
-            MessageBox.Show("Keine Einträge aus Outlook gefunden.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            return;
-        }
-        foreach (var Oe in OutlookEntries)
-        {
-            //Writer.Insert("Entries", Oe);
-        }
+            List<Entry> OutlookEntries = await OutlookCalendar.DoOutlookIntegrationAsync([.. AllEntrys.Select(x => x.Start.Date)]);
+            if (OutlookEntries.IsNullOrEmpty())
+            {
+                MessageBox.Show("Keine Einträge aus Outlook gefunden.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                foreach (var Oe in OutlookEntries)
+                {
+                    Writer.Insert("Entries", Oe);
+                }
+                MessageBox.Show($"{OutlookEntries.Count} Einträge aus Outlook importiert.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            _isOutlookImporting = false;
+            button3.Text = "Urlaub/Berufsschule";
+            button3.Invalidate();
+            button3.Update();
+        });
     }
 
     private void LockPcTime_ValueChanged(object sender, EventArgs e)
