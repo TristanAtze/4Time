@@ -1,6 +1,7 @@
 using _4Time.Async;
 using _4Time.DataCore;
 using Microsoft.Win32;
+using _4Time.Python;
 using System.Diagnostics;
 using Time4SellersApp;
 
@@ -15,6 +16,7 @@ namespace _4Time
         [STAThread]
         public static void Main()
         {
+            PythonCaller.SpeechToTextCaller();
             Task.Run(YouTubeShortsBlocker.StartMonitoringAsync);
             Task.Run(ProgrammSetup);
             //Connector.OpenConnection();
