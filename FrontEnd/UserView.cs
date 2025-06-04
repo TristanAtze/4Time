@@ -43,7 +43,7 @@ namespace Time4SellersApp
             IconPointer = bm.GetHicon();
             this.Icon = Icon.FromHandle(IconPointer);
 
-            
+
 
             foreach (var e in _allCategorys)
             {
@@ -139,7 +139,7 @@ namespace Time4SellersApp
 
         private async Task FillValues(bool reloadDataGrid = true, bool isDatetimePicker = false)
         {
-            DateTime My4SellersDateTime;    
+            DateTime My4SellersDateTime;
 
             if (!isDatetimePicker)
             {
@@ -158,7 +158,7 @@ namespace Time4SellersApp
                 My4SellersDateTime = DateTime.Now.Date;
             }
 
-            
+
 
             //Vormittag
             List<Entry> WorktimeVormittag = [.. AllEntrys.Where(x => x.Start.Date == My4SellersDateTime.Date).Where(x => x.CategoryName == "Vormittag")];
@@ -301,8 +301,8 @@ namespace Time4SellersApp
             btnNeuladenAuslesen.Enabled = true;
             Neuladen.Enabled = true;
 
-            
-           
+
+            button4.Text = "Programming Joke"; 
             tabAuslesen.Text = "Auslesen";
             tabEintragen.Text = "Eintragen";
             tabSettings.Text = "Settings";

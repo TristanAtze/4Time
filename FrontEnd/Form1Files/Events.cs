@@ -262,7 +262,7 @@ partial class UserView
 
     private void button1_Click(object sender, EventArgs e)
     {
-        MessageBox.Show($"{DadJokes.GetRandomJoke()}", "Dad jokes", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        MessageBox.Show($"{DadJokes.GetRandomDadJoke()}", "Dad jokes", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
     }
 
@@ -311,5 +311,10 @@ partial class UserView
             decimal newLockMinutes = numericUpDownControl.Value;
             Task.Run(() => LockPcWhenInaktive.SetLockPcTime(newLockMinutes));
         }
+    }
+
+    private void button4_Click(object sender, EventArgs e)
+    {
+        MessageBox.Show(ProgrammingJoke.GetRandomProgrammingJoke(), "Programming Joke", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 }
