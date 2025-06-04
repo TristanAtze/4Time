@@ -43,7 +43,7 @@ public static class HighlySecureAuthenticatedVersionedCipher
     private const int Pbkdf2SaltSizeBytes = 16;
 
     // SEHR hohe Iterationen für PBKDF2.
-    private const int Pbkdf2Iterations =100000; // Oder mehr, je nach Performance-Budget
+    private const int Pbkdf2Iterations = 2; // Oder mehr, je nach Performance-Budget
 
     /// <summary>
     /// Löscht den Inhalt eines Byte-Arrays sicher, indem er mit Nullen überschrieben wird.
@@ -56,9 +56,6 @@ public static class HighlySecureAuthenticatedVersionedCipher
         if (data == null) return;
         // Überschreibt den Speicher mit Nullen.
         new Span<byte>(data).Clear();
-        // Optional: Füge eine kleine Verzögerung hinzu, um JIT/Compiler-Optimierungen zu erschweren,
-        // die das Löschen überspringen könnten, aber das ist umstritten und kann Performance beeinträchtigen.
-        // Thread.Sleep(1); // Beispiel für Verzögerung (meist unnötig)
     }
 
 
@@ -259,7 +256,6 @@ public static partial class WindowsCredentialManager
     internal enum CREDENTIAL_TYPE : uint
     {
         GENERIC = 1,
-        // ... andere Typen
     }
 
     // Fix for CS0051: Make the CRED_PERSIST enum public to match the accessibility of the SavePassword method.

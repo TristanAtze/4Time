@@ -58,16 +58,13 @@ namespace Time4SellersApp
 
             rbStartzeitEndzeit.Checked = true;
 
-            FillValues();
+            _ = FillValues();
 
             LogginName.Text = Connector.FirstName + " " + Connector.LastName;
 
             LoadSettings();
 
             TrackLockedTime.InitializeAndStartTracking(this);
-
-            dateTimePicker1.Value = DateTime.Now.Date;
-            dateTimePickerOverview.Value = DateTime.Now.Date;
         }
 
         public static async Task<List<Entry>> GetAllEntriesAsync()
@@ -142,9 +139,26 @@ namespace Time4SellersApp
 
         private async Task FillValues(bool reloadDataGrid = true, bool isDatetimePicker = false)
         {
-            await AwaitEntryTask();
+            DateTime My4SellersDateTime;    
 
-            DateTime My4SellersDateTime = dateTimePicker1.Value.Date;
+            if (!isDatetimePicker)
+            {
+                await AwaitEntryTask();
+            }
+
+            My4SellersDateTime = dateTimePicker1.Value.Date;
+
+            if (!isDatetimePicker)
+            {
+                dateTimePicker1.Value = DateTime.Now.Date;
+                dateTimePickerOverview.Value = DateTime.Now.Date;
+            }
+            else
+            {
+                My4SellersDateTime = DateTime.Now.Date;
+            }
+
+            
 
             //Vormittag
             List<Entry> WorktimeVormittag = [.. AllEntrys.Where(x => x.Start.Date == My4SellersDateTime.Date).Where(x => x.CategoryName == "Vormittag")];
@@ -287,6 +301,8 @@ namespace Time4SellersApp
             btnNeuladenAuslesen.Enabled = true;
             Neuladen.Enabled = true;
 
+            
+           
             tabAuslesen.Text = "Auslesen";
             tabEintragen.Text = "Eintragen";
             tabSettings.Text = "Settings";
