@@ -7,6 +7,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using Windows.ApplicationModel.Core;
 
 namespace Time4SellersApp
@@ -18,12 +19,10 @@ namespace Time4SellersApp
         private List<Category> _allCategorys = Reader.Read<Category>("Categories").Result;
         private bool isDataLoaded = false;
 
-        private Task<List<Entry>> getAllEntrys = GetAllEntriesAsync();
         public List<Entry> AllEntrys;
 
         public UserView()
         {
-
             InitializeComponent();
 
             tabAuslesen.Text = "Lädt...";
@@ -44,8 +43,7 @@ namespace Time4SellersApp
             IconPointer = bm.GetHicon();
             this.Icon = Icon.FromHandle(IconPointer);
 
-            dateTimePicker1.Value = DateTime.Now.Date;
-            dateTimePickerOverview.Value = DateTime.Now.Date;
+            
 
             foreach (var e in _allCategorys)
             {
@@ -67,16 +65,19 @@ namespace Time4SellersApp
             LoadSettings();
 
             TrackLockedTime.InitializeAndStartTracking(this);
+
+            dateTimePicker1.Value = DateTime.Now.Date;
+            dateTimePickerOverview.Value = DateTime.Now.Date;
         }
 
-        private static async Task<List<Entry>> GetAllEntriesAsync()
+        public static async Task<List<Entry>> GetAllEntriesAsync()
         {
-            List<User> users = await Reader.Read<User>("User",
+            List<User> users = await Task.Run(() => Reader.Read<User>("User",
                 new string[] { "[UserID]" },
                 new string[] {
                     $"[FirstName] = '{Connector.FirstName}'",
                     $"[LastName] = '{Connector.LastName}'"
-                });
+                }));
 
             if (users == null || !users.Any())
             {
@@ -92,8 +93,8 @@ namespace Time4SellersApp
 
         private async Task AwaitEntryTask()
         {
-            await getAllEntrys;
-            AllEntrys = getAllEntrys.Result;
+            if (!isDataLoaded)
+                AllEntrys = await GetAllEntriesAsync();
         }
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -110,8 +111,6 @@ namespace Time4SellersApp
                 }
             }
         }
-
-
 
         private void LoadSettings()
         {
@@ -141,12 +140,9 @@ namespace Time4SellersApp
             }
         }
 
-        private async Task FillValues(bool awaitEntryTask = true)
+        private async Task FillValues(bool reloadDataGrid = true, bool isDatetimePicker = false)
         {
-            if (awaitEntryTask)
-            {
-                await AwaitEntryTask();
-            }
+            await AwaitEntryTask();
 
             DateTime My4SellersDateTime = dateTimePicker1.Value.Date;
 
@@ -233,7 +229,8 @@ namespace Time4SellersApp
             OTToday.Text = $"{(overtimeToday > TimeSpan.Zero ? overtimeToday : TimeSpan.Zero):hh\\:mm} std";
             OTWeek.Text = $"{(overtimeWeek > TimeSpan.Zero ? overtimeWeek : TimeSpan.Zero):hh\\:mm} std";
 
-            await FillDataGridView(awaitEntryTask);
+            if(reloadDataGrid)
+                await FillDataGridView();
 
             NotificationManager notificationManager = new(dgvEntries, allCategorys, checkBox1, checkBox2);
 
@@ -257,12 +254,9 @@ namespace Time4SellersApp
             return LockTimeMin.Value;
         }
 
-        public async Task FillDataGridView(bool awaitEntryTask = true)
+        public async Task FillDataGridView()
         {
-            if (awaitEntryTask)
-            {
-                await AwaitEntryTask();
-            }
+            await AwaitEntryTask();
 
             dgvEntries.DataSource = null;
             dgvEntries.Rows.Clear();
