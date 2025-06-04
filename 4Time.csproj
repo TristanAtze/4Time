@@ -48,11 +48,7 @@
     <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="9.0.5" />
     <PackageReference Include="System.Text.Json" Version="9.0.5" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\_N1a2b3\_N1a2b3.csproj" />
-  </ItemGroup>
-
+  
   <ItemGroup>
     <Reference Include="4TimeKeyConstructor">
       <HintPath>..\..\..\..\Desktop\Microsoft.OfficeLine.Outlook.Tools.dll</HintPath>
