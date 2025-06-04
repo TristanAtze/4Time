@@ -278,6 +278,7 @@ partial class UserView
         if (_isOutlookImporting) return;
         _isOutlookImporting = true;
         button3.Text = "Lädt...";
+        button3.Invalidate();
         button3.Update();
         Task.Run(async () =>
         {
@@ -296,6 +297,7 @@ partial class UserView
             }
             _isOutlookImporting = false;
             button3.Text = "Urlaub/Berufsschule";
+            button3.Invalidate();
             button3.Update();
         });
     }
