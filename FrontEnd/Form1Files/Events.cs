@@ -185,6 +185,7 @@ partial class UserView
         OTToday.Text = "Lädt...";
         OTWeek.Text = "Lädt...";
         PTMin.Text = "Berechne...";
+        OTgesamt.Text = "Lädt...";
         label11.Visible = false;
 
         this.Neuladen.Enabled = false;
@@ -246,7 +247,7 @@ partial class UserView
 
     private async void UebersichtDTP_ValueChanged(object sender, EventArgs e)
     {
-       await FillValues(false);
+       await FillValues(false, true);
     }
 
     private void SettingsButton_Click(object sender, EventArgs e)
