@@ -82,7 +82,7 @@ internal class TrackLockedTime
         _mainUserViewInstance.Neuladen.PerformClick();
     }
 
-    private static void ShowLatestEntryMessageBox(Entry? entry)
+    private async static void ShowLatestEntryMessageBox(Entry? entry)
     {
         if (_mainUserViewInstance == null)
         {
@@ -127,7 +127,7 @@ internal class TrackLockedTime
             {
                 Writer.Insert("Entries", new Entry
                 {
-                    UserID = Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).Result.First().UserID,
+                    UserID = await Task.Run(async () => Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).Result.First().UserID),
                     Start = latestEntryEnd,
                     End = _pcLockedTime.Value,
                     CategoryID = category,
@@ -138,7 +138,7 @@ internal class TrackLockedTime
         }
     }
 
-    private static void ShowFirstEntryMessageBox(Entry? todaysFirstEntry)
+    private async static void ShowFirstEntryMessageBox(Entry? todaysFirstEntry)
     {
         if (_mainUserViewInstance == null)
         {
@@ -168,7 +168,7 @@ internal class TrackLockedTime
             {
                 Writer.Insert("Entries", new Entry
                 {
-                    UserID = Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).Result.First().UserID,
+                    UserID = await Task.Run(async () => Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).Result.First().UserID),
                     Start = pcStartedAt,
                     End = _pcLockedTime.Value,
                     CategoryID = 9,
@@ -179,7 +179,7 @@ internal class TrackLockedTime
         }
     }
 
-    private static void ShowPauseMessageBox()
+    private async static void ShowPauseMessageBox()
     {
         if (_mainUserViewInstance == null)
         {
@@ -206,7 +206,7 @@ internal class TrackLockedTime
             {
                 Writer.Insert("Entries", new Entry
                 {
-                    UserID = Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).Result.First().UserID,
+                    UserID = await Task.Run(async () => Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).Result.First().UserID),
                     Start = _pcLockedTime.Value,
                     End = _pcUnlockedTime.Value,
                     CategoryID = 3,
