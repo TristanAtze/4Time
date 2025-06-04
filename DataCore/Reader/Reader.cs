@@ -12,7 +12,7 @@ namespace _4Time.DataCore
 {
     internal class Reader : Connector
     {
-        private const int MaxDegreeOfParallelism = 16; //Handel wie viele Threads gleichzeitig ausgeführt werden können
+        private const int MaxDegreeOfParallelism = 8; //Handel wie viele Threads gleichzeitig ausgeführt werden können
 
         internal static async Task<List<T>> Read<T>(string table, string[]? columns = null, string[]? conditions = null, string? password = null) where T : new()
         {

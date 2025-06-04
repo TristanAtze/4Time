@@ -44,7 +44,7 @@ partial class UserView
         StartzeitEndzeitEnde.Enabled = false;
     }
 
-    private void BtnSpeichern_Click(object sender, EventArgs e)
+    private async void BtnSpeichern_Click(object sender, EventArgs e)
     {
         int? oldId = selectedBookingIndex.HasValue
                          ? AllEntrys[selectedBookingIndex.Value].EntryID
@@ -110,7 +110,7 @@ partial class UserView
         { 
             NotificationManager notificationManager = new(dgvEntries, allCategorys, checkBox1, checkBox2); 
         }
-        FillValues();
+        await FillValues(false);
     }
 
     private void DgvEntries_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -194,7 +194,7 @@ partial class UserView
         {
             AllEntrys.Clear();
             await Task.Run(() => DisableReloadButton.PerformDataReloadAsync(this));
-            await FillValues(false);
+            await FillValues();
         }
         catch (Exception ex)
         {
@@ -246,7 +246,7 @@ partial class UserView
 
     private async void UebersichtDTP_ValueChanged(object sender, EventArgs e)
     {
-       await FillValues();
+       await FillValues(false);
     }
 
     private void SettingsButton_Click(object sender, EventArgs e)
