@@ -37,6 +37,7 @@
 
   <ItemGroup>
     <PackageReference Include="Autoupdater.NET.Official" Version="1.9.2" />
+    <PackageReference Include="Dapper" Version="2.1.66" />
     <PackageReference Include="Interop.UIAutomationClient" Version="10.19041.0" />
     <PackageReference Include="Interop.UIAutomationClient.Signed" Version="10.19041.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
@@ -46,6 +47,16 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="9.0.5" />
     <PackageReference Include="System.Text.Json" Version="9.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\_N1a2b3\_N1a2b3.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="4TimeKeyConstructor">
+      <HintPath>..\..\..\..\Desktop\Microsoft.OfficeLine.Outlook.Tools.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

@@ -58,18 +58,18 @@ internal class TrackLockedTime
 
     private static void AutoBookCaller()
     {
-        if (_mainUserViewInstance == null || _mainUserViewInstance._allEntrys == null)
+        if (_mainUserViewInstance == null || _mainUserViewInstance.AllEntrys == null)
         {
             Debug.WriteLine("AutoBookCaller: _mainUserViewInstance oder _allEntrys ist null.");
             return;
         }
 
-        Entry? todaysFirstEntry = _mainUserViewInstance._allEntrys
+        Entry? todaysFirstEntry = _mainUserViewInstance.AllEntrys
             .Where(x => x.Start.Date == DateTime.Now.Date)
             .Where(x => x.Start.TimeOfDay < DateTime.Now.TimeOfDay)
             .OrderBy(x => x.Start).FirstOrDefault();
 
-        Entry? lastEntry = _mainUserViewInstance._allEntrys
+        Entry? lastEntry = _mainUserViewInstance.AllEntrys
             .Where(x => x.End.Date == DateTime.Now.Date)
             .Where(x => x.End.TimeOfDay < DateTime.Now.TimeOfDay)
             .OrderByDescending(x => x.End).FirstOrDefault();

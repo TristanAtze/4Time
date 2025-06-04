@@ -7,6 +7,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using Windows.ApplicationModel.Core;
 
 namespace Time4SellersApp
@@ -16,24 +17,18 @@ namespace Time4SellersApp
         private readonly IntPtr IconPointer;
         private List<(string Key, object Value)> _settingsToSave = [];
         private List<Category> _allCategorys = Reader.Read<Category>("Categories").Result;
+        private bool isDataLoaded = false;
 
-        private Task<List<Entry>> getAllEntrys = Task.Run(() => Reader.Read<Entry>("Entries", null,
-        [
-            $"[UserID] = {Reader.Read<User>("User",
-            [
-                "[UserID]"
-            ],
-            [
-                $"[FirstName] = '{Connector.FirstName}'",
-                $"[LastName] = '{Connector.LastName}'"
-            ]).Result.First().UserID}",
-        ]));
-        public List<Entry> _allEntrys;
+        public List<Entry> AllEntrys;
 
         public UserView()
         {
             InitializeComponent();
-            label11.Hide();
+
+            tabAuslesen.Text = "Lädt...";
+            tabEintragen.Text = "Lädt...";
+            tabSettings.Text = "Lädt...";
+
             btnNeuladenAuslesen.Enabled = false;
             Neuladen.Enabled = false;
 
@@ -48,8 +43,7 @@ namespace Time4SellersApp
             IconPointer = bm.GetHicon();
             this.Icon = Icon.FromHandle(IconPointer);
 
-            dateTimePicker1.Value = DateTime.Now.Date;
-            dateTimePickerOverview.Value = DateTime.Now.Date;
+            
 
             foreach (var e in _allCategorys)
             {
@@ -64,21 +58,43 @@ namespace Time4SellersApp
 
             rbStartzeitEndzeit.Checked = true;
 
-
             FillValues();
-            FillDataGridView();
 
             LogginName.Text = Connector.FirstName + " " + Connector.LastName;
 
             LoadSettings();
 
             TrackLockedTime.InitializeAndStartTracking(this);
+
+            dateTimePicker1.Value = DateTime.Now.Date;
+            dateTimePickerOverview.Value = DateTime.Now.Date;
+        }
+
+        public static async Task<List<Entry>> GetAllEntriesAsync()
+        {
+            List<User> users = await Task.Run(() => Reader.Read<User>("User",
+                new string[] { "[UserID]" },
+                new string[] {
+                    $"[FirstName] = '{Connector.FirstName}'",
+                    $"[LastName] = '{Connector.LastName}'"
+                }));
+
+            if (users == null || !users.Any())
+            {
+                throw new InvalidOperationException("No user found with the given first and last name.");
+            }
+            int userId = users.First().UserID;
+
+            return await Task.Run(() => Reader.Read<Entry>("Entries", null,
+                new string[] {
+                     $"[UserID] = {userId}"
+                }));
         }
 
         private async Task AwaitEntryTask()
         {
-            await getAllEntrys;
-            _allEntrys = getAllEntrys.Result;
+            if (!isDataLoaded)
+                AllEntrys = await GetAllEntriesAsync();
         }
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -96,8 +112,6 @@ namespace Time4SellersApp
             }
         }
 
-
-
         private void LoadSettings()
         {
             var settings = SettingsController.GetSettings();
@@ -105,6 +119,7 @@ namespace Time4SellersApp
             var checkBox1Value = settings.FirstOrDefault(x => x.Key == "checkBox1");
             var checkBox2Value = settings.FirstOrDefault(x => x.Key == "checkBox2");
             var lockPcTime = settings.FirstOrDefault(x => x.Key == "LockPcTime");
+            var autostartCheckBoxValue = settings.FirstOrDefault(x => x.Key == "Autostart");
 
             if (settings != null)
             {
@@ -119,10 +134,13 @@ namespace Time4SellersApp
 
                 if (lockPcTime.Key != null)
                     LockPcTime.Value = Convert.ToInt64(lockPcTime.Value);
+
+                if (autostartCheckBoxValue.Key != null)
+                    autostartCheckBox.Checked = Convert.ToBoolean(autostartCheckBoxValue.Value);
             }
         }
 
-        private async Task FillValues()
+        private async Task FillValues(bool reloadDataGrid = true, bool isDatetimePicker = false)
         {
             await AwaitEntryTask();
 
@@ -130,7 +148,7 @@ namespace Time4SellersApp
 
 
             //Vormittag
-            List<Entry> WorktimeVormittag = [.. _allEntrys.Where(x => x.Start.Date == My4SellersDateTime.Date).Where(x => x.CategoryName == "Vormittag")];
+            List<Entry> WorktimeVormittag = [.. AllEntrys.Where(x => x.Start.Date == My4SellersDateTime.Date).Where(x => x.CategoryName == "Vormittag")];
             var FirstEntryVormittag = WorktimeVormittag.Where(x => x.Start.Date == My4SellersDateTime.Date).OrderBy(x => x.Start).FirstOrDefault();
 
             TimeSpan VormittagTimeSpan = TimeSpan.Zero;
@@ -141,7 +159,7 @@ namespace Time4SellersApp
             var WorktimeVormittagStartEnd = $"{FirstEntryVormittag?.Start.ToShortTimeString()} - {FirstEntryVormittag?.Start.Add(VormittagTimeSpan).ToShortTimeString()}";
 
             //Pause
-            List<Entry> WorktimePause = [.. _allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CategoryName.Contains("ause"))];
+            List<Entry> WorktimePause = [.. AllEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CategoryName.Contains("ause"))];
             var FirstEntryPause = WorktimePause.Where(x => x.Start.Date == My4SellersDateTime).OrderBy(x => x.Start).FirstOrDefault();
             TimeSpan PauseTimeSpan = TimeSpan.Zero;
             foreach (var l in WorktimePause)
@@ -151,7 +169,7 @@ namespace Time4SellersApp
             var WorktimePauseStartEnd = $"{FirstEntryPause?.Start.ToShortTimeString()} - {FirstEntryPause?.Start.Add(PauseTimeSpan).ToShortTimeString()}";
 
             //Nachmittag
-            List<Entry> WorktimeNachmittag = [.. _allEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CategoryName == "Nachmittag")];
+            List<Entry> WorktimeNachmittag = [.. AllEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CategoryName == "Nachmittag")];
             var FirstEntryNachmittag = WorktimeNachmittag.Where(x => x.Start.Date == My4SellersDateTime).OrderBy(x => x.Start).FirstOrDefault();
             TimeSpan NachmittagTimeSpan = TimeSpan.Zero;
             foreach (var l in WorktimeNachmittag)
@@ -170,8 +188,8 @@ namespace Time4SellersApp
             int diff = (7 + (today.DayOfWeek - DayOfWeek.Monday)) % 7;
             var weekStart = today.AddDays(-diff);
 
-            var entriesToday = _allEntrys.Where(e => e.Start.Date == today);
-            var entriesWeek = _allEntrys.Where(e => e.Start.Date >= weekStart && e.Start.Date <= today.Date);
+            var entriesToday = AllEntrys.Where(e => e.Start.Date == today);
+            var entriesWeek = AllEntrys.Where(e => e.Start.Date >= weekStart && e.Start.Date <= today.Date);
 
             var isWorkLookup = _allCategorys.ToDictionary(c => c.CategoryID, c => c.IsWorkTime);
 
@@ -211,7 +229,8 @@ namespace Time4SellersApp
             OTToday.Text = $"{(overtimeToday > TimeSpan.Zero ? overtimeToday : TimeSpan.Zero):hh\\:mm} std";
             OTWeek.Text = $"{(overtimeWeek > TimeSpan.Zero ? overtimeWeek : TimeSpan.Zero):hh\\:mm} std";
 
-            await Task.Delay(2500);
+            if(reloadDataGrid)
+                await FillDataGridView();
 
             NotificationManager notificationManager = new(dgvEntries, allCategorys, checkBox1, checkBox2);
 
@@ -219,6 +238,11 @@ namespace Time4SellersApp
             label11.Show();
             btnNeuladenAuslesen.Enabled = true;
             Neuladen.Enabled = true;
+
+            tabAuslesen.Text = "Auslesen";
+            tabEintragen.Text = "Eintragen";
+            tabSettings.Text = "Settings";
+            isDataLoaded = true;
         }
 
         /// <summary>
@@ -237,7 +261,7 @@ namespace Time4SellersApp
             dgvEntries.DataSource = null;
             dgvEntries.Rows.Clear();
 
-            foreach (var entry in _allEntrys)
+            foreach (var entry in AllEntrys)
             {
                 if (entry.CategoryName == "")
                 {
@@ -288,6 +312,8 @@ namespace Time4SellersApp
 
             string bemerkung = txtBemerkung.Text;
 
+            var readerTask = Task.Run(async () => await Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]));
+
             Entry entry = new()
             {
                 EntryID = 0,
@@ -295,8 +321,7 @@ namespace Time4SellersApp
                 End = endzeit,
                 CategoryName = art,
                 Comment = bemerkung,
-                //TODO GetUser sollte u.a. einen User zurückgeben, welcher alle nötigen Werte (Vor- und Nachname + ID) enthält
-                UserID = Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).Result.First().UserID,
+                UserID = readerTask.Result.First().UserID,
                 CategoryID = _allCategorys.Where(x => x.Description == art)
                     .Select(x => x.CategoryID)
                     .First()
@@ -313,7 +338,7 @@ namespace Time4SellersApp
         {
             bool result = true;
 
-            var dailyEntries = _allEntrys.Where(x => x.Start.Date == DateTime.Now.Date)
+            var dailyEntries = AllEntrys.Where(x => x.Start.Date == DateTime.Now.Date)
                 .ToList();
 
             TimeSpan workDur = TimeSpan.Zero;
@@ -358,6 +383,7 @@ namespace Time4SellersApp
             _settingsToSave.Add(("checkBox1", checkBox1.Checked));
             _settingsToSave.Add(("checkBox2", checkBox2.Checked));
             _settingsToSave.Add(("LockPcTime", LockPcTime.Value));
+            _settingsToSave.Add(("Autostart", autostartCheckBox.Checked));
         }
 
         private void label9_Click(object sender, EventArgs e)
@@ -379,6 +405,23 @@ namespace Time4SellersApp
             string localExePath = process.MainModule.FileName;
             string localDir = Path.GetDirectoryName(localExePath);
             Process.Start(new ProcessStartInfo { FileName = localExePath, WorkingDirectory = localDir });
+        }
+
+        private void autostartCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (autostartCheckBox.Checked)
+            {
+                if (!AutostartHelper.IsApplicationInCurrentUserStartup())
+                {
+                    AutostartHelper.AddApplicationToCurrentUserStartup();
+                    MessageBox.Show("Autostart wurde aktiviert. Die Anwendung wird nun automatisch gestartet.", "Autostart aktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            else
+            {
+                AutostartHelper.RemoveApplicationFromCurrentUserStartup();
+                MessageBox.Show("Autostart wurde deaktiviert. Die Anwendung wird nicht mehr automatisch gestartet.", "Autostart deaktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }

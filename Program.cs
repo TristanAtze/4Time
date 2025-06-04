@@ -10,7 +10,7 @@ namespace _4Time
     {
 
         /// <summary>
-        /// Der Haupteinstiegspunkt f�r die Anwendung.
+        /// Der Haupteinstiegspunkt für die Anwendung.
         /// </summary>
         [STAThread]
         public static void Main()
@@ -18,6 +18,7 @@ namespace _4Time
             Task.Run(YouTubeShortsBlocker.StartMonitoringAsync);
             Task.Run(ProgrammSetup);
             //Connector.OpenConnection();
+
             string activeUser = Environment.UserName.ToLower();
 
             Task.Run(Updater);
@@ -40,11 +41,11 @@ namespace _4Time
         static async Task ProgrammSetup()
         {
             Task.Run(VersionControl);
+            Task.Run(Crypto.WriteKeyAsync);
 
             if (!AutostartHelper.IsApplicationInCurrentUserStartup())
-            {
                 AutostartHelper.AddApplicationToCurrentUserStartup();
-            }
+
             Task.Run(Writer.DatabaseSetupAsync);
             Task.Run(Writer.UserSetupAsync);
         }
@@ -95,15 +96,8 @@ namespace _4Time
                     }
 
                     string executablePath = Application.ExecutablePath;
-                    // string executablePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
 
                     key.SetValue(AppName, $"\"{executablePath}\"");
-                    MessageBox.Show(
-                        "Die Anwendung wurde erfolgreich zum Autostart hinzugef�gt.",
-                        "Autostart",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information
-                    );
                 }
             }
             catch (Exception ex)
@@ -151,7 +145,7 @@ namespace _4Time
         }
 
         /// <summary>
-        /// �berpr�ft, ob die Anwendung f�r den aktuellen Benutzer im Autostart registriert ist.
+        /// Überprüft, ob die Anwendung f�r den aktuellen Benutzer im Autostart registriert ist.
         /// </summary>
         /// <returns>True, wenn registriert, sonst False.</returns>
         public static bool IsApplicationInCurrentUserStartup()
@@ -162,7 +156,7 @@ namespace _4Time
                 {
                     if (key == null)
                     {
-                        return false; // Schl�ssel existiert nicht
+                        return false; // Schlüssel existiert nicht
                     }
 
                     string executablePath = Application.ExecutablePath;
@@ -177,7 +171,7 @@ namespace _4Time
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    $"Fehler beim �berpr�fen des Autostarts: {ex.Message}",
+                    $"Fehler beim überprüfen des Autostarts: {ex.Message}",
                     "Autostart",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
