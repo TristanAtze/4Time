@@ -321,13 +321,13 @@ partial class UserView
 
     private void PythonCaller_OnErrorOccurred(string errorMessage)
     {
-        if (lblStatus.InvokeRequired)
+        if (txtOutputLog.InvokeRequired)
         {
-            lblStatus.Invoke(new Action(() => lblStatus.Text = errorMessage));
+            txtOutputLog.Invoke(new Action(() => txtOutputLog.Text = errorMessage));
         }
         else
         {
-            lblStatus.Text = errorMessage;
+            txtOutputLog.Text = errorMessage;
         }
     }
 
@@ -428,25 +428,25 @@ partial class UserView
     }
     private void NavigateToAuslesenSeite()
     {
-        lblStatus.Text = "Zur Auslesen-Seite navigiert.";
+        txtOutputLog.Text = "Zur Auslesen-Seite navigiert.";
         tabControl.SelectedTab = tabAuslesen;
     }
 
     private void NavigateToSettingsSeite()
     {
-        lblStatus.Text = "Zur Einstellungen-Seite navigiert.";
+        txtOutputLog.Text = "Zur Einstellungen-Seite navigiert.";
         tabControl.SelectedTab = tabSettings;
     }
 
     private void NavigateToUebersichtSeite()
     {
-        lblStatus.Text = "Zur Übersicht navigiert.";
+        txtOutputLog.Text = "Zur Übersicht navigiert.";
         tabControl.SelectedTab = tabUebersicht;
     }
 
     private void NavigateToEintragenSeite()
     {
-        lblStatus.Text = "Zur Eintragen-Seite navigiert.";
+        txtOutputLog.Text = "Zur Eintragen-Seite navigiert.";
         tabControl.SelectedTab = tabEintragen;
     }
 
@@ -454,27 +454,27 @@ partial class UserView
     {
         if (SpeechToTextCheck.Checked)
         {
-            lblStatus.Text = "Starte Spracherkennung... (Dieser Prozess kann ein paar Sekunden Dauern)";
-            _4Time.Python.PythonCaller.OnTextErkannt += PythonCaller_OnTextErkannt;
-            _4Time.Python.PythonCaller.OnErrorOccurred += PythonCaller_OnErrorOccurred;
-            _4Time.Python.PythonCaller.SpeechToTextCaller();
+            txtOutputLog.Text = "Starte Spracherkennung... (Dieser Prozess kann ein paar Sekunden Dauern)";
+            PythonCaller.OnTextErkannt += PythonCaller_OnTextErkannt;
+            PythonCaller.OnErrorOccurred += PythonCaller_OnErrorOccurred;
+            PythonCaller.SpeechToTextCaller();
         }
         else
         {
-            lblStatus.Text = "Stoppe Spracherkennung...";
-            _4Time.Python.PythonCaller.StopSpeechToText();
-            lblStatus.Text = "Spracherkennung gestoppt."; 
+            txtOutputLog.Text = "Stoppe Spracherkennung...";
+            PythonCaller.StopSpeechToText();
+            txtOutputLog.Text = "Spracherkennung gestoppt."; 
         }
     }
 
     protected override void OnFormClosing(FormClosingEventArgs e)
     {
-        _4Time.Python.PythonCaller.OnTextErkannt -= PythonCaller_OnTextErkannt;
-        _4Time.Python.PythonCaller.OnErrorOccurred -= PythonCaller_OnErrorOccurred;
+        PythonCaller.OnTextErkannt -= PythonCaller_OnTextErkannt;
+        PythonCaller.OnErrorOccurred -= PythonCaller_OnErrorOccurred;
 
         if (SpeechToTextCheck.Checked) 
         {
-            _4Time.Python.PythonCaller.StopSpeechToText();
+            PythonCaller.StopSpeechToText();
         }
         base.OnFormClosing(e);
     }

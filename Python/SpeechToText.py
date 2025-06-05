@@ -18,7 +18,7 @@ def speech_callback(r, audio_data):
         print(text) 
         sys.stdout.flush() 
     except sr.UnknownValueError:
-        print("Spracherkennung konnte nichts verstehen.", file=sys.stderr)
+        print("Bereit...", file=sys.stderr)
         sys.stderr.flush()
     except sr.RequestError as e:
         print(f"Fehler bei der Anfrage an den Spracherkennungsdienst; {e}", file=sys.stderr)

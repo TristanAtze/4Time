@@ -60,7 +60,7 @@ namespace _4Time.Python
                 Debug.WriteLine($"DEBUG PythonCaller.ErrorDataReceived: Empfangene Fehlerdaten = '{e.Data}'");
                 if (e.Data != null)
                 {
-                    OnErrorOccurred?.Invoke($"Python Fehler: {e.Data}");
+                    OnErrorOccurred?.Invoke($"{e.Data}");
                 }
             };
 
@@ -90,7 +90,7 @@ namespace _4Time.Python
                 try
                 {
                     pythonProcess.Kill();
-                    pythonProcess.WaitForExit(2000); 
+                    pythonProcess.WaitForExit(3500); 
 
                     if (!pythonProcess.HasExited)
                     {

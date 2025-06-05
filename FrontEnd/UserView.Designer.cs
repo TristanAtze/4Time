@@ -899,6 +899,7 @@ namespace Time4SellersApp
             textBox1.Location = new Point(8, 371);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
+            textBox1.ReadOnly = true;
             textBox1.Size = new Size(372, 83);
             textBox1.TabIndex = 25;
             textBox1.Text = resources.GetString("textBox1.Text");
@@ -907,6 +908,8 @@ namespace Time4SellersApp
             // 
             txtOutputLog.Location = new Point(8, 325);
             txtOutputLog.Name = "txtOutputLog";
+            txtOutputLog.PlaceholderText = "Hier stehen die von der Spracherkennung verstandenen wörter";
+            txtOutputLog.ReadOnly = true;
             txtOutputLog.Size = new Size(372, 23);
             txtOutputLog.TabIndex = 24;
             // 
@@ -915,9 +918,9 @@ namespace Time4SellersApp
             lblStatus.AutoSize = true;
             lblStatus.Location = new Point(8, 307);
             lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(39, 15);
+            lblStatus.Size = new Size(81, 15);
             lblStatus.TabIndex = 23;
-            lblStatus.Text = "Status";
+            lblStatus.Text = "Status: Offline";
             // 
             // label18
             // 
@@ -933,7 +936,7 @@ namespace Time4SellersApp
             // 
             SpeechToTextCheck.AutoSize = true;
             SpeechToTextCheck.Font = new Font("Segoe UI", 18F);
-            SpeechToTextCheck.Location = new Point(214, 275);
+            SpeechToTextCheck.Location = new Point(206, 267);
             SpeechToTextCheck.Name = "SpeechToTextCheck";
             SpeechToTextCheck.Size = new Size(15, 14);
             SpeechToTextCheck.TabIndex = 21;
