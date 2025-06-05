@@ -44,6 +44,8 @@ Willkommen bei **4Time**! Tauche ein in eine intelligente und sichere Welt der Z
 
 ## ✨ Update Logs (Neue Funktionen seit letzter Dokumentation) ✨
 
+* ** 📊 PerformanceV4 Update:**
+    * Das neue Performance Update (PerformanceV4) senkt druch umfassende anpassung der start- und laufzeit-Logik die Anfangsladezeit von ca. 12 Sekunden auf unter 800 Millisekunden.
 * **🗣️ Sprachsteuerung (Speech-to-Text):**
     * Integriert eine Spracherkennungsfunktion, die über ein Python-Skript (`SpeechToText.py`) und eine C#-Schnittstelle (`PythonCaller.cs`) realisiert wird.
     * Ermöglicht die Navigation zwischen den Haupt-Tabs der Anwendung (Übersicht, Eintragen, Auslesen, Settings) mittels Sprachbefehlen wie "eintragen" oder "übersicht".
