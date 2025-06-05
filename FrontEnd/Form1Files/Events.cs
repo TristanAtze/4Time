@@ -337,12 +337,12 @@ partial class UserView
         {
             txtOutputLog.Invoke(new Action(() =>
             {
-                txtOutputLog.AppendText($"Erkannt: {regrocnizedText}{Environment.NewLine}");
+                txtOutputLog.Text = $"Erkannt: {regrocnizedText}{Environment.NewLine}";
             }));
         }
         else
         {
-            txtOutputLog.AppendText($"Erkannt: {regrocnizedText}{Environment.NewLine}");
+            txtOutputLog.Text = ($"Erkannt: {regrocnizedText}{Environment.NewLine}");
         }
 
         string command = regrocnizedText.Trim().ToLowerInvariant();
