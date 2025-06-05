@@ -189,7 +189,6 @@ partial class UserView
         OTWeek.Text = "Lädt...";
         PTMin.Text = "Berechne...";
         OTgesamt.Text = "Lädt...";
-        label11.Visible = false;
 
         this.Neuladen.Enabled = false;
         this.btnNeuladenAuslesen.Enabled = false;
@@ -208,7 +207,6 @@ partial class UserView
         {
             this.Neuladen.Enabled = true;
             this.btnNeuladenAuslesen.Enabled = true;
-            label11.Visible = true;
         }
     }
 
@@ -298,7 +296,7 @@ partial class UserView
                 MessageBox.Show($"{OutlookEntries.Count} Einträge aus Outlook importiert.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             _isOutlookImporting = false;
-            button3.Text = "Urlaub/Berufsschule";
+            button3.Text = "Outlook-Import";
             button3.Invalidate();
             button3.Update();
         });

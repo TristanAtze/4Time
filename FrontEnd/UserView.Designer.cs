@@ -94,9 +94,9 @@ namespace Time4SellersApp
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserView));
             tabControl = new TabControl();
             tabUebersicht = new TabPage();
+            pictureBox3 = new PictureBox();
             OTgesamt = new Label();
             label16 = new Label();
-            label11 = new Label();
             PTMin = new Label();
             label10 = new Label();
             dateTimePickerOverview = new DateTimePicker();
@@ -121,6 +121,7 @@ namespace Time4SellersApp
             lblUeberstundenWoche = new Label();
             lblMy4SellersAusgabe = new Label();
             tabEintragen = new TabPage();
+            pictureBox2 = new PictureBox();
             button3 = new Button();
             button2 = new Button();
             label5 = new Label();
@@ -156,6 +157,7 @@ namespace Time4SellersApp
             colKommentar = new DataGridViewTextBoxColumn();
             colDauer = new DataGridViewTextBoxColumn();
             tabSettings = new TabPage();
+            label11 = new Label();
             label19 = new Label();
             textBox1 = new TextBox();
             txtOutputLog = new TextBox();
@@ -181,11 +183,16 @@ namespace Time4SellersApp
             LockTimeMin = new NumericUpDown();
             label7 = new Label();
             LockedTimeMin = new Label();
-            pictureBox2 = new PictureBox();
-            pictureBox3 = new PictureBox();
+            label21 = new Label();
+            label22 = new Label();
+            label23 = new Label();
+            label24 = new Label();
+            label25 = new Label();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
             tabEintragen.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)EndzeitDauerMinuten).BeginInit();
             ((System.ComponentModel.ISupportInitialize)EndzeitDauerStunden).BeginInit();
             ((System.ComponentModel.ISupportInitialize)StartzeitDauerMinuten).BeginInit();
@@ -196,8 +203,6 @@ namespace Time4SellersApp
             tabSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)LockPcTime).BeginInit();
             ((System.ComponentModel.ISupportInitialize)LockTimeMin).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
             SuspendLayout();
             // 
             // tabControl
@@ -219,7 +224,6 @@ namespace Time4SellersApp
             tabUebersicht.Controls.Add(pictureBox3);
             tabUebersicht.Controls.Add(OTgesamt);
             tabUebersicht.Controls.Add(label16);
-            tabUebersicht.Controls.Add(label11);
             tabUebersicht.Controls.Add(PTMin);
             tabUebersicht.Controls.Add(label10);
             tabUebersicht.Controls.Add(dateTimePickerOverview);
@@ -250,6 +254,16 @@ namespace Time4SellersApp
             tabUebersicht.TabIndex = 0;
             tabUebersicht.Text = "Übersicht";
             // 
+            // pictureBox3
+            // 
+            pictureBox3.ImageLocation = "res/4TIMELogo.gif";
+            pictureBox3.Location = new Point(0, 0);
+            pictureBox3.Name = "pictureBox3";
+            pictureBox3.Size = new Size(882, 150);
+            pictureBox3.SizeMode = PictureBoxSizeMode.CenterImage;
+            pictureBox3.TabIndex = 31;
+            pictureBox3.TabStop = false;
+            // 
             // OTgesamt
             // 
             OTgesamt.AutoSize = true;
@@ -269,15 +283,6 @@ namespace Time4SellersApp
             label16.Size = new Size(191, 25);
             label16.TabIndex = 29;
             label16.Text = "Überstunden gesamt:";
-            // 
-            // label11
-            // 
-            label11.AutoSize = true;
-            label11.Location = new Point(726, 274);
-            label11.Name = "label11";
-            label11.Size = new Size(43, 25);
-            label11.TabIndex = 28;
-            label11.Text = "Uhr";
             // 
             // PTMin
             // 
@@ -534,27 +539,38 @@ namespace Time4SellersApp
             tabEintragen.Controls.Add(lblBemerkung);
             tabEintragen.Controls.Add(txtBemerkung);
             tabEintragen.Controls.Add(btnSpeichern);
+            tabEintragen.Font = new Font("Segoe UI", 14F);
             tabEintragen.Location = new Point(4, 24);
             tabEintragen.Name = "tabEintragen";
             tabEintragen.Size = new Size(882, 533);
             tabEintragen.TabIndex = 1;
             tabEintragen.Text = "Eintragen";
             // 
+            // pictureBox2
+            // 
+            pictureBox2.ImageLocation = "res/4TIMELogo.gif";
+            pictureBox2.Location = new Point(0, 0);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Size = new Size(882, 150);
+            pictureBox2.SizeMode = PictureBoxSizeMode.CenterImage;
+            pictureBox2.TabIndex = 32;
+            pictureBox2.TabStop = false;
+            // 
             // button3
             // 
-            button3.Location = new Point(182, 502);
+            button3.Location = new Point(703, 438);
             button3.Name = "button3";
-            button3.Size = new Size(133, 28);
+            button3.Size = new Size(171, 32);
             button3.TabIndex = 29;
-            button3.Text = "Urlaub/Berufsschule";
+            button3.Text = "Outlook-Import";
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click;
             // 
             // button2
             // 
-            button2.Location = new Point(425, 185);
+            button2.Location = new Point(627, 180);
             button2.Name = "button2";
-            button2.Size = new Size(200, 23);
+            button2.Size = new Size(247, 43);
             button2.TabIndex = 28;
             button2.Text = "Ende des letzten Eintrags";
             button2.UseVisualStyleBackColor = true;
@@ -563,9 +579,9 @@ namespace Time4SellersApp
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(182, 167);
+            label5.Location = new Point(8, 153);
             label5.Name = "label5";
-            label5.Size = new Size(94, 15);
+            label5.Size = new Size(150, 25);
             label5.TabIndex = 26;
             label5.Text = "Art der Buchung";
             // 
@@ -573,44 +589,44 @@ namespace Time4SellersApp
             // 
             BookingType.DropDownStyle = ComboBoxStyle.DropDownList;
             BookingType.FormattingEnabled = true;
-            BookingType.Location = new Point(182, 185);
+            BookingType.Location = new Point(8, 185);
             BookingType.Name = "BookingType";
-            BookingType.Size = new Size(207, 23);
+            BookingType.Size = new Size(207, 33);
             BookingType.TabIndex = 25;
             BookingType.SelectionChangeCommitted += BookingType_SelectionChangeCommitted;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(400, 371);
+            label3.Location = new Point(315, 418);
             label3.Name = "label3";
-            label3.Size = new Size(54, 15);
+            label3.Size = new Size(85, 25);
             label3.TabIndex = 24;
             label3.Text = "Stunden:";
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(525, 372);
+            label4.Location = new Point(511, 423);
             label4.Name = "label4";
-            label4.Size = new Size(55, 15);
+            label4.Size = new Size(87, 25);
             label4.TabIndex = 23;
             label4.Text = "Minuten:";
             // 
             // EndzeitDauerMinuten
             // 
-            EndzeitDauerMinuten.Location = new Point(587, 370);
+            EndzeitDauerMinuten.Location = new Point(604, 418);
             EndzeitDauerMinuten.Maximum = new decimal(new int[] { 59, 0, 0, 0 });
             EndzeitDauerMinuten.Name = "EndzeitDauerMinuten";
-            EndzeitDauerMinuten.Size = new Size(38, 23);
+            EndzeitDauerMinuten.Size = new Size(38, 32);
             EndzeitDauerMinuten.TabIndex = 22;
             // 
             // EndzeitDauerStunden
             // 
-            EndzeitDauerStunden.Location = new Point(461, 369);
+            EndzeitDauerStunden.Location = new Point(406, 416);
             EndzeitDauerStunden.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
             EndzeitDauerStunden.Name = "EndzeitDauerStunden";
-            EndzeitDauerStunden.Size = new Size(38, 23);
+            EndzeitDauerStunden.Size = new Size(38, 32);
             EndzeitDauerStunden.TabIndex = 21;
             // 
             // EndzeitDauerStart
@@ -618,43 +634,43 @@ namespace Time4SellersApp
             EndzeitDauerStart.AllowDrop = true;
             EndzeitDauerStart.CustomFormat = "HH:mm";
             EndzeitDauerStart.Format = DateTimePickerFormat.Custom;
-            EndzeitDauerStart.Location = new Point(182, 369);
+            EndzeitDauerStart.Location = new Point(8, 418);
             EndzeitDauerStart.Name = "EndzeitDauerStart";
-            EndzeitDauerStart.Size = new Size(200, 23);
+            EndzeitDauerStart.Size = new Size(200, 32);
             EndzeitDauerStart.TabIndex = 20;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(400, 309);
+            label2.Location = new Point(315, 344);
             label2.Name = "label2";
-            label2.Size = new Size(54, 15);
+            label2.Size = new Size(85, 25);
             label2.TabIndex = 19;
             label2.Text = "Stunden:";
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(525, 307);
+            label1.Location = new Point(511, 342);
             label1.Name = "label1";
-            label1.Size = new Size(55, 15);
+            label1.Size = new Size(87, 25);
             label1.TabIndex = 18;
             label1.Text = "Minuten:";
             // 
             // StartzeitDauerMinuten
             // 
-            StartzeitDauerMinuten.Location = new Point(586, 307);
+            StartzeitDauerMinuten.Location = new Point(604, 342);
             StartzeitDauerMinuten.Maximum = new decimal(new int[] { 59, 0, 0, 0 });
             StartzeitDauerMinuten.Name = "StartzeitDauerMinuten";
-            StartzeitDauerMinuten.Size = new Size(38, 23);
+            StartzeitDauerMinuten.Size = new Size(38, 32);
             StartzeitDauerMinuten.TabIndex = 17;
             // 
             // StartzeitDauerStunden
             // 
-            StartzeitDauerStunden.Location = new Point(461, 307);
+            StartzeitDauerStunden.Location = new Point(406, 342);
             StartzeitDauerStunden.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
             StartzeitDauerStunden.Name = "StartzeitDauerStunden";
-            StartzeitDauerStunden.Size = new Size(38, 23);
+            StartzeitDauerStunden.Size = new Size(38, 32);
             StartzeitDauerStunden.TabIndex = 16;
             // 
             // StartzeitDauerStart
@@ -662,9 +678,9 @@ namespace Time4SellersApp
             StartzeitDauerStart.AllowDrop = true;
             StartzeitDauerStart.CustomFormat = "HH:mm";
             StartzeitDauerStart.Format = DateTimePickerFormat.Custom;
-            StartzeitDauerStart.Location = new Point(182, 303);
+            StartzeitDauerStart.Location = new Point(9, 344);
             StartzeitDauerStart.Name = "StartzeitDauerStart";
-            StartzeitDauerStart.Size = new Size(200, 23);
+            StartzeitDauerStart.Size = new Size(200, 32);
             StartzeitDauerStart.TabIndex = 15;
             // 
             // StartzeitEndzeitEnde
@@ -672,9 +688,9 @@ namespace Time4SellersApp
             StartzeitEndzeitEnde.AllowDrop = true;
             StartzeitEndzeitEnde.CustomFormat = "HH:mm";
             StartzeitEndzeitEnde.Format = DateTimePickerFormat.Custom;
-            StartzeitEndzeitEnde.Location = new Point(425, 239);
+            StartzeitEndzeitEnde.Location = new Point(315, 259);
             StartzeitEndzeitEnde.Name = "StartzeitEndzeitEnde";
-            StartzeitEndzeitEnde.Size = new Size(200, 23);
+            StartzeitEndzeitEnde.Size = new Size(200, 32);
             StartzeitEndzeitEnde.TabIndex = 14;
             // 
             // StartzeitEndzeitStart
@@ -682,17 +698,17 @@ namespace Time4SellersApp
             StartzeitEndzeitStart.AllowDrop = true;
             StartzeitEndzeitStart.CustomFormat = "HH:mm";
             StartzeitEndzeitStart.Format = DateTimePickerFormat.Custom;
-            StartzeitEndzeitStart.Location = new Point(182, 239);
+            StartzeitEndzeitStart.Location = new Point(8, 259);
             StartzeitEndzeitStart.Name = "StartzeitEndzeitStart";
-            StartzeitEndzeitStart.Size = new Size(200, 23);
+            StartzeitEndzeitStart.Size = new Size(200, 32);
             StartzeitEndzeitStart.TabIndex = 12;
             // 
             // rbStartzeitEndzeit
             // 
             rbStartzeitEndzeit.AutoSize = true;
-            rbStartzeitEndzeit.Location = new Point(189, 214);
+            rbStartzeitEndzeit.Location = new Point(8, 224);
             rbStartzeitEndzeit.Name = "rbStartzeitEndzeit";
-            rbStartzeitEndzeit.Size = new Size(116, 19);
+            rbStartzeitEndzeit.Size = new Size(178, 29);
             rbStartzeitEndzeit.TabIndex = 1;
             rbStartzeitEndzeit.Text = "Startzeit - Endzeit";
             rbStartzeitEndzeit.CheckedChanged += RbStartzeitEndzeit_CheckedChanged;
@@ -700,9 +716,9 @@ namespace Time4SellersApp
             // rbStartzeitDauer
             // 
             rbStartzeitDauer.AutoSize = true;
-            rbStartzeitDauer.Location = new Point(189, 278);
+            rbStartzeitDauer.Location = new Point(9, 310);
             rbStartzeitDauer.Name = "rbStartzeitDauer";
-            rbStartzeitDauer.Size = new Size(109, 19);
+            rbStartzeitDauer.Size = new Size(167, 29);
             rbStartzeitDauer.TabIndex = 2;
             rbStartzeitDauer.Text = "Startzeit - Dauer";
             rbStartzeitDauer.CheckedChanged += RbStartzeitDauer_CheckedChanged;
@@ -710,9 +726,9 @@ namespace Time4SellersApp
             // rbEndzeitDauer
             // 
             rbEndzeitDauer.AutoSize = true;
-            rbEndzeitDauer.Location = new Point(189, 344);
+            rbEndzeitDauer.Location = new Point(9, 382);
             rbEndzeitDauer.Name = "rbEndzeitDauer";
-            rbEndzeitDauer.Size = new Size(105, 19);
+            rbEndzeitDauer.Size = new Size(161, 29);
             rbEndzeitDauer.TabIndex = 3;
             rbEndzeitDauer.Text = "Endzeit - Dauer";
             rbEndzeitDauer.CheckedChanged += RbEndzeitDauer_CheckedChanged;
@@ -720,33 +736,33 @@ namespace Time4SellersApp
             // lblInfoEintragen
             // 
             lblInfoEintragen.AutoSize = true;
-            lblInfoEintragen.Location = new Point(182, 402);
+            lblInfoEintragen.Location = new Point(184, 463);
             lblInfoEintragen.Name = "lblInfoEintragen";
-            lblInfoEintragen.Size = new Size(303, 15);
+            lblInfoEintragen.Size = new Size(488, 25);
             lblInfoEintragen.TabIndex = 4;
             lblInfoEintragen.Text = "Info: Es kann nur eine der drei Optionen gewählt werden";
             // 
             // lblBemerkung
             // 
             lblBemerkung.AutoSize = true;
-            lblBemerkung.Location = new Point(182, 453);
+            lblBemerkung.Location = new Point(30, 496);
             lblBemerkung.Name = "lblBemerkung";
-            lblBemerkung.Size = new Size(71, 15);
+            lblBemerkung.Size = new Size(112, 25);
             lblBemerkung.TabIndex = 5;
             lblBemerkung.Text = "Bemerkung:";
             // 
             // txtBemerkung
             // 
-            txtBemerkung.Location = new Point(198, 471);
+            txtBemerkung.Location = new Point(173, 493);
             txtBemerkung.Name = "txtBemerkung";
-            txtBemerkung.Size = new Size(425, 23);
+            txtBemerkung.Size = new Size(545, 32);
             txtBemerkung.TabIndex = 6;
             // 
             // btnSpeichern
             // 
-            btnSpeichern.Location = new Point(542, 500);
+            btnSpeichern.Location = new Point(751, 486);
             btnSpeichern.Name = "btnSpeichern";
-            btnSpeichern.Size = new Size(100, 30);
+            btnSpeichern.Size = new Size(123, 44);
             btnSpeichern.TabIndex = 7;
             btnSpeichern.Text = "Speichern";
             btnSpeichern.Click += BtnSpeichern_Click;
@@ -855,12 +871,12 @@ namespace Time4SellersApp
             // 
             // tabSettings
             // 
+            tabSettings.Controls.Add(label11);
             tabSettings.Controls.Add(label19);
             tabSettings.Controls.Add(textBox1);
             tabSettings.Controls.Add(txtOutputLog);
             tabSettings.Controls.Add(label18);
             tabSettings.Controls.Add(SpeechToTextCheck);
-            tabSettings.Controls.Add(label17);
             tabSettings.Controls.Add(button4);
             tabSettings.Controls.Add(label15);
             tabSettings.Controls.Add(autostartCheckBox);
@@ -871,7 +887,6 @@ namespace Time4SellersApp
             tabSettings.Controls.Add(button1);
             tabSettings.Controls.Add(u18Description);
             tabSettings.Controls.Add(checkBox2);
-            tabSettings.Controls.Add(u18);
             tabSettings.Controls.Add(label9);
             tabSettings.Controls.Add(label6);
             tabSettings.Controls.Add(checkBox1);
@@ -880,6 +895,14 @@ namespace Time4SellersApp
             tabSettings.Controls.Add(LockTimeMin);
             tabSettings.Controls.Add(label7);
             tabSettings.Controls.Add(LockedTimeMin);
+            tabSettings.Controls.Add(label21);
+            tabSettings.Controls.Add(label22);
+            tabSettings.Controls.Add(label23);
+            tabSettings.Controls.Add(u18);
+            tabSettings.Controls.Add(label25);
+            tabSettings.Controls.Add(label24);
+            tabSettings.Controls.Add(label17);
+            tabSettings.Font = new Font("Segoe UI", 12F);
             tabSettings.Location = new Point(4, 24);
             tabSettings.Name = "tabSettings";
             tabSettings.Padding = new Padding(3);
@@ -888,41 +911,52 @@ namespace Time4SellersApp
             tabSettings.Text = "Settings";
             tabSettings.UseVisualStyleBackColor = true;
             // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Font = new Font("Segoe UI", 18F);
+            label11.Location = new Point(543, 220);
+            label11.Name = "label11";
+            label11.Size = new Size(55, 32);
+            label11.TabIndex = 27;
+            label11.Text = "min";
+            // 
             // label19
             // 
             label19.AutoSize = true;
-            label19.Location = new Point(8, 336);
+            label19.Location = new Point(8, 374);
             label19.Name = "label19";
-            label19.Size = new Size(38, 15);
+            label19.Size = new Size(50, 21);
             label19.TabIndex = 26;
             label19.Text = "Tipps:";
             // 
             // textBox1
             // 
             textBox1.Enabled = false;
-            textBox1.Location = new Point(8, 354);
+            textBox1.Font = new Font("Segoe UI", 12F);
+            textBox1.Location = new Point(64, 374);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
             textBox1.ReadOnly = true;
-            textBox1.Size = new Size(422, 83);
+            textBox1.Size = new Size(570, 114);
             textBox1.TabIndex = 25;
             textBox1.Text = resources.GetString("textBox1.Text");
             // 
             // txtOutputLog
             // 
             txtOutputLog.Enabled = false;
-            txtOutputLog.Location = new Point(8, 310);
+            txtOutputLog.Location = new Point(8, 339);
             txtOutputLog.Name = "txtOutputLog";
             txtOutputLog.PlaceholderText = "Status: Offline";
             txtOutputLog.ReadOnly = true;
-            txtOutputLog.Size = new Size(422, 23);
+            txtOutputLog.Size = new Size(422, 29);
             txtOutputLog.TabIndex = 24;
             // 
             // label18
             // 
             label18.AutoSize = true;
             label18.Font = new Font("Segoe UI", 9F);
-            label18.Location = new Point(8, 292);
+            label18.Location = new Point(10, 306);
             label18.Name = "label18";
             label18.Size = new Size(372, 15);
             label18.TabIndex = 22;
@@ -932,7 +966,7 @@ namespace Time4SellersApp
             // 
             SpeechToTextCheck.AutoSize = true;
             SpeechToTextCheck.Font = new Font("Segoe UI", 18F);
-            SpeechToTextCheck.Location = new Point(206, 267);
+            SpeechToTextCheck.Location = new Point(496, 285);
             SpeechToTextCheck.Name = "SpeechToTextCheck";
             SpeechToTextCheck.Size = new Size(15, 14);
             SpeechToTextCheck.TabIndex = 21;
@@ -944,7 +978,7 @@ namespace Time4SellersApp
             // 
             label17.AutoSize = true;
             label17.Font = new Font("Segoe UI", 18F);
-            label17.Location = new Point(8, 257);
+            label17.Location = new Point(3, 271);
             label17.Name = "label17";
             label17.Size = new Size(193, 32);
             label17.TabIndex = 20;
@@ -952,9 +986,9 @@ namespace Time4SellersApp
             // 
             // button4
             // 
-            button4.Location = new Point(265, 489);
+            button4.Location = new Point(105, 494);
             button4.Name = "button4";
-            button4.Size = new Size(122, 23);
+            button4.Size = new Size(165, 36);
             button4.TabIndex = 19;
             button4.Text = "Programming-Joke";
             button4.UseVisualStyleBackColor = true;
@@ -964,7 +998,7 @@ namespace Time4SellersApp
             // 
             label15.AutoSize = true;
             label15.Font = new Font("Segoe UI", 9F);
-            label15.Location = new Point(187, 314);
+            label15.Location = new Point(10, 321);
             label15.Name = "label15";
             label15.Size = new Size(359, 15);
             label15.TabIndex = 18;
@@ -974,7 +1008,7 @@ namespace Time4SellersApp
             // 
             autostartCheckBox.AutoSize = true;
             autostartCheckBox.Font = new Font("Segoe UI", 18F);
-            autostartCheckBox.Location = new Point(309, 289);
+            autostartCheckBox.Location = new Point(496, 21);
             autostartCheckBox.Name = "autostartCheckBox";
             autostartCheckBox.Size = new Size(15, 14);
             autostartCheckBox.TabIndex = 17;
@@ -986,7 +1020,7 @@ namespace Time4SellersApp
             // 
             label14.AutoSize = true;
             label14.Font = new Font("Segoe UI", 18F);
-            label14.Location = new Point(187, 279);
+            label14.Location = new Point(10, 3);
             label14.Name = "label14";
             label14.Size = new Size(116, 32);
             label14.TabIndex = 16;
@@ -995,7 +1029,7 @@ namespace Time4SellersApp
             // LockPcTime
             // 
             LockPcTime.Font = new Font("Segoe UI", 10F);
-            LockPcTime.Location = new Point(394, 224);
+            LockPcTime.Location = new Point(496, 227);
             LockPcTime.Name = "LockPcTime";
             LockPcTime.Size = new Size(41, 25);
             LockPcTime.TabIndex = 15;
@@ -1005,7 +1039,7 @@ namespace Time4SellersApp
             // 
             label13.AutoSize = true;
             label13.Font = new Font("Segoe UI", 9F);
-            label13.Location = new Point(187, 249);
+            label13.Location = new Point(10, 252);
             label13.Name = "label13";
             label13.Size = new Size(391, 15);
             label13.TabIndex = 14;
@@ -1015,7 +1049,7 @@ namespace Time4SellersApp
             // 
             label12.AutoSize = true;
             label12.Font = new Font("Segoe UI", 18F);
-            label12.Location = new Point(8, 217);
+            label12.Location = new Point(6, 217);
             label12.Name = "label12";
             label12.Size = new Size(213, 32);
             label12.TabIndex = 13;
@@ -1023,9 +1057,9 @@ namespace Time4SellersApp
             // 
             // button1
             // 
-            button1.Location = new Point(184, 489);
+            button1.Location = new Point(6, 494);
             button1.Name = "button1";
-            button1.Size = new Size(75, 23);
+            button1.Size = new Size(93, 36);
             button1.TabIndex = 12;
             button1.Text = "Dad-Joke";
             button1.UseVisualStyleBackColor = true;
@@ -1035,7 +1069,7 @@ namespace Time4SellersApp
             // 
             u18Description.AutoSize = true;
             u18Description.Font = new Font("Segoe UI", 9F);
-            u18Description.Location = new Point(187, 186);
+            u18Description.Location = new Point(10, 186);
             u18Description.Name = "u18Description";
             u18Description.Size = new Size(356, 15);
             u18Description.TabIndex = 11;
@@ -1045,7 +1079,7 @@ namespace Time4SellersApp
             // 
             checkBox2.AutoSize = true;
             checkBox2.Font = new Font("Segoe UI", 18F);
-            checkBox2.Location = new Point(393, 169);
+            checkBox2.Location = new Point(496, 172);
             checkBox2.Name = "checkBox2";
             checkBox2.Size = new Size(15, 14);
             checkBox2.TabIndex = 10;
@@ -1065,9 +1099,10 @@ namespace Time4SellersApp
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(184, 515);
+            label9.Font = new Font("Segoe UI", 8F);
+            label9.Location = new Point(438, 520);
             label9.Name = "label9";
-            label9.Size = new Size(453, 15);
+            label9.Size = new Size(441, 13);
             label9.TabIndex = 8;
             label9.Text = "Manche Einstellungen werden erst nach einem Neustart aktiv. Klicke zum Neustarten";
             label9.Click += label9_Click;
@@ -1076,7 +1111,7 @@ namespace Time4SellersApp
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 9F);
-            label6.Location = new Point(8, 112);
+            label6.Location = new Point(10, 139);
             label6.Name = "label6";
             label6.Size = new Size(356, 15);
             label6.TabIndex = 7;
@@ -1086,7 +1121,7 @@ namespace Time4SellersApp
             // 
             checkBox1.AutoSize = true;
             checkBox1.Font = new Font("Segoe UI", 18F);
-            checkBox1.Location = new Point(351, 95);
+            checkBox1.Location = new Point(496, 125);
             checkBox1.Name = "checkBox1";
             checkBox1.Size = new Size(15, 14);
             checkBox1.TabIndex = 6;
@@ -1097,7 +1132,7 @@ namespace Time4SellersApp
             // 
             Benach.AutoSize = true;
             Benach.Font = new Font("Segoe UI", 18F);
-            Benach.Location = new Point(8, 80);
+            Benach.Location = new Point(6, 107);
             Benach.Name = "Benach";
             Benach.Size = new Size(344, 32);
             Benach.TabIndex = 5;
@@ -1107,7 +1142,7 @@ namespace Time4SellersApp
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 18F);
-            label8.Location = new Point(485, 12);
+            label8.Location = new Point(543, 55);
             label8.Name = "label8";
             label8.Size = new Size(55, 32);
             label8.TabIndex = 4;
@@ -1116,7 +1151,7 @@ namespace Time4SellersApp
             // LockTimeMin
             // 
             LockTimeMin.Font = new Font("Segoe UI", 10F);
-            LockTimeMin.Location = new Point(441, 19);
+            LockTimeMin.Location = new Point(496, 58);
             LockTimeMin.Name = "LockTimeMin";
             LockTimeMin.Size = new Size(41, 25);
             LockTimeMin.TabIndex = 3;
@@ -1125,7 +1160,7 @@ namespace Time4SellersApp
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 9F);
-            label7.Location = new Point(187, 44);
+            label7.Location = new Point(10, 80);
             label7.Name = "label7";
             label7.Size = new Size(327, 15);
             label7.TabIndex = 2;
@@ -1135,31 +1170,56 @@ namespace Time4SellersApp
             // 
             LockedTimeMin.AutoSize = true;
             LockedTimeMin.Font = new Font("Segoe UI", 18F);
-            LockedTimeMin.Location = new Point(187, 12);
+            LockedTimeMin.Location = new Point(8, 48);
             LockedTimeMin.Name = "LockedTimeMin";
             LockedTimeMin.Size = new Size(248, 32);
             LockedTimeMin.TabIndex = 1;
             LockedTimeMin.Text = "PC Sperrzeit Schwelle:";
             // 
-            // pictureBox2
+            // label21
             // 
-            pictureBox2.ImageLocation = "res/4TIMELogo.gif";
-            pictureBox2.Location = new Point(189, 3);
-            pictureBox2.Name = "pictureBox2";
-            pictureBox2.Size = new Size(424, 122);
-            pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBox2.TabIndex = 30;
-            pictureBox2.TabStop = false;
+            label21.AutoSize = true;
+            label21.Location = new Point(-79, 87);
+            label21.Name = "label21";
+            label21.Size = new Size(1060, 21);
+            label21.TabIndex = 29;
+            label21.Text = "______________________________________________________________________________________________________________________________________________________";
             // 
-            // pictureBox3
+            // label22
             // 
-            pictureBox3.ImageLocation = "res/4TIMELogo.gif";
-            pictureBox3.Location = new Point(209, 17);
-            pictureBox3.Name = "pictureBox3";
-            pictureBox3.Size = new Size(424, 122);
-            pictureBox3.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBox3.TabIndex = 31;
-            pictureBox3.TabStop = false;
+            label22.AutoSize = true;
+            label22.Location = new Point(-98, 23);
+            label22.Name = "label22";
+            label22.Size = new Size(1060, 21);
+            label22.TabIndex = 30;
+            label22.Text = "______________________________________________________________________________________________________________________________________________________";
+            // 
+            // label23
+            // 
+            label23.AutoSize = true;
+            label23.Location = new Point(-98, 138);
+            label23.Name = "label23";
+            label23.Size = new Size(1060, 21);
+            label23.TabIndex = 31;
+            label23.Text = "______________________________________________________________________________________________________________________________________________________";
+            // 
+            // label24
+            // 
+            label24.AutoSize = true;
+            label24.Location = new Point(-89, 256);
+            label24.Name = "label24";
+            label24.Size = new Size(1060, 21);
+            label24.TabIndex = 32;
+            label24.Text = "______________________________________________________________________________________________________________________________________________________";
+            // 
+            // label25
+            // 
+            label25.AutoSize = true;
+            label25.Location = new Point(-79, 194);
+            label25.Name = "label25";
+            label25.Size = new Size(1060, 21);
+            label25.TabIndex = 33;
+            label25.Text = "______________________________________________________________________________________________________________________________________________________";
             // 
             // UserView
             // 
@@ -1173,8 +1233,10 @@ namespace Time4SellersApp
             tabControl.ResumeLayout(false);
             tabUebersicht.ResumeLayout(false);
             tabUebersicht.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
             tabEintragen.ResumeLayout(false);
             tabEintragen.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ((System.ComponentModel.ISupportInitialize)EndzeitDauerMinuten).EndInit();
             ((System.ComponentModel.ISupportInitialize)EndzeitDauerStunden).EndInit();
             ((System.ComponentModel.ISupportInitialize)StartzeitDauerMinuten).EndInit();
@@ -1186,8 +1248,6 @@ namespace Time4SellersApp
             tabSettings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)LockPcTime).EndInit();
             ((System.ComponentModel.ISupportInitialize)LockTimeMin).EndInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
             ResumeLayout(false);
         }
         private Label label7;
@@ -1205,7 +1265,6 @@ namespace Time4SellersApp
         private Label label10;
         private Label PTMin;
         private Button button2;
-        private Label label11;
         private Button button3;
         private NumericUpDown LockPcTime;
         private Label label13;
@@ -1222,12 +1281,18 @@ namespace Time4SellersApp
         private DataGridViewTextBoxColumn colKommentar;
         private DataGridViewTextBoxColumn colDauer;
         private PictureBox pictureBox3;
-        private PictureBox pictureBox2;
         private Label label17;
         private Label label18;
         private CheckBox SpeechToTextCheck;
         private TextBox txtOutputLog;
         private Label label19;
         private TextBox textBox1;
+        private PictureBox pictureBox2;
+        private Label label11;
+        private Label label25;
+        private Label label24;
+        private Label label21;
+        private Label label22;
+        private Label label23;
     }
 }

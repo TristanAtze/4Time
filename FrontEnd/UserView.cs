@@ -298,8 +298,7 @@ namespace Time4SellersApp
             }
 
 
-            PTMin.Text = NotificationManager.startPauseAt.ToString(@"t");
-            label11.Show();
+            PTMin.Text = NotificationManager.startPauseAt.ToString(@"t") + " Uhr";
             btnNeuladenAuslesen.Enabled = true;
             Neuladen.Enabled = true;
 
