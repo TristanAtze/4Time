@@ -100,6 +100,7 @@ namespace Time4SellersApp
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserView));
             tabControl = new TabControl();
             tabUebersicht = new TabPage();
             OTgesamt = new Label();
@@ -166,6 +167,7 @@ namespace Time4SellersApp
             colKommentar = new DataGridViewTextBoxColumn();
             colDauer = new DataGridViewTextBoxColumn();
             tabSettings = new TabPage();
+            txtOutputLog = new TextBox();
             lblStatus = new Label();
             label18 = new Label();
             SpeechToTextCheck = new CheckBox();
@@ -189,7 +191,8 @@ namespace Time4SellersApp
             LockTimeMin = new NumericUpDown();
             label7 = new Label();
             LockedTimeMin = new Label();
-            txtOutputLog = new TextBox();
+            textBox1 = new TextBox();
+            label19 = new Label();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureLogoUebersicht).BeginInit();
@@ -848,6 +851,8 @@ namespace Time4SellersApp
             // 
             // tabSettings
             // 
+            tabSettings.Controls.Add(label19);
+            tabSettings.Controls.Add(textBox1);
             tabSettings.Controls.Add(txtOutputLog);
             tabSettings.Controls.Add(lblStatus);
             tabSettings.Controls.Add(label18);
@@ -880,10 +885,17 @@ namespace Time4SellersApp
             tabSettings.Text = "Settings";
             tabSettings.UseVisualStyleBackColor = true;
             // 
+            // txtOutputLog
+            // 
+            txtOutputLog.Location = new Point(8, 325);
+            txtOutputLog.Name = "txtOutputLog";
+            txtOutputLog.Size = new Size(372, 23);
+            txtOutputLog.TabIndex = 24;
+            // 
             // lblStatus
             // 
             lblStatus.AutoSize = true;
-            lblStatus.Location = new Point(8, 395);
+            lblStatus.Location = new Point(8, 307);
             lblStatus.Name = "lblStatus";
             lblStatus.Size = new Size(52, 15);
             lblStatus.TabIndex = 23;
@@ -893,7 +905,7 @@ namespace Time4SellersApp
             // 
             label18.AutoSize = true;
             label18.Font = new Font("Segoe UI", 9F);
-            label18.Location = new Point(8, 380);
+            label18.Location = new Point(8, 292);
             label18.Name = "label18";
             label18.Size = new Size(372, 15);
             label18.TabIndex = 22;
@@ -903,7 +915,7 @@ namespace Time4SellersApp
             // 
             SpeechToTextCheck.AutoSize = true;
             SpeechToTextCheck.Font = new Font("Segoe UI", 18F);
-            SpeechToTextCheck.Location = new Point(206, 358);
+            SpeechToTextCheck.Location = new Point(214, 275);
             SpeechToTextCheck.Name = "SpeechToTextCheck";
             SpeechToTextCheck.Size = new Size(15, 14);
             SpeechToTextCheck.TabIndex = 21;
@@ -915,7 +927,7 @@ namespace Time4SellersApp
             // 
             label17.AutoSize = true;
             label17.Font = new Font("Segoe UI", 18F);
-            label17.Location = new Point(8, 348);
+            label17.Location = new Point(8, 257);
             label17.Name = "label17";
             label17.Size = new Size(193, 32);
             label17.TabIndex = 20;
@@ -935,7 +947,7 @@ namespace Time4SellersApp
             // 
             label15.AutoSize = true;
             label15.Font = new Font("Segoe UI", 9F);
-            label15.Location = new Point(8, 314);
+            label15.Location = new Point(5, 242);
             label15.Name = "label15";
             label15.Size = new Size(359, 15);
             label15.TabIndex = 18;
@@ -945,7 +957,7 @@ namespace Time4SellersApp
             // 
             autostartCheckBox.AutoSize = true;
             autostartCheckBox.Font = new Font("Segoe UI", 18F);
-            autostartCheckBox.Location = new Point(130, 289);
+            autostartCheckBox.Location = new Point(130, 220);
             autostartCheckBox.Name = "autostartCheckBox";
             autostartCheckBox.Size = new Size(15, 14);
             autostartCheckBox.TabIndex = 17;
@@ -957,7 +969,7 @@ namespace Time4SellersApp
             // 
             label14.AutoSize = true;
             label14.Font = new Font("Segoe UI", 18F);
-            label14.Location = new Point(8, 279);
+            label14.Location = new Point(8, 210);
             label14.Name = "label14";
             label14.Size = new Size(116, 32);
             label14.TabIndex = 16;
@@ -966,7 +978,7 @@ namespace Time4SellersApp
             // LockPcTime
             // 
             LockPcTime.Font = new Font("Segoe UI", 10F);
-            LockPcTime.Location = new Point(215, 224);
+            LockPcTime.Location = new Point(215, 167);
             LockPcTime.Name = "LockPcTime";
             LockPcTime.Size = new Size(41, 25);
             LockPcTime.TabIndex = 15;
@@ -976,7 +988,7 @@ namespace Time4SellersApp
             // 
             label13.AutoSize = true;
             label13.Font = new Font("Segoe UI", 9F);
-            label13.Location = new Point(8, 249);
+            label13.Location = new Point(8, 195);
             label13.Name = "label13";
             label13.Size = new Size(391, 15);
             label13.TabIndex = 14;
@@ -986,7 +998,7 @@ namespace Time4SellersApp
             // 
             label12.AutoSize = true;
             label12.Font = new Font("Segoe UI", 18F);
-            label12.Location = new Point(8, 217);
+            label12.Location = new Point(8, 157);
             label12.Name = "label12";
             label12.Size = new Size(213, 32);
             label12.TabIndex = 13;
@@ -1006,7 +1018,7 @@ namespace Time4SellersApp
             // 
             u18Description.AutoSize = true;
             u18Description.Font = new Font("Segoe UI", 9F);
-            u18Description.Location = new Point(8, 186);
+            u18Description.Location = new Point(8, 142);
             u18Description.Name = "u18Description";
             u18Description.Size = new Size(356, 15);
             u18Description.TabIndex = 11;
@@ -1016,7 +1028,7 @@ namespace Time4SellersApp
             // 
             checkBox2.AutoSize = true;
             checkBox2.Font = new Font("Segoe UI", 18F);
-            checkBox2.Location = new Point(214, 169);
+            checkBox2.Location = new Point(214, 125);
             checkBox2.Name = "checkBox2";
             checkBox2.Size = new Size(15, 14);
             checkBox2.TabIndex = 10;
@@ -1027,7 +1039,7 @@ namespace Time4SellersApp
             // 
             u18.AutoSize = true;
             u18.Font = new Font("Segoe UI", 18F);
-            u18.Location = new Point(8, 154);
+            u18.Location = new Point(8, 107);
             u18.Name = "u18";
             u18.Size = new Size(200, 32);
             u18.TabIndex = 9;
@@ -1047,7 +1059,7 @@ namespace Time4SellersApp
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 9F);
-            label6.Location = new Point(8, 112);
+            label6.Location = new Point(8, 92);
             label6.Name = "label6";
             label6.Size = new Size(356, 15);
             label6.TabIndex = 7;
@@ -1057,7 +1069,7 @@ namespace Time4SellersApp
             // 
             checkBox1.AutoSize = true;
             checkBox1.Font = new Font("Segoe UI", 18F);
-            checkBox1.Location = new Point(351, 95);
+            checkBox1.Location = new Point(352, 70);
             checkBox1.Name = "checkBox1";
             checkBox1.Size = new Size(15, 14);
             checkBox1.TabIndex = 6;
@@ -1068,7 +1080,7 @@ namespace Time4SellersApp
             // 
             Benach.AutoSize = true;
             Benach.Font = new Font("Segoe UI", 18F);
-            Benach.Location = new Point(8, 80);
+            Benach.Location = new Point(8, 60);
             Benach.Name = "Benach";
             Benach.Size = new Size(344, 32);
             Benach.TabIndex = 5;
@@ -1112,12 +1124,23 @@ namespace Time4SellersApp
             LockedTimeMin.TabIndex = 1;
             LockedTimeMin.Text = "PC Sperrzeit Schwelle:";
             // 
-            // txtOutputLog
+            // textBox1
             // 
-            txtOutputLog.Location = new Point(8, 413);
-            txtOutputLog.Name = "txtOutputLog";
-            txtOutputLog.Size = new Size(372, 23);
-            txtOutputLog.TabIndex = 24;
+            textBox1.Location = new Point(8, 371);
+            textBox1.Multiline = true;
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(372, 83);
+            textBox1.TabIndex = 25;
+            textBox1.Text = resources.GetString("textBox1.Text");
+            // 
+            // label19
+            // 
+            label19.AutoSize = true;
+            label19.Location = new Point(8, 353);
+            label19.Name = "label19";
+            label19.Size = new Size(38, 15);
+            label19.TabIndex = 26;
+            label19.Text = "Tipps:";
             // 
             // UserView
             // 
@@ -1179,5 +1202,7 @@ namespace Time4SellersApp
         private CheckBox SpeechToTextCheck;
         private Label lblStatus;
         private TextBox txtOutputLog;
+        private Label label19;
+        private TextBox textBox1;
     }
 }

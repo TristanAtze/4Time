@@ -487,6 +487,11 @@ namespace Time4SellersApp
                 AutostartHelper.RemoveApplicationFromCurrentUserStartup();
                 MessageBox.Show("Autostart wurde deaktiviert. Die Anwendung wird nicht mehr automatisch gestartet.", "Autostart deaktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-        } 
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            contextMenuStrip1.Show();
+        }
     }
 }
