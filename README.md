@@ -1,6 +1,6 @@
 # 🕒 4Time - Dein Produktivitäts-Booster! 🚀
 
-Willkommen bei **4Time**! Tauche ein in eine intelligente und sichere Welt der Zeiterfassung, die dich dabei unterstützt, den Überblick über deine Arbeitsstunden und Pausen zu behalten. Entwickelt in C# und .NET 8, verbindet 4Time Professionalität mit cleveren Automatisierungsfeatures – und einer Prise Humor!
+Willkommen bei **4Time**! Tauche ein in eine intelligente und sichere Welt der Zeiterfassung, die dich dabei unterstützt, den Überblick über deine Arbeitsstunden und Pausen zu behalten. Entwickelt in C#, Python und .NET 8, verbindet 4Time Professionalität mit cleveren Automatisierungsfeatures – und einer Prise Humor!
 
 ## ✨ Kernfunktionen, die 4Time einzigartig machen ✨
 
@@ -42,6 +42,28 @@ Willkommen bei **4Time**! Tauche ein in eine intelligente und sichere Welt der Z
     * Das Datenbankschema umfasst klar strukturierte Tabellen für Benutzer, Kategorien, Einträge, Automatisierungen und ein spezielles Shutdown-Protokoll.
     * Die automatische Datenbank- und Benutzer-Einrichtung erfolgt beim ersten Start der Anwendung.
 
+## ✨ Update Logs (Neue Funktionen seit letzter Dokumentation) ✨
+
+* **🗣️ Sprachsteuerung (Speech-to-Text):**
+    * Integriert eine Spracherkennungsfunktion, die über ein Python-Skript (`SpeechToText.py`) und eine C#-Schnittstelle (`PythonCaller.cs`) realisiert wird.
+    * Ermöglicht die Navigation zwischen den Haupt-Tabs der Anwendung (Übersicht, Eintragen, Auslesen, Settings) mittels Sprachbefehlen wie "eintragen" oder "übersicht".
+    * Bietet die Möglichkeit, das CD-Laufwerk per Sprachbefehl zu steuern (z.B. "cd öffnen", "cd schließen").
+    * Die Benutzeroberfläche in den Einstellungen (`tabSettings`) zeigt nun den Status der Spracherkennung (Online/Offline) und ein Log der erkannten Wörter an. Es gibt auch ein Textfeld mit Tipps zur besseren Nutzung der Spracherkennung.
+    * Die Spracherkennung kann in den Einstellungen über eine Checkbox (`SpeechToTextCheck`) aktiviert bzw. deaktiviert werden.
+* **💿 CD-Laufwerk-Steuerung:**
+    * Es wurde eine neue Funktionalität zum Öffnen und Schließen des CD-Laufwerks implementiert (`OpenCd.cs`).
+    * Diese Funktion ist, wie oben erwähnt, auch über die neue Sprachsteuerung zugänglich.
+* **💻 Programmierer-Witze:**
+    * Zusätzlich zum bekannten "Dad-Joke"-Button gibt es nun eine neue Quelle der Erheiterung: Programmierer-Witze!
+    * Ein spezieller Button (`button4`) in den Einstellungen ruft einen zufälligen Witz aus der Sammlung in `ProgrammingJoke.cs` ab.
+* **⚙️ Erweiterte Autostart-Kontrolle in der UI:**
+    * Während die Autostart-Funktionalität bereits existierte, können Benutzer diese nun direkt über eine Checkbox (`autostartCheckBox`) in den Einstellungen der `UserView` bequem aktivieren oder deaktivieren.
+* **🎨 Benutzerdefiniertes Anwendungssymbol:**
+    * Die Anwendung verfügt nun über ein eigenes Icon (`Res/Icon.png`), welches im Fenster und in der Taskleiste angezeigt wird, um die Wiedererkennbarkeit zu verbessern (`UserView.cs`).
+* **🛡️ Detailliertere Datenbank-Sicherheitsmaßnahmen (`Setup.txt`):**
+    * Die Datenbanktabelle `dbo.Shutdown` wurde durch spezifische Trigger (`TRG_Shutdown_PreventInsert`, `TRG_Shutdown_AutoUpdate`) erweitert. `TRG_Shutdown_PreventInsert` blockiert das direkte Einfügen von Datensätzen, um die Integrität der Tabelle zu wahren. `TRG_Shutdown_AutoUpdate` startet einen SQL Server Agent Job, wenn der Shutdown-Status geändert wird.
+    * Ein SQL Server Agent Job namens `4TIME_ResetShutdown` wurde implementiert. Dieser Job wird nach einer Verzögerung von 10 Minuten aktiv und setzt den Wert in der `dbo.Shutdown`-Tabelle zurück, falls dieser auf '1' (true) steht.
+
 ## 🛠️ Ein Blick unter die Haube – Wie 4Time funktioniert
 
 1.  **Start der Anwendung:** Die Ausführung beginnt in `Program.cs`.
@@ -72,7 +94,7 @@ Willkommen bei **4Time**! Tauche ein in eine intelligente und sichere Welt der Z
 * **Framework:** .NET 8
 * **Sprache:** C#
 * **Datenbank:** SQL Server
-    * Der Connection String ist in `Connector.cs` definiert.
+    * Der Connection String ist in `Connector.cs` definiert und wird durch `_C1x2y3.cs` obfuscated generiert.
     * Das Datenbankschema (`dbo.Automatics`, `dbo.User`, `dbo.Categories`, `dbo.Shutdown`, `dbo.Entries`) wird über das SQL-Skript in `Res/Setup.txt` beim ersten Start erstellt und mit initialen Daten (`dbo.Categories`) befüllt.
     * Die Datenbankinteraktion erfolgt über `Microsoft.Data.SqlClient`, wobei asynchrone Operationen (`OpenAsync`, `ReadAsync`) für eine nicht-blockierende Ausführung eingesetzt werden.
 * **Verschlüsselung:**
@@ -81,7 +103,8 @@ Willkommen bei **4Time**! Tauche ein in eine intelligente und sichere Welt der Z
 * **Benutzeroberfläche:** Windows Forms. Die Trennung von Designer-Code (`.Designer.cs`) und Logik (`.cs`) fördert eine saubere Codebasis und Wartbarkeit.
 * **Asynchrone Programmierung:** Umfangreicher Einsatz von `async`/`await` und `Task`-basierten Operationen (`Task.Run`, `Task.WhenAll`) zur Verbesserung der Responsivität der Anwendung, insbesondere bei datenbankintensiven oder langlaufenden Prozessen.
 * **System-Interaktionen:** Direkte Interaktionen mit dem Betriebssystem, z.B. über `DllImport` für `user32.dll` (`GetForegroundWindow`, `GetWindowText`, `LockWorkStation`) und `advapi32.dll` (Credential Manager), sowie die Nutzung von `Microsoft.Win32.SystemEvents` für die Überwachung von Session-Statusänderungen.
-* **Aktuelle App-Version (gemäß interner Versionsdatei):** 3.0.0.00
+* **Python-Integration:** Für die Spracherkennung wird ein Python-Skript (`SpeechToText.py`) über `PythonCaller.cs` gestartet und die Kommunikation erfolgt über Standard-Output/Error-Streams.
+* **Aktuelle App-Version (gemäß interner Versionsdatei):** 3.1.0.02
 
 ### 📁 Projektstruktur (Auszug)
 
@@ -98,6 +121,7 @@ Willkommen bei **4Time**! Tauche ein in eine intelligente und sichere Welt der Z
 │   ├── OutlookCalendar.cs              # Bietet eine grundlegende Schnittstelle zur Interaktion mit Outlook-Kalenderdaten.
 │   ├── Settings.cs                     # Steuert das Laden, Speichern und Verwalten von Anwendungseinstellungen als JSON-Datei.
 │   ├── Writer.cs                       # Verantwortlich für das Einfügen, Aktualisieren und Löschen von Daten in der Datenbank, inklusive Verschlüsselung von Einträgen.
+│   ├── _C1x2y3.cs                      # Generiert den obfuscated Connection String.
 │   └── Models/
 │       ├── Automatics.cs               # Datenmodell für automatische Prozesse.
 │       ├── Category.cs                 # Datenmodell für verschiedene Zeitkategorien (Arbeit, Pause, Urlaub).
@@ -110,12 +134,17 @@ Willkommen bei **4Time**! Tauche ein in eine intelligente und sichere Welt der Z
 ├── FrontEnd/
 │   ├── AdminView.Designer.cs           # Automatisch generierter Code für das Design der Admin-Oberfläche.
 │   ├── AdminView.cs                    # Geschäftslogik und Event-Handler für die Admin-Ansicht, inklusive Benutzer-Simulation.
-│   ├── DadJokes.cs                     # Kapselt eine Sammlung von Text-Witzen.
 │   ├── Form1Files/
-│   │   └── Events.cs                   # Spezifische Event-Handler und Validierungslogik für die Benutzer-Ansicht.
+│   │   └── Events.cs                   # Spezifische Event-Handler und Validierungslogik für die Benutzer-Ansicht (UserView).
+│   ├── Jokes/
+│   │   ├── DadJokes.cs                 # Kapselt eine Sammlung von Papa-Witzen.
+│   │   └── ProgrammingJoke.cs          # Kapselt eine Sammlung von Programmierer-Witzen.
 │   ├── NotificationManager.cs          # Verwaltet die Zeitplanung und das Senden von Desktop-Benachrichtigungen.
 │   ├── UserView.Designer.cs            # Automatisch generierter Code für das Design der Benutzer-Oberfläche.
 │   └── UserView.cs                     # Hauptlogik der Benutzer-Ansicht, Datenaggregation und Interaktion mit anderen Modulen.
+├── Python/
+│   ├── PythonCaller.cs                 # C#-Klasse zur Interaktion mit Python-Skripten.
+│   └── SpeechToText.py                 # Python-Skript für die Spracherkennung.
 ├── Program.cs                          # Der Anwendungseinstiegspunkt, orchestriert den Start von Diensten und der Benutzeroberfläche.
 └── Res/
     ├── Setup.txt                       # SQL-DDL-Skript für die Erstellung der Datenbanktabellen und Trigger, inklusive initialer Daten und SQL Server Agent Job Definitionen.
@@ -127,10 +156,8 @@ Willkommen bei **4Time**! Tauche ein in eine intelligente und sichere Welt der Z
 4Time ist darauf ausgelegt, schnell und unkompliziert einsatzbereit zu sein!
 1.  Beim ersten Start versucht die Anwendung, die notwendigen Datenbanktabellen einzurichten und den aktuellen Benutzer zu registrieren.
 2.  Zudem wird versucht, sich automatisch zum Windows-Autostart hinzuzufügen.
-3.  Stelle sicher, dass der in `Connector.cs` angegebene Datenbankserver erreichbar ist. (Entwickler-Hinweis: Dies muss eventuell angepasst werden!).
+3.  Stelle sicher, dass der in `Connector.cs` (bzw. durch `_C1x2y3.cs` generierte) angegebene Datenbankserver erreichbar ist. (Entwickler-Hinweis: Dies muss eventuell angepasst werden!).
 
 ---
 
-Viel Spaß beim effektiven Managen deiner Zeit mit **4Time**! Mögen deine Arbeitstage produktiv und deine Pausen von großartigen Dad-Jokes begleitet sein! 😄
-
-```
+Viel Spaß beim effektiven Managen deiner Zeit mit **4Time**! Mögen deine Arbeitstage produktiv und deine Pausen von großartigen Witzen begleitet sein! 😄
