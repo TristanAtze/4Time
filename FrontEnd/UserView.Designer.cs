@@ -91,6 +91,7 @@ namespace Time4SellersApp
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserView));
             tabControl = new TabControl();
             tabUebersicht = new TabPage();
             OTgesamt = new Label();
@@ -155,6 +156,12 @@ namespace Time4SellersApp
             colKommentar = new DataGridViewTextBoxColumn();
             colDauer = new DataGridViewTextBoxColumn();
             tabSettings = new TabPage();
+            label19 = new Label();
+            textBox1 = new TextBox();
+            txtOutputLog = new TextBox();
+            label18 = new Label();
+            SpeechToTextCheck = new CheckBox();
+            label17 = new Label();
             button4 = new Button();
             label15 = new Label();
             autostartCheckBox = new CheckBox();
@@ -848,6 +855,12 @@ namespace Time4SellersApp
             // 
             // tabSettings
             // 
+            tabSettings.Controls.Add(label19);
+            tabSettings.Controls.Add(textBox1);
+            tabSettings.Controls.Add(txtOutputLog);
+            tabSettings.Controls.Add(label18);
+            tabSettings.Controls.Add(SpeechToTextCheck);
+            tabSettings.Controls.Add(label17);
             tabSettings.Controls.Add(button4);
             tabSettings.Controls.Add(label15);
             tabSettings.Controls.Add(autostartCheckBox);
@@ -874,6 +887,68 @@ namespace Time4SellersApp
             tabSettings.TabIndex = 3;
             tabSettings.Text = "Settings";
             tabSettings.UseVisualStyleBackColor = true;
+            // 
+            // label19
+            // 
+            label19.AutoSize = true;
+            label19.Location = new Point(8, 336);
+            label19.Name = "label19";
+            label19.Size = new Size(38, 15);
+            label19.TabIndex = 26;
+            label19.Text = "Tipps:";
+            // 
+            // textBox1
+            // 
+            textBox1.Enabled = false;
+            textBox1.Location = new Point(8, 354);
+            textBox1.Multiline = true;
+            textBox1.Name = "textBox1";
+            textBox1.ReadOnly = true;
+            textBox1.Size = new Size(422, 83);
+            textBox1.TabIndex = 25;
+            textBox1.Text = resources.GetString("textBox1.Text");
+            // 
+            // txtOutputLog
+            // 
+            txtOutputLog.Enabled = false;
+            txtOutputLog.Location = new Point(8, 310);
+            txtOutputLog.Name = "txtOutputLog";
+            txtOutputLog.PlaceholderText = "Status: Offline";
+            txtOutputLog.ReadOnly = true;
+            txtOutputLog.Size = new Size(422, 23);
+            txtOutputLog.TabIndex = 24;
+            // 
+            // label18
+            // 
+            label18.AutoSize = true;
+            label18.Font = new Font("Segoe UI", 9F);
+            label18.Location = new Point(8, 292);
+            label18.Name = "label18";
+            label18.Size = new Size(372, 15);
+            label18.TabIndex = 22;
+            label18.Text = "Wenn aktiviert hört 4Time alles was du sagst und reagiert auch darauf";
+            // 
+            // SpeechToTextCheck
+            // 
+            SpeechToTextCheck.AutoSize = true;
+            SpeechToTextCheck.Font = new Font("Segoe UI", 18F);
+            SpeechToTextCheck.Location = new Point(206, 267);
+            SpeechToTextCheck.Name = "SpeechToTextCheck";
+            SpeechToTextCheck.Size = new Size(15, 14);
+            SpeechToTextCheck.TabIndex = 21;
+            SpeechToTextCheck.Tag = "";
+            SpeechToTextCheck.UseVisualStyleBackColor = true;
+            SpeechToTextCheck.CheckedChanged += checkBox_SpeechToText_CheckedChanged;
+            // 
+            // label17
+            // 
+            label17.AutoSize = true;
+            label17.Font = new Font("Segoe UI", 18F);
+            label17.Location = new Point(8, 257);
+            label17.Name = "label17";
+            label17.Size = new Size(193, 32);
+            label17.TabIndex = 20;
+            label17.Text = "Spracherkenung:";
             // 
             // button4
             // 
@@ -940,7 +1015,7 @@ namespace Time4SellersApp
             // 
             label12.AutoSize = true;
             label12.Font = new Font("Segoe UI", 18F);
-            label12.Location = new Point(187, 217);
+            label12.Location = new Point(8, 217);
             label12.Name = "label12";
             label12.Size = new Size(213, 32);
             label12.TabIndex = 13;
@@ -981,7 +1056,7 @@ namespace Time4SellersApp
             // 
             u18.AutoSize = true;
             u18.Font = new Font("Segoe UI", 18F);
-            u18.Location = new Point(187, 154);
+            u18.Location = new Point(8, 154);
             u18.Name = "u18";
             u18.Size = new Size(200, 32);
             u18.TabIndex = 9;
@@ -1001,7 +1076,7 @@ namespace Time4SellersApp
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 9F);
-            label6.Location = new Point(187, 112);
+            label6.Location = new Point(8, 112);
             label6.Name = "label6";
             label6.Size = new Size(356, 15);
             label6.TabIndex = 7;
@@ -1011,7 +1086,7 @@ namespace Time4SellersApp
             // 
             checkBox1.AutoSize = true;
             checkBox1.Font = new Font("Segoe UI", 18F);
-            checkBox1.Location = new Point(530, 95);
+            checkBox1.Location = new Point(351, 95);
             checkBox1.Name = "checkBox1";
             checkBox1.Size = new Size(15, 14);
             checkBox1.TabIndex = 6;
@@ -1022,7 +1097,7 @@ namespace Time4SellersApp
             // 
             Benach.AutoSize = true;
             Benach.Font = new Font("Segoe UI", 18F);
-            Benach.Location = new Point(187, 80);
+            Benach.Location = new Point(8, 80);
             Benach.Name = "Benach";
             Benach.Size = new Size(344, 32);
             Benach.TabIndex = 5;
@@ -1148,5 +1223,11 @@ namespace Time4SellersApp
         private DataGridViewTextBoxColumn colDauer;
         private PictureBox pictureBox3;
         private PictureBox pictureBox2;
+        private Label label17;
+        private Label label18;
+        private CheckBox SpeechToTextCheck;
+        private TextBox txtOutputLog;
+        private Label label19;
+        private TextBox textBox1;
     }
 }
