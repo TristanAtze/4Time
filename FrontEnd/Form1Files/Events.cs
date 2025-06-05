@@ -402,7 +402,7 @@ partial class UserView
                 OpenCd();
             }
         }
-        else if((command.Contains("cd") && command.Contains("schließen")) || (command.Contains("cd") && command.Contains("einziehen")))
+        else if((command.Contains("cd") && (command.Contains("schließen") || command.Contains("schließt"))) || (command.Contains("cd") && command.Contains("einziehen")))
         {
             if (this.InvokeRequired)
             {
