@@ -2,6 +2,7 @@
 using _4Time.DataCore;
 using _4Time.DataCore.Models;
 using _4Time.FrontEnd;
+using _4Time.Python;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Time4SellersApp;
@@ -316,5 +317,165 @@ partial class UserView
     private void button4_Click(object sender, EventArgs e)
     {
         MessageBox.Show(ProgrammingJoke.GetRandomProgrammingJoke(), "Programming Joke", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    }
+
+    private void PythonCaller_OnErrorOccurred(string errorMessage)
+    {
+        if (txtOutputLog.InvokeRequired)
+        {
+            txtOutputLog.Invoke(new Action(() => txtOutputLog.Text = errorMessage));
+        }
+        else
+        {
+            txtOutputLog.Text = errorMessage;
+        }
+    }
+
+    private void PythonCaller_OnTextErkannt(string regrocnizedText)
+    {
+        if (txtOutputLog.InvokeRequired)
+        {
+            txtOutputLog.Invoke(new Action(() =>
+            {
+                txtOutputLog.AppendText($"Erkannt: {regrocnizedText}{Environment.NewLine}");
+            }));
+        }
+        else
+        {
+            txtOutputLog.AppendText($"Erkannt: {regrocnizedText}{Environment.NewLine}");
+        }
+
+        string command = regrocnizedText.Trim().ToLowerInvariant();
+
+        if (command.Contains("eintragen")) 
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action(NavigateToEintragenSeite));
+            }
+            else
+            {
+                NavigateToEintragenSeite();
+            }
+        }
+        else if (command.Contains("auslesen"))
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action(NavigateToAuslesenSeite));
+            }
+            else
+            {
+                NavigateToAuslesenSeite();
+            }
+        }
+        else if(command.Contains("einstellungen") || command.Contains("settings"))
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action(NavigateToSettingsSeite));
+            }
+            else
+            {
+                NavigateToSettingsSeite();
+            }
+        }
+        else if (command.Contains("übersicht") || command.Contains("uebersicht"))
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action(NavigateToUebersichtSeite));
+            }
+            else
+            {
+                NavigateToUebersichtSeite();
+            }
+        }
+        else if ((command.Contains("cd") && command.Contains("öffnen")) || (command.Contains("cd") && command.Contains("auswerfen")))
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action(OpenCd));
+            }
+            else
+            {
+                OpenCd();
+            }
+        }
+        else if((command.Contains("cd") && command.Contains("schließen")) || (command.Contains("cd") && command.Contains("einziehen")))
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action(CloseCd));
+            }
+            else
+            {
+                CloseCd();
+            }
+        }
+    }
+    private void OpenCd()
+    {
+        OpenOrCloseCDDrive openOrClose = new OpenOrCloseCDDrive();
+        List<DriveInfo> drives = openOrClose.GetCDDrives;
+        openOrClose.Open(drives[0]);
+    }
+    private void CloseCd()
+    {
+        OpenOrCloseCDDrive openOrClose = new OpenOrCloseCDDrive();
+        List<DriveInfo> drives = openOrClose.GetCDDrives;
+        openOrClose.Close(drives[0]);
+    }
+    private void NavigateToAuslesenSeite()
+    {
+        txtOutputLog.Text = "Zur Auslesen-Seite navigiert.";
+        tabControl.SelectedTab = tabAuslesen;
+    }
+
+    private void NavigateToSettingsSeite()
+    {
+        txtOutputLog.Text = "Zur Einstellungen-Seite navigiert.";
+        tabControl.SelectedTab = tabSettings;
+    }
+
+    private void NavigateToUebersichtSeite()
+    {
+        txtOutputLog.Text = "Zur Übersicht navigiert.";
+        tabControl.SelectedTab = tabUebersicht;
+    }
+
+    private void NavigateToEintragenSeite()
+    {
+        txtOutputLog.Text = "Zur Eintragen-Seite navigiert.";
+        tabControl.SelectedTab = tabEintragen;
+    }
+
+    private void checkBox_SpeechToText_CheckedChanged(object sender, EventArgs e)
+    {
+        if (SpeechToTextCheck.Checked)
+        {
+            txtOutputLog.Text = "Starte Spracherkennung... (Dieser Prozess kann einige Sekunden Dauern)";
+            PythonCaller.OnTextErkannt += PythonCaller_OnTextErkannt;
+            PythonCaller.OnErrorOccurred += PythonCaller_OnErrorOccurred;
+            PythonCaller.SpeechToTextCaller();
+        }
+        else
+        {
+            txtOutputLog.Text = "Stoppe Spracherkennung...";
+            PythonCaller.StopSpeechToText();
+            txtOutputLog.Text = "Spracherkennung gestoppt."; 
+        }
+    }
+
+    protected override void OnFormClosing(FormClosingEventArgs e)
+    {
+        PythonCaller.OnTextErkannt -= PythonCaller_OnTextErkannt;
+        PythonCaller.OnErrorOccurred -= PythonCaller_OnErrorOccurred;
+
+        if (SpeechToTextCheck.Checked) 
+        {
+            PythonCaller.StopSpeechToText();
+        }
+        base.OnFormClosing(e);
     }
 }

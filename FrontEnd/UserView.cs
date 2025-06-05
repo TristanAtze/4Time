@@ -3,6 +3,7 @@ using _4Time.Async;
 using _4Time.DataCore;
 using _4Time.DataCore.Models;
 using _4Time.FrontEnd;
+using _4Time.Python;
 using System.Data;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -18,6 +19,7 @@ namespace Time4SellersApp
         private List<(string Key, object Value)> _settingsToSave = [];
         private List<Category> _allCategorys = Reader.Read<Category>("Categories").Result;
         private bool isDataLoaded = false;
+        private NotificationManager? _notificationManager = null;
 
         public List<Entry> AllEntrys;
 
@@ -290,9 +292,9 @@ namespace Time4SellersApp
             if (reloadDataGrid)
                 await FillDataGridView();
 
-            if (!isDataLoaded && !isDatetimePicker)
+            if (!isDatetimePicker)
             {
-                NotificationManager notificationManager = new(dgvEntries, allCategorys, checkBox1, checkBox2);
+                _notificationManager = new NotificationManager(dgvEntries, _allCategorys, checkBox1, checkBox2);
             }
 
 
@@ -302,7 +304,7 @@ namespace Time4SellersApp
             Neuladen.Enabled = true;
 
 
-            button4.Text = "Programming Joke"; 
+            button4.Text = "Programming Joke";
             tabAuslesen.Text = "Auslesen";
             tabEintragen.Text = "Eintragen";
             tabSettings.Text = "Settings";
