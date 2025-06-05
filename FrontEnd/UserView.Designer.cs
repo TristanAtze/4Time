@@ -167,6 +167,8 @@ namespace Time4SellersApp
             colKommentar = new DataGridViewTextBoxColumn();
             colDauer = new DataGridViewTextBoxColumn();
             tabSettings = new TabPage();
+            label19 = new Label();
+            textBox1 = new TextBox();
             txtOutputLog = new TextBox();
             lblStatus = new Label();
             label18 = new Label();
@@ -191,8 +193,6 @@ namespace Time4SellersApp
             LockTimeMin = new NumericUpDown();
             label7 = new Label();
             LockedTimeMin = new Label();
-            textBox1 = new TextBox();
-            label19 = new Label();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureLogoUebersicht).BeginInit();
@@ -885,6 +885,24 @@ namespace Time4SellersApp
             tabSettings.Text = "Settings";
             tabSettings.UseVisualStyleBackColor = true;
             // 
+            // label19
+            // 
+            label19.AutoSize = true;
+            label19.Location = new Point(8, 353);
+            label19.Name = "label19";
+            label19.Size = new Size(38, 15);
+            label19.TabIndex = 26;
+            label19.Text = "Tipps:";
+            // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(8, 371);
+            textBox1.Multiline = true;
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(372, 83);
+            textBox1.TabIndex = 25;
+            textBox1.Text = resources.GetString("textBox1.Text");
+            // 
             // txtOutputLog
             // 
             txtOutputLog.Location = new Point(8, 325);
@@ -897,9 +915,9 @@ namespace Time4SellersApp
             lblStatus.AutoSize = true;
             lblStatus.Location = new Point(8, 307);
             lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(52, 15);
+            lblStatus.Size = new Size(39, 15);
             lblStatus.TabIndex = 23;
-            lblStatus.Text = "lblStatus";
+            lblStatus.Text = "Status";
             // 
             // label18
             // 
@@ -1123,24 +1141,6 @@ namespace Time4SellersApp
             LockedTimeMin.Size = new Size(248, 32);
             LockedTimeMin.TabIndex = 1;
             LockedTimeMin.Text = "PC Sperrzeit Schwelle:";
-            // 
-            // textBox1
-            // 
-            textBox1.Location = new Point(8, 371);
-            textBox1.Multiline = true;
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(372, 83);
-            textBox1.TabIndex = 25;
-            textBox1.Text = resources.GetString("textBox1.Text");
-            // 
-            // label19
-            // 
-            label19.AutoSize = true;
-            label19.Location = new Point(8, 353);
-            label19.Name = "label19";
-            label19.Size = new Size(38, 15);
-            label19.TabIndex = 26;
-            label19.Text = "Tipps:";
             // 
             // UserView
             // 
