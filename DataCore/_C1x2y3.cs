@@ -1,7 +1,4 @@
-﻿using System;
-using System.Text;
-
-namespace _N1a2b3
+﻿namespace _N1a2b3
 {
     public static class _C1x2y3
     {

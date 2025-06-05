@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using _4Time.DataCore.Models;
+using Microsoft.Data.SqlClient;
 using System.Reflection;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Data.SqlClient; 
-using _4Time.DataCore.Models;    
 
 namespace _4Time.DataCore 
 {
