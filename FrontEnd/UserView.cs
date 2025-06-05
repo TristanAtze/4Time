@@ -2,14 +2,9 @@ using _4Time;
 using _4Time.Async;
 using _4Time.DataCore;
 using _4Time.DataCore.Models;
-using _4Time.FrontEnd;
-using _4Time.Python;
 using System.Data;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using Windows.ApplicationModel.Core;
 
 namespace Time4SellersApp
 {

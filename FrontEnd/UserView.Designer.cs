@@ -52,7 +52,6 @@ namespace Time4SellersApp
         private Label label2;
         private Label label5;
         private ComboBox BookingType;
-        private PictureBox pictureBox1;
         private Label OTWeek;
         private Label PTWeek;
         private Label OTToday;
@@ -144,8 +143,8 @@ namespace Time4SellersApp
             txtBemerkung = new TextBox();
             btnSpeichern = new Button();
             tabAuslesen = new TabPage();
-            Löschen = new Button();
             pictureBox1 = new PictureBox();
+            Löschen = new Button();
             btnSettingsAuslesen = new Button();
             btnNeuladenAuslesen = new Button();
             dgvEntries = new DataGridView();
@@ -191,6 +190,8 @@ namespace Time4SellersApp
             label19 = new Label();
             numericUpDown1 = new NumericUpDown();
             label27 = new Label();
+            LockedTimeMin = new Label();
+            button5 = new Button();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -763,8 +764,8 @@ namespace Time4SellersApp
             // 
             // tabAuslesen
             // 
-            tabAuslesen.Controls.Add(Löschen);
             tabAuslesen.Controls.Add(pictureBox1);
+            tabAuslesen.Controls.Add(Löschen);
             tabAuslesen.Controls.Add(btnSettingsAuslesen);
             tabAuslesen.Controls.Add(btnNeuladenAuslesen);
             tabAuslesen.Controls.Add(dgvEntries);
@@ -774,6 +775,16 @@ namespace Time4SellersApp
             tabAuslesen.TabIndex = 2;
             tabAuslesen.Text = "Auslesen";
             // 
+            // pictureBox1
+            // 
+            pictureBox1.ImageLocation = "res/4TIMELogo.gif";
+            pictureBox1.Location = new Point(0, 0);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(882, 150);
+            pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
+            pictureBox1.TabIndex = 33;
+            pictureBox1.TabStop = false;
+            // 
             // Löschen
             // 
             Löschen.Location = new Point(339, 471);
@@ -782,16 +793,6 @@ namespace Time4SellersApp
             Löschen.TabIndex = 5;
             Löschen.Text = "Löschen";
             Löschen.Click += Löschen_Click;
-            // 
-            // pictureBox1
-            // 
-            pictureBox1.ImageLocation = "res/4TIMELogo.gif";
-            pictureBox1.Location = new Point(199, 14);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(424, 122);
-            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBox1.TabIndex = 3;
-            pictureBox1.TabStop = false;
             // 
             // btnSettingsAuslesen
             // 
@@ -820,7 +821,7 @@ namespace Time4SellersApp
             dgvEntries.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvEntries.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgvEntries.Columns.AddRange(new DataGridViewColumn[] { colStart, colEnd, colArt, colKommentar, colDauer });
-            dgvEntries.Location = new Point(8, 142);
+            dgvEntries.Location = new Point(8, 156);
             dgvEntries.Name = "dgvEntries";
             dgvEntries.ReadOnly = true;
             dgvEntries.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -867,6 +868,8 @@ namespace Time4SellersApp
             // 
             tabSettings.Controls.Add(label27);
             tabSettings.Controls.Add(numericUpDown1);
+            tabSettings.Controls.Add(button5);
+            tabSettings.Controls.Add(label11);
             tabSettings.Controls.Add(label19);
             tabSettings.Controls.Add(label26);
             tabSettings.Controls.Add(FaceRegocnitionCheck);
@@ -1270,6 +1273,26 @@ namespace Time4SellersApp
             label27.TabIndex = 39;
             label27.Text = "Zeitintervall bis zur PC-Sperrung in Sekunden";
             // 
+            // LockedTimeMin
+            // 
+            LockedTimeMin.AutoSize = true;
+            LockedTimeMin.Font = new Font("Segoe UI", 18F);
+            LockedTimeMin.Location = new Point(8, 48);
+            LockedTimeMin.Name = "LockedTimeMin";
+            LockedTimeMin.Size = new Size(248, 32);
+            LockedTimeMin.TabIndex = 1;
+            LockedTimeMin.Text = "PC Sperrzeit Schwelle:";
+            // 
+            // button5
+            // 
+            button5.Location = new Point(276, 494);
+            button5.Name = "button5";
+            button5.Size = new Size(91, 36);
+            button5.TabIndex = 34;
+            button5.Text = "Curry";
+            button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click;
+            // 
             // UserView
             // 
             ClientSize = new Size(890, 561);
@@ -1349,5 +1372,7 @@ namespace Time4SellersApp
         private Label label27;
         private NumericUpDown numericUpDown1;
         private Label label19;
+        private PictureBox pictureBox1;
+        private Button button5;
     }
 }

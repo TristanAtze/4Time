@@ -2,6 +2,7 @@
 using _4Time.DataCore;
 using _4Time.DataCore.Models;
 using _4Time.FrontEnd;
+using _4Time.FrontEnd.Jokes;
 using _4Time.Python;
 using Microsoft.IdentityModel.Tokens;
 
@@ -477,4 +478,8 @@ partial class UserView
         base.OnFormClosing(e);
     }
 
+    private void button5_Click(object sender, EventArgs e)
+    {
+        MessageBox.Show($"{Curry.GetCurry()}", "Curry", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    }
 }

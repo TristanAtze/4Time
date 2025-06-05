@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace _4Time.DataCore.Models
+﻿namespace _4Time.DataCore.Models
 {
     /// <summary>
     /// Represents row-specific data for an entry, including identifiers and raw textual information.
