@@ -21,7 +21,7 @@ Für das Curry:
 
 1 Dose Kichererbsen (ca. 400 g), abgespült
 
-100 ml Wasser
+100 ml Ganges-Wasser
 
 Gewürze:
 
