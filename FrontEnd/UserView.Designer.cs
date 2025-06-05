@@ -900,7 +900,7 @@ namespace Time4SellersApp
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
             textBox1.ReadOnly = true;
-            textBox1.Size = new Size(372, 83);
+            textBox1.Size = new Size(422, 83);
             textBox1.TabIndex = 25;
             textBox1.Text = resources.GetString("textBox1.Text");
             // 
@@ -910,7 +910,7 @@ namespace Time4SellersApp
             txtOutputLog.Name = "txtOutputLog";
             txtOutputLog.PlaceholderText = "Hier stehen die von der Spracherkennung verstandenen wörter";
             txtOutputLog.ReadOnly = true;
-            txtOutputLog.Size = new Size(372, 23);
+            txtOutputLog.Size = new Size(422, 23);
             txtOutputLog.TabIndex = 24;
             // 
             // lblStatus

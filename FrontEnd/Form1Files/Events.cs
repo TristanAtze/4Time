@@ -454,7 +454,7 @@ partial class UserView
     {
         if (SpeechToTextCheck.Checked)
         {
-            txtOutputLog.Text = "Starte Spracherkennung... (Dieser Prozess kann ein paar Sekunden Dauern)";
+            txtOutputLog.Text = "Starte Spracherkennung... (Dieser Prozess kann einige Sekunden Dauern)";
             PythonCaller.OnTextErkannt += PythonCaller_OnTextErkannt;
             PythonCaller.OnErrorOccurred += PythonCaller_OnErrorOccurred;
             PythonCaller.SpeechToTextCaller();
