@@ -166,6 +166,10 @@ namespace Time4SellersApp
             colKommentar = new DataGridViewTextBoxColumn();
             colDauer = new DataGridViewTextBoxColumn();
             tabSettings = new TabPage();
+            lblStatus = new Label();
+            label18 = new Label();
+            SpeechToTextCheck = new CheckBox();
+            label17 = new Label();
             button4 = new Button();
             label15 = new Label();
             autostartCheckBox = new CheckBox();
@@ -185,6 +189,7 @@ namespace Time4SellersApp
             LockTimeMin = new NumericUpDown();
             label7 = new Label();
             LockedTimeMin = new Label();
+            txtOutputLog = new TextBox();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureLogoUebersicht).BeginInit();
@@ -843,6 +848,11 @@ namespace Time4SellersApp
             // 
             // tabSettings
             // 
+            tabSettings.Controls.Add(txtOutputLog);
+            tabSettings.Controls.Add(lblStatus);
+            tabSettings.Controls.Add(label18);
+            tabSettings.Controls.Add(SpeechToTextCheck);
+            tabSettings.Controls.Add(label17);
             tabSettings.Controls.Add(button4);
             tabSettings.Controls.Add(label15);
             tabSettings.Controls.Add(autostartCheckBox);
@@ -869,6 +879,47 @@ namespace Time4SellersApp
             tabSettings.TabIndex = 3;
             tabSettings.Text = "Settings";
             tabSettings.UseVisualStyleBackColor = true;
+            // 
+            // lblStatus
+            // 
+            lblStatus.AutoSize = true;
+            lblStatus.Location = new Point(8, 395);
+            lblStatus.Name = "lblStatus";
+            lblStatus.Size = new Size(52, 15);
+            lblStatus.TabIndex = 23;
+            lblStatus.Text = "lblStatus";
+            // 
+            // label18
+            // 
+            label18.AutoSize = true;
+            label18.Font = new Font("Segoe UI", 9F);
+            label18.Location = new Point(8, 380);
+            label18.Name = "label18";
+            label18.Size = new Size(372, 15);
+            label18.TabIndex = 22;
+            label18.Text = "Wenn aktiviert hört 4Time alles was du sagst und reagiert auch darauf";
+            // 
+            // SpeechToTextCheck
+            // 
+            SpeechToTextCheck.AutoSize = true;
+            SpeechToTextCheck.Font = new Font("Segoe UI", 18F);
+            SpeechToTextCheck.Location = new Point(206, 358);
+            SpeechToTextCheck.Name = "SpeechToTextCheck";
+            SpeechToTextCheck.Size = new Size(15, 14);
+            SpeechToTextCheck.TabIndex = 21;
+            SpeechToTextCheck.Tag = "";
+            SpeechToTextCheck.UseVisualStyleBackColor = true;
+            SpeechToTextCheck.CheckedChanged += checkBox_SpeechToText_CheckedChanged;
+            // 
+            // label17
+            // 
+            label17.AutoSize = true;
+            label17.Font = new Font("Segoe UI", 18F);
+            label17.Location = new Point(8, 348);
+            label17.Name = "label17";
+            label17.Size = new Size(193, 32);
+            label17.TabIndex = 20;
+            label17.Text = "Spracherkenung:";
             // 
             // button4
             // 
@@ -1061,6 +1112,13 @@ namespace Time4SellersApp
             LockedTimeMin.TabIndex = 1;
             LockedTimeMin.Text = "PC Sperrzeit Schwelle:";
             // 
+            // txtOutputLog
+            // 
+            txtOutputLog.Location = new Point(8, 413);
+            txtOutputLog.Name = "txtOutputLog";
+            txtOutputLog.Size = new Size(372, 23);
+            txtOutputLog.TabIndex = 24;
+            // 
             // UserView
             // 
             ClientSize = new Size(474, 561);
@@ -1116,5 +1174,10 @@ namespace Time4SellersApp
         private Label OTgesamt;
         private Label label16;
         private Button button4;
+        private Label label17;
+        private Label label18;
+        private CheckBox SpeechToTextCheck;
+        private Label lblStatus;
+        private TextBox txtOutputLog;
     }
 }

@@ -16,7 +16,6 @@ namespace _4Time
         [STAThread]
         public static void Main()
         {
-            PythonCaller.SpeechToTextCaller();
             Task.Run(YouTubeShortsBlocker.StartMonitoringAsync);
             Task.Run(ProgrammSetup);
             //Connector.OpenConnection();

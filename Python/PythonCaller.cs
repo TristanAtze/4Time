@@ -1,74 +1,115 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO; // Für Path.Combine (optional aber empfohlen)
-using System.Threading.Tasks; // Für asynchrones Lesen
+﻿using System.Diagnostics;
 
-namespace _4Time.Python;
-class PythonCaller
+namespace _4Time.Python
 {
-    public static async void SpeechToTextCaller()
+    class PythonCaller
     {
-        string pythonInterpreterPath = "python";
-        string scriptPath = "SpeechToText.py"; 
-                                                                      
-        if (!File.Exists(scriptPath))
-        {
-            MessageBox.Show($"Fehler: Python-Skript nicht gefunden unter: {scriptPath}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            return;
-        }
+        private static Process pythonProcess;
+        private static readonly string pythonInterpreterPath = "python";
+        private static readonly string scriptPath = @"Python\SpeechToText.py";
 
-        // 2. Prozess-Starteinstellungen konfigurieren
-        ProcessStartInfo startInfo = new ProcessStartInfo
-        {
-            FileName = pythonInterpreterPath,
-            Arguments = $"\"{scriptPath}\"",
-            UseShellExecute = false,          
-            RedirectStandardOutput = true,    
-            RedirectStandardError = true,     
-            CreateNoWindow = false            
-        };
+        /// <summary>
+        /// Wird ausgelöst, wenn das Python-Skript erkannten Text sendet.
+        /// Der String-Parameter enthält den erkannten Text.
+        /// </summary>
+        public static event Action<string> OnTextErkannt;
 
-        // 3. Prozess starten
-        using (Process process = new Process { StartInfo = startInfo })
+        /// <summary>
+        /// Wird ausgelöst, wenn das Python-Skript eine Fehlermeldung sendet oder ein Fehler im Caller auftritt.
+        /// </summary>
+        public static event Action<string> OnErrorOccurred;
+
+        public static void SpeechToTextCaller()
         {
-            // Asynchrone Event-Handler für die Ausgabe
-            // Dies verhindert, dass die UI (falls vorhanden) blockiert oder Deadlocks entstehen
-            process.OutputDataReceived += (sender, e) =>
+            if (pythonProcess != null && !pythonProcess.HasExited)
             {
+                OnErrorOccurred?.Invoke("Der Spracherkennungsprozess läuft bereits.");
+                return;
+            }
+
+            if (!File.Exists(scriptPath))
+            {
+                OnErrorOccurred?.Invoke($"Fehler: Python-Skript nicht gefunden unter: {Path.GetFullPath(scriptPath)}");
+                return;
+            }
+
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = pythonInterpreterPath,
+                Arguments = $"\"{Path.GetFullPath(scriptPath)}\"",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true
+            };
+
+            pythonProcess = new Process { StartInfo = startInfo };
+
+            pythonProcess.OutputDataReceived += (sender, e) =>
+            {
+                Debug.WriteLine($"DEBUG PythonCaller.OutputDataReceived: Empfangene Daten = '{e.Data}'"); 
                 if (e.Data != null)
                 {
-                    MessageBox.Show(e.Data, "Python Output", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Debug.WriteLine($"DEBUG PythonCaller: OnTextErkannt wird ausgelöst mit '{e.Data}'");
+                    OnTextErkannt?.Invoke(e.Data);
                 }
             };
-            process.ErrorDataReceived += (sender, e) =>
+
+            pythonProcess.ErrorDataReceived += (sender, e) =>
             {
+                Debug.WriteLine($"DEBUG PythonCaller.ErrorDataReceived: Empfangene Fehlerdaten = '{e.Data}'");
                 if (e.Data != null)
                 {
-                    MessageBox.Show(e.Data, "Python Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    OnErrorOccurred?.Invoke($"Python Fehler: {e.Data}");
                 }
             };
 
             try
             {
-                process.Start();
+                pythonProcess.Start();
+                Debug.WriteLine("DEBUG PythonCaller: Prozess gestartet.");
+                pythonProcess.BeginOutputReadLine();
+                Debug.WriteLine("DEBUG PythonCaller: BeginOutputReadLine aufgerufen."); 
+                pythonProcess.BeginErrorReadLine();
+                Debug.WriteLine("DEBUG PythonCaller: BeginErrorReadLine aufgerufen."); 
 
-                // Beginne mit dem asynchronen Lesen der Ausgaben
-                process.BeginOutputReadLine();
-                process.BeginErrorReadLine();
-
-                Console.WriteLine("Python-Skript gestartet. Es reagiert auf Tastendrücke (Leertaste zum Aufnehmen, Esc zum Beenden des Python-Skripts).");
-                Console.WriteLine("Das C#-Programm wartet, bis das Python-Skript beendet wird (z.B. durch Drücken von 'Esc' im Python-Kontext).");
-
-                // Warte, bis der Python-Prozess beendet wird.
-                // Du könntest hier auch eine maximale Wartezeit einbauen oder den Prozess
-                // programmatisch von C# aus beenden, wenn nötig (process.Kill()).
-                await process.WaitForExitAsync(); // Asynchrones Warten
-
-                MessageBox.Show("Python-Skript wurde beendet.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox. Show($"Fehler beim Starten des Python-Skripts: {ex.Message}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Debug.WriteLine($"DEBUG PythonCaller: FEHLER beim Starten des Prozesses - {ex.Message}"); 
+                OnErrorOccurred?.Invoke($"Fehler beim Starten des Python-Skripts: {ex.Message}");
+                pythonProcess?.Dispose();
+                pythonProcess = null;
+            }
+        }
+
+        public static void StopSpeechToText()
+        {
+            if (pythonProcess != null && !pythonProcess.HasExited)
+            {
+                try
+                {
+                    pythonProcess.Kill();
+                    pythonProcess.WaitForExit(2000); 
+
+                    if (!pythonProcess.HasExited)
+                    {
+                        OnErrorOccurred?.Invoke("Python-Prozess konnte nicht sofort beendet werden.");
+                    }
+                }
+                catch (InvalidOperationException)
+                {
+                    OnErrorOccurred?.Invoke("Spracherkennung war bereits gestoppt oder konnte nicht adressiert werden.");
+                }
+                catch (Exception ex)
+                {
+                    OnErrorOccurred?.Invoke($"Fehler beim Beenden des Python-Skripts: {ex.Message}");
+                }
+                finally
+                {
+                    pythonProcess?.Dispose();
+                    pythonProcess = null;
+                }
             }
         }
     }

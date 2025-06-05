@@ -3,6 +3,7 @@ using _4Time.Async;
 using _4Time.DataCore;
 using _4Time.DataCore.Models;
 using _4Time.FrontEnd;
+using _4Time.Python;
 using System.Data;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -302,7 +303,7 @@ namespace Time4SellersApp
             Neuladen.Enabled = true;
 
 
-            button4.Text = "Programming Joke"; 
+            button4.Text = "Programming Joke";
             tabAuslesen.Text = "Auslesen";
             tabEintragen.Text = "Eintragen";
             tabSettings.Text = "Settings";
@@ -486,6 +487,6 @@ namespace Time4SellersApp
                 AutostartHelper.RemoveApplicationFromCurrentUserStartup();
                 MessageBox.Show("Autostart wurde deaktiviert. Die Anwendung wird nicht mehr automatisch gestartet.", "Autostart deaktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-        }
+        } 
     }
 }
