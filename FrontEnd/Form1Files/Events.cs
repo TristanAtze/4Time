@@ -379,7 +379,7 @@ partial class UserView
                 NavigateToSettingsSeite();
             }
         }
-        else if (command.Contains("übersicht") || command.Contains("uebersicht"))
+        else if (command.Contains("übersicht") || command.Contains("uebersicht") || command.Contains("über"))
         {
             if (this.InvokeRequired)
             {
@@ -410,6 +410,17 @@ partial class UserView
             else
             {
                 CloseCd();
+            }
+        }
+        else if (command.Contains("neuladen") || command.Contains("reload") || command.Contains("neu laden"))
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(() => Neuladen_Click(null, new EventArgs()));
+            }
+            else
+            {
+                Neuladen_Click(null, new EventArgs());
             }
         }
     }

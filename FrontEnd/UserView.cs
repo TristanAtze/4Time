@@ -2,6 +2,7 @@ using _4Time;
 using _4Time.Async;
 using _4Time.DataCore;
 using _4Time.DataCore.Models;
+using _4Time.Python;
 using System.Data;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -481,6 +482,40 @@ namespace Time4SellersApp
             {
                 AutostartHelper.RemoveApplicationFromCurrentUserStartup();
                 MessageBox.Show("Autostart wurde deaktiviert. Die Anwendung wird nicht mehr automatisch gestartet.", "Autostart deaktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void FaceRegocnitionCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            if (FaceRegocnitionCheck.Checked)
+            {
+                int seconds = (int)numericUpDownSecondsToLock.Value;
+                WebcamLockController.OnPythonOutput += (output) => {
+                    if (txtOutputLog.InvokeRequired)
+                    {
+                        textBox2.Invoke(new Action(() => textBox2.AppendText($"Webcam: {output}{Environment.NewLine}")));
+                    }
+                    else
+                    {
+                        textBox2.AppendText($"Webcam: {output}{Environment.NewLine}");
+                    }
+                };
+                WebcamLockController.OnPythonError += (error) => {
+                    if (txtOutputLog.InvokeRequired)
+                    {
+                        textBox2.Invoke(new Action(() => textBox2.AppendText($"Webcam ERROR: {error}{Environment.NewLine}")));
+                    }
+                    else
+                    {
+                        textBox2.AppendText($"Webcam ERROR: {error}{Environment.NewLine}");
+                    }
+                };
+                WebcamLockController.StartWebcamDetection(seconds);
+            }
+            else
+            {
+                WebcamLockController.StopWebcamDetection();
+                MessageBox.Show("Gesichtserkennung wurde deaktiviert. Die Anwendung wird nicht mehr versuchen, Ihr Gesicht zu erkennen.", "Gesichtserkennung deaktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }

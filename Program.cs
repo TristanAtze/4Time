@@ -41,10 +41,6 @@ namespace _4Time
         {
             Task.Run(VersionControl);
             Task.Run(Crypto.WriteKeyAsync);
-
-            if (!AutostartHelper.IsApplicationInCurrentUserStartup())
-                AutostartHelper.AddApplicationToCurrentUserStartup();
-
             Task.Run(Writer.DatabaseSetupAsync);
             Task.Run(Writer.UserSetupAsync);
         }

@@ -118,7 +118,7 @@ namespace _4Time.Python
     {
         private static Process pythonProcess;
         private static readonly string pythonInterpreterPath = "python"; // Oder der volle Pfad zu python.exe
-        private static readonly string scriptName = "webcam_presence_lock.py"; // Name des Python-Skripts
+        private static readonly string scriptName = "WebcamPresenceLock.py"; // Name des Python-Skripts
         private static readonly string scriptPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Python", scriptName);
 
 
@@ -149,6 +149,7 @@ namespace _4Time.Python
             }
             if (secondsToLock <= 0)
             {
+                secondsToLock = 10;
                 OnPythonError?.Invoke($"WARNING: Ungültiger Wert für secondsToLock ({secondsToLock}). Muss größer 0 sein.");
                 // Hier könnte man einen Standardwert setzen oder abbrechen.
                 // Fürs Erste brechen wir ab.
@@ -163,7 +164,7 @@ namespace _4Time.Python
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
-                CreateNoWindow = true, // Kein Konsolenfenster für das Python-Skript anzeigen
+                CreateNoWindow = true, 
                 WorkingDirectory = Path.GetDirectoryName(Path.GetFullPath(scriptPath)) ?? AppDomain.CurrentDomain.BaseDirectory
             };
 
@@ -173,7 +174,7 @@ namespace _4Time.Python
             {
                 if (e.Data != null)
                 {
-                    // Debug.WriteLine($"Python Output: {e.Data}"); // Für Debugging in C#
+                    Debug.WriteLine($"Python Output: {e.Data}"); 
                     OnPythonOutput?.Invoke(e.Data);
                 }
             };
@@ -182,7 +183,7 @@ namespace _4Time.Python
             {
                 if (e.Data != null)
                 {
-                    // Debug.WriteLine($"Python Error: {e.Data}"); // Für Debugging in C#
+                    Debug.WriteLine($"Python Error: {e.Data}");
                     OnPythonError?.Invoke(e.Data);
                 }
             };
@@ -206,7 +207,7 @@ namespace _4Time.Python
         {
             if (!IsRunning)
             {
-                // OnPythonOutput?.Invoke("INFO: Webcam-Überwachung lief nicht.");
+                OnPythonOutput?.Invoke("INFO: Webcam-Überwachung lief nicht.");
                 return;
             }
 
@@ -226,7 +227,7 @@ namespace _4Time.Python
 
                 // Harter Stopp, wenn nötig
                 pythonProcess.Kill(true); // Gesamten Prozessbaum killen
-                // pythonProcess.WaitForExit(); // Warten, bis der Prozess wirklich beendet ist
+                pythonProcess.WaitForExit(3500); 
 
                 OnPythonOutput?.Invoke("INFO: Webcam-Überwachungsprozess gestoppt (Kill).");
             }

@@ -154,6 +154,14 @@ namespace Time4SellersApp
             colKommentar = new DataGridViewTextBoxColumn();
             colDauer = new DataGridViewTextBoxColumn();
             tabSettings = new TabPage();
+            label28 = new Label();
+            label27 = new Label();
+            numericUpDownSecondsToLock = new NumericUpDown();
+            button5 = new Button();
+            label19 = new Label();
+            label26 = new Label();
+            FaceRegocnitionCheck = new CheckBox();
+            label20 = new Label();
             label11 = new Label();
             textBox1 = new TextBox();
             txtOutputLog = new TextBox();
@@ -184,14 +192,7 @@ namespace Time4SellersApp
             label24 = new Label();
             label17 = new Label();
             LockedTimeMin = new Label();
-            label20 = new Label();
-            FaceRegocnitionCheck = new CheckBox();
-            label26 = new Label();
-            label19 = new Label();
-            numericUpDown1 = new NumericUpDown();
-            label27 = new Label();
-            LockedTimeMin = new Label();
-            button5 = new Button();
+            textBox2 = new TextBox();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -205,9 +206,9 @@ namespace Time4SellersApp
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvEntries).BeginInit();
             tabSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownSecondsToLock).BeginInit();
             ((System.ComponentModel.ISupportInitialize)LockPcTime).BeginInit();
             ((System.ComponentModel.ISupportInitialize)LockTimeMin).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             SuspendLayout();
             // 
             // tabControl
@@ -866,10 +867,11 @@ namespace Time4SellersApp
             // 
             // tabSettings
             // 
+            tabSettings.Controls.Add(textBox2);
+            tabSettings.Controls.Add(label28);
             tabSettings.Controls.Add(label27);
-            tabSettings.Controls.Add(numericUpDown1);
+            tabSettings.Controls.Add(numericUpDownSecondsToLock);
             tabSettings.Controls.Add(button5);
-            tabSettings.Controls.Add(label11);
             tabSettings.Controls.Add(label19);
             tabSettings.Controls.Add(label26);
             tabSettings.Controls.Add(FaceRegocnitionCheck);
@@ -912,6 +914,89 @@ namespace Time4SellersApp
             tabSettings.TabIndex = 3;
             tabSettings.Text = "Settings";
             tabSettings.UseVisualStyleBackColor = true;
+            // 
+            // label28
+            // 
+            label28.AutoSize = true;
+            label28.Font = new Font("Segoe UI", 9F);
+            label28.Location = new Point(495, 386);
+            label28.Name = "label28";
+            label28.Size = new Size(208, 15);
+            label28.TabIndex = 40;
+            label28.Text = "Optimal ist ein Wert von mindestens 7";
+            // 
+            // label27
+            // 
+            label27.AutoSize = true;
+            label27.Font = new Font("Segoe UI", 9F);
+            label27.Location = new Point(495, 371);
+            label27.Name = "label27";
+            label27.Size = new Size(245, 15);
+            label27.TabIndex = 39;
+            label27.Text = "Zeitintervall bis zur PC-Sperrung in Sekunden";
+            // 
+            // numericUpDownSecondsToLock
+            // 
+            numericUpDownSecondsToLock.Font = new Font("Segoe UI", 10F);
+            numericUpDownSecondsToLock.Location = new Point(815, 343);
+            numericUpDownSecondsToLock.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
+            numericUpDownSecondsToLock.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
+            numericUpDownSecondsToLock.Name = "numericUpDownSecondsToLock";
+            numericUpDownSecondsToLock.Size = new Size(41, 25);
+            numericUpDownSecondsToLock.TabIndex = 38;
+            numericUpDownSecondsToLock.Value = new decimal(new int[] { 7, 0, 0, 0 });
+            // 
+            // button5
+            // 
+            button5.Location = new Point(276, 494);
+            button5.Name = "button5";
+            button5.Size = new Size(91, 36);
+            button5.TabIndex = 34;
+            button5.Text = "Curry";
+            button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click;
+            // 
+            // label19
+            // 
+            label19.AutoSize = true;
+            label19.Font = new Font("Segoe UI", 18F);
+            label19.Location = new Point(491, 339);
+            label19.Name = "label19";
+            label19.Size = new Size(172, 32);
+            label19.TabIndex = 37;
+            label19.Text = "Schwellenwert:";
+            // 
+            // label26
+            // 
+            label26.AutoSize = true;
+            label26.Font = new Font("Segoe UI", 9F);
+            label26.Location = new Point(495, 317);
+            label26.Name = "label26";
+            label26.Size = new Size(379, 15);
+            label26.TabIndex = 36;
+            label26.Text = "Dein PC sperrt sich automatisch, sobald du deinen Arbeitsplatz verlässt";
+            // 
+            // FaceRegocnitionCheck
+            // 
+            FaceRegocnitionCheck.AutoSize = true;
+            FaceRegocnitionCheck.Font = new Font("Segoe UI", 18F);
+            FaceRegocnitionCheck.Location = new Point(841, 295);
+            FaceRegocnitionCheck.Name = "FaceRegocnitionCheck";
+            FaceRegocnitionCheck.Size = new Size(15, 14);
+            FaceRegocnitionCheck.TabIndex = 35;
+            FaceRegocnitionCheck.Tag = "";
+            FaceRegocnitionCheck.UseVisualStyleBackColor = true;
+            FaceRegocnitionCheck.CheckedChanged += FaceRegocnitionCheck_CheckedChanged;
+            // 
+            // label20
+            // 
+            label20.AutoSize = true;
+            label20.Font = new Font("Segoe UI", 18F);
+            label20.Location = new Point(491, 285);
+            label20.Name = "label20";
+            label20.Size = new Size(291, 32);
+            label20.TabIndex = 34;
+            label20.Text = "Anwesenheits-Erkennung:";
             // 
             // label11
             // 
@@ -1214,84 +1299,16 @@ namespace Time4SellersApp
             LockedTimeMin.TabIndex = 1;
             LockedTimeMin.Text = "PC Sperrzeit Schwelle:";
             // 
-            // label20
+            // textBox2
             // 
-            label20.AutoSize = true;
-            label20.Font = new Font("Segoe UI", 18F);
-            label20.Location = new Point(491, 285);
-            label20.Name = "label20";
-            label20.Size = new Size(291, 32);
-            label20.TabIndex = 34;
-            label20.Text = "Anwesenheits-Erkennung:";
-            // 
-            // FaceRegocnitionCheck
-            // 
-            FaceRegocnitionCheck.AutoSize = true;
-            FaceRegocnitionCheck.Font = new Font("Segoe UI", 18F);
-            FaceRegocnitionCheck.Location = new Point(841, 295);
-            FaceRegocnitionCheck.Name = "FaceRegocnitionCheck";
-            FaceRegocnitionCheck.Size = new Size(15, 14);
-            FaceRegocnitionCheck.TabIndex = 35;
-            FaceRegocnitionCheck.Tag = "";
-            FaceRegocnitionCheck.UseVisualStyleBackColor = true;
-            // 
-            // label26
-            // 
-            label26.AutoSize = true;
-            label26.Font = new Font("Segoe UI", 9F);
-            label26.Location = new Point(495, 317);
-            label26.Name = "label26";
-            label26.Size = new Size(379, 15);
-            label26.TabIndex = 36;
-            label26.Text = "Dein PC sperrt sich automatisch, sobald du deinen Arbeitsplatz verlässt";
-            // 
-            // label19
-            // 
-            label19.AutoSize = true;
-            label19.Font = new Font("Segoe UI", 18F);
-            label19.Location = new Point(491, 339);
-            label19.Name = "label19";
-            label19.Size = new Size(172, 32);
-            label19.TabIndex = 37;
-            label19.Text = "Schwellenwert:";
-            // 
-            // numericUpDown1
-            // 
-            numericUpDown1.Font = new Font("Segoe UI", 10F);
-            numericUpDown1.Location = new Point(815, 343);
-            numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(41, 25);
-            numericUpDown1.TabIndex = 38;
-            // 
-            // label27
-            // 
-            label27.AutoSize = true;
-            label27.Font = new Font("Segoe UI", 9F);
-            label27.Location = new Point(495, 371);
-            label27.Name = "label27";
-            label27.Size = new Size(245, 15);
-            label27.TabIndex = 39;
-            label27.Text = "Zeitintervall bis zur PC-Sperrung in Sekunden";
-            // 
-            // LockedTimeMin
-            // 
-            LockedTimeMin.AutoSize = true;
-            LockedTimeMin.Font = new Font("Segoe UI", 18F);
-            LockedTimeMin.Location = new Point(8, 48);
-            LockedTimeMin.Name = "LockedTimeMin";
-            LockedTimeMin.Size = new Size(248, 32);
-            LockedTimeMin.TabIndex = 1;
-            LockedTimeMin.Text = "PC Sperrzeit Schwelle:";
-            // 
-            // button5
-            // 
-            button5.Location = new Point(276, 494);
-            button5.Name = "button5";
-            button5.Size = new Size(91, 36);
-            button5.TabIndex = 34;
-            button5.Text = "Curry";
-            button5.UseVisualStyleBackColor = true;
-            button5.Click += button5_Click;
+            textBox2.Enabled = false;
+            textBox2.Font = new Font("Segoe UI", 12F);
+            textBox2.Location = new Point(496, 404);
+            textBox2.Multiline = true;
+            textBox2.Name = "textBox2";
+            textBox2.ReadOnly = true;
+            textBox2.Size = new Size(361, 85);
+            textBox2.TabIndex = 41;
             // 
             // UserView
             // 
@@ -1318,9 +1335,9 @@ namespace Time4SellersApp
             ((System.ComponentModel.ISupportInitialize)dgvEntries).EndInit();
             tabSettings.ResumeLayout(false);
             tabSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownSecondsToLock).EndInit();
             ((System.ComponentModel.ISupportInitialize)LockPcTime).EndInit();
             ((System.ComponentModel.ISupportInitialize)LockTimeMin).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             ResumeLayout(false);
         }
         private Label label7;
@@ -1370,9 +1387,11 @@ namespace Time4SellersApp
         private CheckBox FaceRegocnitionCheck;
         private Label label20;
         private Label label27;
-        private NumericUpDown numericUpDown1;
+        private NumericUpDown numericUpDownSecondsToLock;
         private Label label19;
         private PictureBox pictureBox1;
         private Button button5;
+        private Label label28;
+        private TextBox textBox2;
     }
 }
