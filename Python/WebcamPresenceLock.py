@@ -81,17 +81,26 @@ def main(seconds_to_lock_arg):
             gray_frame = cv2.equalizeHist(gray_frame)
 
             frontal_faces = frontal_face_cascade.detectMultiScale(
-                gray_frame, scaleFactor=1.05, minNeighbors=4, minSize=(30, 30)
+                gray_frame, 
+                scaleFactor=1.1, 
+                minNeighbors=5, 
+                minSize=(30, 30)
             )
 
             profile_faces = [] 
             if len(frontal_faces) == 0:
                 profile_faces_left = profile_face_cascade.detectMultiScale(
-                    gray_frame, scaleFactor=1.05, minNeighbors=5, minSize=(40, 40)
+                    gray_frame, 
+                    scaleFactor=1.1, 
+                    minNeighbors=5, 
+                    minSize=(40, 40)
                 )
                 flipped_gray_frame = cv2.flip(gray_frame, 1)
                 profile_faces_right_flipped = profile_face_cascade.detectMultiScale(
-                    flipped_gray_frame, scaleFactor=1.05, minNeighbors=5, minSize=(40, 40)
+                    flipped_gray_frame, 
+                    scaleFactor=1.1, 
+                    minNeighbors=5, 
+                    minSize=(40, 40)
                 )
                 profile_faces_right = []
                 for (x, y, w, h) in profile_faces_right_flipped:

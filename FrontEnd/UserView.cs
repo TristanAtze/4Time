@@ -142,6 +142,7 @@ namespace Time4SellersApp
             if (!isDatetimePicker)
             {
                 await AwaitEntryTask();
+
             }
 
             My4SellersDateTime = dateTimePicker1.Value.Date;
@@ -156,10 +157,8 @@ namespace Time4SellersApp
                 My4SellersDateTime = DateTime.Now.Date;
             }
 
-
-
             //Vormittag
-            List<Entry> WorktimeVormittag = [.. AllEntrys.Where(x => x.Start.Date == My4SellersDateTime.Date).Where(x => x.CategoryName == "Vormittag")];
+            List<Entry> WorktimeVormittag = [.. AllEntrys.Where(x => x.Start.Date == My4SellersDateTime.Date).Where(x => x.CategoryName == "Vormittag" || x.CategoryID == 9)];
             var FirstEntryVormittag = WorktimeVormittag.Where(x => x.Start.Date == My4SellersDateTime.Date).OrderBy(x => x.Start).FirstOrDefault();
 
             TimeSpan VormittagTimeSpan = TimeSpan.Zero;
@@ -170,7 +169,7 @@ namespace Time4SellersApp
             var WorktimeVormittagStartEnd = $"{FirstEntryVormittag?.Start.ToShortTimeString()} - {FirstEntryVormittag?.Start.Add(VormittagTimeSpan).ToShortTimeString()}";
 
             //Pause
-            List<Entry> WorktimePause = [.. AllEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CategoryName.Contains("ause"))];
+            List<Entry> WorktimePause = [.. AllEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CategoryName.Contains("ause") || x.CategoryID is >= 1 and <= 3)];
             var FirstEntryPause = WorktimePause.Where(x => x.Start.Date == My4SellersDateTime).OrderBy(x => x.Start).FirstOrDefault();
             TimeSpan PauseTimeSpan = TimeSpan.Zero;
             foreach (var l in WorktimePause)
@@ -180,7 +179,7 @@ namespace Time4SellersApp
             var WorktimePauseStartEnd = $"{FirstEntryPause?.Start.ToShortTimeString()} - {FirstEntryPause?.Start.Add(PauseTimeSpan).ToShortTimeString()}";
 
             //Nachmittag
-            List<Entry> WorktimeNachmittag = [.. AllEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CategoryName == "Nachmittag")];
+            List<Entry> WorktimeNachmittag = [.. AllEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CategoryName == "Nachmittag" || x.CategoryID == 10)];
             var FirstEntryNachmittag = WorktimeNachmittag.Where(x => x.Start.Date == My4SellersDateTime).OrderBy(x => x.Start).FirstOrDefault();
             TimeSpan NachmittagTimeSpan = TimeSpan.Zero;
             foreach (var l in WorktimeNachmittag)
@@ -189,9 +188,13 @@ namespace Time4SellersApp
             }
             var WorktimeNachmittagStartEnd = $"{FirstEntryPause?.Start.Add(PauseTimeSpan).ToShortTimeString()} - {FirstEntryPause?.Start.Add(PauseTimeSpan + NachmittagTimeSpan).ToShortTimeString()}";
 
-            VormittagLabel.Text = $"Vormittag:    {WorktimeVormittagStartEnd} (Interne Buchung)" ?? $"Vormittag: 00:00";
-            NachmittagLabel.Text = $"Nachmittag: {WorktimeNachmittagStartEnd} (Interne Buchung)" ?? $"Nachmittag: 00:00";
-            PauseLabel.Text = $"Pause:          {WorktimePauseStartEnd} (gesetzl. Pausenzeiten für Auszubildende)" ?? $"Pause: 00:00";
+            if ((WorktimeVormittagStartEnd.Length + WorktimeNachmittagStartEnd.Length + WorktimePauseStartEnd.Length) > 9)
+            {
+                VormittagLabel.Text = $"Vormittag:    {WorktimeVormittagStartEnd} (Interne Buchung)" ?? $"Vormittag: 00:00";
+                NachmittagLabel.Text = $"Nachmittag: {WorktimeNachmittagStartEnd} (Interne Buchung)" ?? $"Nachmittag: 00:00";
+                PauseLabel.Text = $"Pause:          {WorktimePauseStartEnd} (gesetzl. Pausenzeiten für Auszubildende)" ?? $"Pause: 00:00";
+            }
+            
 
             btnSpeichern.Enabled = false;
 
