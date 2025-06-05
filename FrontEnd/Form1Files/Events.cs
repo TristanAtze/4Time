@@ -423,6 +423,17 @@ partial class UserView
                 Neuladen_Click(null, new EventArgs());
             }
         }
+        else if (command.Contains("curry") || command.Contains("lecker") || command.Contains("schmackofatz"))
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(() => button5_Click(null, new EventArgs()));
+            }
+            else
+            {
+                button5_Click(null, new EventArgs());
+            }
+        }
     }
     private void OpenCd()
     {
