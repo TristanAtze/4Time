@@ -170,7 +170,6 @@ namespace Time4SellersApp
             label19 = new Label();
             textBox1 = new TextBox();
             txtOutputLog = new TextBox();
-            lblStatus = new Label();
             label18 = new Label();
             SpeechToTextCheck = new CheckBox();
             label17 = new Label();
@@ -854,7 +853,6 @@ namespace Time4SellersApp
             tabSettings.Controls.Add(label19);
             tabSettings.Controls.Add(textBox1);
             tabSettings.Controls.Add(txtOutputLog);
-            tabSettings.Controls.Add(lblStatus);
             tabSettings.Controls.Add(label18);
             tabSettings.Controls.Add(SpeechToTextCheck);
             tabSettings.Controls.Add(label17);
@@ -888,7 +886,7 @@ namespace Time4SellersApp
             // label19
             // 
             label19.AutoSize = true;
-            label19.Location = new Point(8, 353);
+            label19.Location = new Point(8, 336);
             label19.Name = "label19";
             label19.Size = new Size(38, 15);
             label19.TabIndex = 26;
@@ -896,7 +894,8 @@ namespace Time4SellersApp
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(8, 371);
+            textBox1.Enabled = false;
+            textBox1.Location = new Point(8, 354);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
             textBox1.ReadOnly = true;
@@ -906,21 +905,13 @@ namespace Time4SellersApp
             // 
             // txtOutputLog
             // 
-            txtOutputLog.Location = new Point(8, 325);
+            txtOutputLog.Enabled = false;
+            txtOutputLog.Location = new Point(8, 310);
             txtOutputLog.Name = "txtOutputLog";
-            txtOutputLog.PlaceholderText = "Hier stehen die von der Spracherkennung verstandenen wörter";
+            txtOutputLog.PlaceholderText = "Status: Offline";
             txtOutputLog.ReadOnly = true;
             txtOutputLog.Size = new Size(422, 23);
             txtOutputLog.TabIndex = 24;
-            // 
-            // lblStatus
-            // 
-            lblStatus.AutoSize = true;
-            lblStatus.Location = new Point(8, 307);
-            lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(81, 15);
-            lblStatus.TabIndex = 23;
-            lblStatus.Text = "Status: Offline";
             // 
             // label18
             // 
@@ -1203,7 +1194,6 @@ namespace Time4SellersApp
         private Label label17;
         private Label label18;
         private CheckBox SpeechToTextCheck;
-        private Label lblStatus;
         private TextBox txtOutputLog;
         private Label label19;
         private TextBox textBox1;
