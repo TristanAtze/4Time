@@ -6,7 +6,7 @@ Willkommen bei **4Time**! Tauche ein in eine intelligente und sichere Welt der Z
 
 * **👨‍💼 Zwei maßgeschneiderte Ansichten:**
     * **Benutzeransicht:** Dein täglicher Begleiter für die persönliche Zeiterfassung, das Anzeigen von Statistiken und die Verwaltung deiner Einträge.
-    * **Admin-Ansicht:** Speziell für Administratoren (ja, Gerd Kaufmann, wir sprechen von dir! 👋) – hier können die Zeitdaten anderer Benutzer eingesehen und verwaltet werden.
+    * **Admin-Ansicht:** Speziell für Administratoren – hier können die Zeitdaten anderer Benutzer eingesehen und verwaltet werden.
 * **⏱️ Umfassende und flexible Zeiterfassung:**
     * Erfasse präzise Arbeitsstunden, verschiedene Pausen (Mittag, Raucherpause, allgemeine Pause) und andere Aktivitäten wie Urlaub, Krankheit oder Berufsschule.
     * Wähle die für dich passende Eingabemethode: Gib eine Start- und Endzeit an, eine Startzeit plus Dauer oder eine Endzeit minus Dauer.
