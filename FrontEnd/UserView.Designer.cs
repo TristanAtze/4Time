@@ -52,7 +52,6 @@ namespace Time4SellersApp
         private Label label2;
         private Label label5;
         private ComboBox BookingType;
-        private PictureBox pictureBox1;
         private Label OTWeek;
         private Label PTWeek;
         private Label OTToday;
@@ -145,7 +144,6 @@ namespace Time4SellersApp
             btnSpeichern = new Button();
             tabAuslesen = new TabPage();
             Löschen = new Button();
-            pictureBox1 = new PictureBox();
             btnSettingsAuslesen = new Button();
             btnNeuladenAuslesen = new Button();
             dgvEntries = new DataGridView();
@@ -178,7 +176,6 @@ namespace Time4SellersApp
             label8 = new Label();
             LockTimeMin = new NumericUpDown();
             label7 = new Label();
-            LockedTimeMin = new Label();
             label21 = new Label();
             label22 = new Label();
             label23 = new Label();
@@ -186,6 +183,8 @@ namespace Time4SellersApp
             label25 = new Label();
             label24 = new Label();
             label17 = new Label();
+            LockedTimeMin = new Label();
+            pictureBox1 = new PictureBox();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -196,11 +195,11 @@ namespace Time4SellersApp
             ((System.ComponentModel.ISupportInitialize)StartzeitDauerMinuten).BeginInit();
             ((System.ComponentModel.ISupportInitialize)StartzeitDauerStunden).BeginInit();
             tabAuslesen.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvEntries).BeginInit();
             tabSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)LockPcTime).BeginInit();
             ((System.ComponentModel.ISupportInitialize)LockTimeMin).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // tabControl
@@ -757,8 +756,8 @@ namespace Time4SellersApp
             // 
             // tabAuslesen
             // 
-            tabAuslesen.Controls.Add(Löschen);
             tabAuslesen.Controls.Add(pictureBox1);
+            tabAuslesen.Controls.Add(Löschen);
             tabAuslesen.Controls.Add(btnSettingsAuslesen);
             tabAuslesen.Controls.Add(btnNeuladenAuslesen);
             tabAuslesen.Controls.Add(dgvEntries);
@@ -776,16 +775,6 @@ namespace Time4SellersApp
             Löschen.TabIndex = 5;
             Löschen.Text = "Löschen";
             Löschen.Click += Löschen_Click;
-            // 
-            // pictureBox1
-            // 
-            pictureBox1.ImageLocation = "res/4TIMELogo.gif";
-            pictureBox1.Location = new Point(199, 14);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(424, 122);
-            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBox1.TabIndex = 3;
-            pictureBox1.TabStop = false;
             // 
             // btnSettingsAuslesen
             // 
@@ -814,7 +803,7 @@ namespace Time4SellersApp
             dgvEntries.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvEntries.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgvEntries.Columns.AddRange(new DataGridViewColumn[] { colStart, colEnd, colArt, colKommentar, colDauer });
-            dgvEntries.Location = new Point(8, 142);
+            dgvEntries.Location = new Point(8, 156);
             dgvEntries.Name = "dgvEntries";
             dgvEntries.ReadOnly = true;
             dgvEntries.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -1134,16 +1123,6 @@ namespace Time4SellersApp
             label7.TabIndex = 2;
             label7.Text = "Die Sperrzeit ab der eine Desktop Benachrichtigung erscheint";
             // 
-            // LockedTimeMin
-            // 
-            LockedTimeMin.AutoSize = true;
-            LockedTimeMin.Font = new Font("Segoe UI", 18F);
-            LockedTimeMin.Location = new Point(8, 48);
-            LockedTimeMin.Name = "LockedTimeMin";
-            LockedTimeMin.Size = new Size(248, 32);
-            LockedTimeMin.TabIndex = 1;
-            LockedTimeMin.Text = "PC Sperrzeit Schwelle:";
-            // 
             // label21
             // 
             label21.AutoSize = true;
@@ -1209,6 +1188,26 @@ namespace Time4SellersApp
             label17.TabIndex = 20;
             label17.Text = "Spracherkenung:";
             // 
+            // LockedTimeMin
+            // 
+            LockedTimeMin.AutoSize = true;
+            LockedTimeMin.Font = new Font("Segoe UI", 18F);
+            LockedTimeMin.Location = new Point(8, 48);
+            LockedTimeMin.Name = "LockedTimeMin";
+            LockedTimeMin.Size = new Size(248, 32);
+            LockedTimeMin.TabIndex = 1;
+            LockedTimeMin.Text = "PC Sperrzeit Schwelle:";
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.ImageLocation = "res/4TIMELogo.gif";
+            pictureBox1.Location = new Point(0, 0);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(882, 150);
+            pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
+            pictureBox1.TabIndex = 33;
+            pictureBox1.TabStop = false;
+            // 
             // UserView
             // 
             ClientSize = new Size(890, 561);
@@ -1230,12 +1229,12 @@ namespace Time4SellersApp
             ((System.ComponentModel.ISupportInitialize)StartzeitDauerMinuten).EndInit();
             ((System.ComponentModel.ISupportInitialize)StartzeitDauerStunden).EndInit();
             tabAuslesen.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvEntries).EndInit();
             tabSettings.ResumeLayout(false);
             tabSettings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)LockPcTime).EndInit();
             ((System.ComponentModel.ISupportInitialize)LockTimeMin).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }
         private Label label7;
@@ -1282,5 +1281,6 @@ namespace Time4SellersApp
         private Label label21;
         private Label label22;
         private Label label23;
+        private PictureBox pictureBox1;
     }
 }
