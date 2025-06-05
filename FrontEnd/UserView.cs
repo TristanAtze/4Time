@@ -19,6 +19,7 @@ namespace Time4SellersApp
         private List<(string Key, object Value)> _settingsToSave = [];
         private List<Category> _allCategorys = Reader.Read<Category>("Categories").Result;
         private bool isDataLoaded = false;
+        private NotificationManager? _notificationManager = null;
 
         public List<Entry> AllEntrys;
 
@@ -291,9 +292,9 @@ namespace Time4SellersApp
             if (reloadDataGrid)
                 await FillDataGridView();
 
-            if (!isDataLoaded && !isDatetimePicker)
+            if (!isDatetimePicker)
             {
-                NotificationManager notificationManager = new(dgvEntries, allCategorys, checkBox1, checkBox2);
+                _notificationManager = new NotificationManager(dgvEntries, _allCategorys, checkBox1, checkBox2);
             }
 
 
