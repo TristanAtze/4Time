@@ -1,5 +1,6 @@
 ﻿using _4Time.DataCore.Models; // Annahme: Diese using-Direktive ist weiterhin notwendig
 using Microsoft.Toolkit.Uwp.Notifications;
+using Time4SellersApp;
 
 // Behelfsklasse für CheckBox, falls der Originaltyp nicht bekannt ist.
 // Ersetze dies durch deinen tatsächlichen CheckBox-Typ oder eine bool-Eigenschaft.

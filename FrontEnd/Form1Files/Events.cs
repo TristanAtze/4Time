@@ -453,27 +453,28 @@ partial class UserView
         if (SpeechToTextCheck.Checked)
         {
             txtOutputLog.Text = "Starte Spracherkennung... (Dieser Prozess kann einige Sekunden Dauern)";
-            PythonCaller.OnTextErkannt += PythonCaller_OnTextErkannt;
-            PythonCaller.OnErrorOccurred += PythonCaller_OnErrorOccurred;
-            PythonCaller.SpeechToTextCaller();
+            SpeechToTextController.OnTextReceived += PythonCaller_OnTextErkannt;
+            SpeechToTextController.OnErrorOccurred += PythonCaller_OnErrorOccurred;
+            SpeechToTextController.SpeechToTextCaller();
         }
         else
         {
             txtOutputLog.Text = "Stoppe Spracherkennung...";
-            PythonCaller.StopSpeechToText();
+            SpeechToTextController.StopSpeechToText();
             txtOutputLog.Text = "Spracherkennung gestoppt."; 
         }
     }
 
     protected override void OnFormClosing(FormClosingEventArgs e)
     {
-        PythonCaller.OnTextErkannt -= PythonCaller_OnTextErkannt;
-        PythonCaller.OnErrorOccurred -= PythonCaller_OnErrorOccurred;
+        SpeechToTextController.OnTextReceived -= PythonCaller_OnTextErkannt;
+        SpeechToTextController.OnErrorOccurred -= PythonCaller_OnErrorOccurred;
 
         if (SpeechToTextCheck.Checked) 
         {
-            PythonCaller.StopSpeechToText();
+            SpeechToTextController.StopSpeechToText();
         }
         base.OnFormClosing(e);
     }
+
 }

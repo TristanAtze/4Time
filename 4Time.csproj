@@ -60,6 +60,7 @@
 
   <ItemGroup>
     <None Include="FrontEnd\Form1Files\Events.resx" />
+    <None Include="Python\PythonController.cs" />
   </ItemGroup>
 
   <ItemGroup>
