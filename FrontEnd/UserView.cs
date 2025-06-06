@@ -6,6 +6,7 @@ using _4Time.Python;
 using System.Data;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using _4Time.General;
 
 namespace Time4SellersApp
 {
@@ -58,7 +59,7 @@ namespace Time4SellersApp
 
             _ = FillValues();
 
-            LogginName.Text = Connector.FirstName + " " + Connector.LastName;
+            LogginName.Text = Connector.FirstName.Capitalise() + " " + Connector.LastName.Capitalise().Verstraussen();
 
             LoadSettings();
 
