@@ -409,7 +409,7 @@ namespace Time4SellersApp
             TimeSpan workDur = TimeSpan.Zero;
             for (int i = dailyEntries.Count - 1; i >= 0; i--)
             {
-                if (_allCategorys.Where(x => x.CategoryID == dailyEntries[i].CategoryID).First().IsWorkTime)
+                if (_allCategorys.First(x => x.CategoryID == dailyEntries[i].CategoryID).IsWorkTime)
                     workDur += dailyEntries[i].End - dailyEntries[i].Start;
             }
 
@@ -467,8 +467,8 @@ namespace Time4SellersApp
             this.Close();
 
             var process = Process.GetProcessesByName("4Time").FirstOrDefault();
-            string localExePath = process.MainModule.FileName;
-            string localDir = Path.GetDirectoryName(localExePath);
+            string localExePath = process?.MainModule?.FileName ?? "";
+            string localDir = Path.GetDirectoryName(localExePath) ?? "";
             Process.Start(new ProcessStartInfo { FileName = localExePath, WorkingDirectory = localDir });
         }
 
@@ -476,11 +476,9 @@ namespace Time4SellersApp
         {
             if (autostartCheckBox.Checked)
             {
-                if (!AutostartHelper.IsApplicationInCurrentUserStartup())
-                {
-                    AutostartHelper.AddApplicationToCurrentUserStartup();
-                    MessageBox.Show("Autostart wurde aktiviert. Die Anwendung wird nun automatisch gestartet.", "Autostart aktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                if (AutostartHelper.IsApplicationInCurrentUserStartup()) return;
+                AutostartHelper.AddApplicationToCurrentUserStartup();
+                MessageBox.Show("Autostart wurde aktiviert. Die Anwendung wird nun automatisch gestartet.", "Autostart aktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
