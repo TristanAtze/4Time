@@ -64,14 +64,14 @@ namespace _4Time
     public static class AutostartHelper
     {
         // Der Name, unter dem deine Anwendung in der Registry erscheinen soll.
-        // W�hle hier etwas Eindeutiges, z.B. den Namen deiner Anwendung.
+        // Wühle hier etwas Eindeutiges, z.B. den Namen deiner Anwendung.
         private const string AppName = "4Time";
 
-        // Pfad zum Registry-Schl�ssel f�r den aktuellen Benutzer
+        // Pfad zum Registry-Schlüssel für den aktuellen Benutzer
         private const string RegistryPathCurrentUser = @"Software\Microsoft\Windows\CurrentVersion\Run";
 
         /// <summary>
-        /// F�gt die Anwendung zum Autostart f�r den aktuellen Benutzer hinzu.
+        /// Fügt die Anwendung zum Autostart für den aktuellen Benutzer hinzu.
         /// </summary>
         public static void AddApplicationToCurrentUserStartup()
         {
@@ -82,7 +82,7 @@ namespace _4Time
                     if (key == null)
                     {
                         MessageBox.Show(
-                            "Fehler: Registry-Schl�ssel nicht gefunden.",
+                            "Fehler: Registry-Schlüssel nicht gefunden.",
                             "Autostart",
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Error
@@ -98,7 +98,7 @@ namespace _4Time
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    $"Fehler beim Hinzuf�gen zum Autostart: {ex.Message}",
+                    $"Fehler beim Hinzufügen zum Autostart: {ex.Message}",
                     "Autostart",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
@@ -107,7 +107,7 @@ namespace _4Time
         }
 
         /// <summary>
-        /// Entfernt die Anwendung aus dem Autostart f�r den aktuellen Benutzer.
+        /// Entfernt die Anwendung aus dem Autostart für den aktuellen Benutzer.
         /// </summary>
         public static void RemoveApplicationFromCurrentUserStartup()
         {
@@ -117,11 +117,11 @@ namespace _4Time
                 {
                     if (key == null)
                     {
-                        Console.WriteLine($"Fehler: Registry-Schl�ssel nicht gefunden: HKCU\\{RegistryPathCurrentUser}");
+                        Console.WriteLine($"Fehler: Registry-Schlüssel nicht gefunden: HKCU\\{RegistryPathCurrentUser}");
                         return;
                     }
 
-                    // �berpr�fe, ob der Wert existiert, bevor du versuchst, ihn zu l�schen.
+                    // überprüfe, ob der Wert existiert, bevor du versuchst, ihn zu lüschen.
                     if (key.GetValue(AppName) != null)
                     {
                         key.DeleteValue(AppName, false); 
@@ -140,14 +140,14 @@ namespace _4Time
         }
 
         /// <summary>
-        /// Überprüft, ob die Anwendung f�r den aktuellen Benutzer im Autostart registriert ist.
+        /// Überprüft, ob die Anwendung für den aktuellen Benutzer im Autostart registriert ist.
         /// </summary>
         /// <returns>True, wenn registriert, sonst False.</returns>
         public static bool IsApplicationInCurrentUserStartup()
         {
             try
             {
-                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(RegistryPathCurrentUser, false)) // false f�r reinen Lesezugriff
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(RegistryPathCurrentUser, false)) // false für reinen Lesezugriff
                 {
                     if (key == null)
                     {
@@ -155,7 +155,7 @@ namespace _4Time
                     }
 
                     string executablePath = Application.ExecutablePath;
-                    // F�r Konsolenanwendungen:
+                    // Für Konsolenanwendungen:
                     // string executablePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
 
                     object value = key.GetValue(AppName);
