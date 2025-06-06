@@ -5,6 +5,7 @@ using _4Time.DataCore.Models;
 using _4Time.Python;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using _4Time.General;
 
@@ -369,9 +370,9 @@ namespace Time4SellersApp
                            .AddHours(-(double)EndzeitDauerStunden.Value)
                            .AddMinutes(-(double)EndzeitDauerMinuten.Value);
             }
-            StartzeitEndzeitStart.Text = endzeit.ToString();
-            StartzeitDauerStart.Text = endzeit.ToString();
-            EndzeitDauerStart.Text = endzeit.ToString();
+            StartzeitEndzeitStart.Text = endzeit.ToString(CultureInfo.InvariantCulture);
+            StartzeitDauerStart.Text = endzeit.ToString(CultureInfo.InvariantCulture);
+            EndzeitDauerStart.Text = endzeit.ToString(CultureInfo.InvariantCulture);
 
             string art = BookingType.SelectedItem?.ToString() ?? "";
 
