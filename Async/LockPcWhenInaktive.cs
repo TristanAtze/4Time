@@ -105,10 +105,6 @@ public static class LockPcWhenInaktive
             {
                 MessageBox. Show("Fehler beim sperren der Workstation.", "LockPC", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            else
-            {
-
-            }
         }
         catch (Exception ex)
         {

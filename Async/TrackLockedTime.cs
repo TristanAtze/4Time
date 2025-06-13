@@ -22,12 +22,7 @@ internal class TrackLockedTime
             return;
         }
 
-        if (mainView == null)
-        {
-            throw new ArgumentNullException(nameof(mainView), "UserView-Instanz darf nicht null sein.");
-        }
-
-        _mainUserViewInstance = mainView;
+        _mainUserViewInstance = mainView ?? throw new ArgumentNullException(nameof(mainView), "UserView-Instanz darf nicht null sein.");
         SystemEvents.SessionSwitch += new SessionSwitchEventHandler(SystemEvents_SessionSwitch);
         Debug.WriteLine("TrackLockedTime initialisiert und SessionSwitch-Event abonniert.");
     }
@@ -53,12 +48,14 @@ internal class TrackLockedTime
                 AutoBookCaller();
                 ShowPauseMessageBox();
                 break;
+            default:
+                break;
         }
     }
 
     private static void AutoBookCaller()
     {
-        if (_mainUserViewInstance == null || _mainUserViewInstance.AllEntrys == null)
+        if (_mainUserViewInstance?.AllEntrys == null)
         {
             Debug.WriteLine("AutoBookCaller: _mainUserViewInstance oder _allEntrys ist null.");
             return;
@@ -109,33 +106,31 @@ internal class TrackLockedTime
         }
 
         Thread.Sleep(500);
-        if (_pcLockedTime.HasValue)
+        if (!_pcLockedTime.HasValue) return;
+        var ursprünglicheMinSize = _mainUserViewInstance.MinimumSize;
+        _mainUserViewInstance.MinimumSize = new System.Drawing.Size(0, 0);
+
+        DialogResult result = MessageBox.Show(
+            _mainUserViewInstance,
+            $"Der PC wurde Entsperrt. Willst du folgende Zeit als '{bookTypeString}' buchen?\nStart: {latestEntryEnd}\nEnde: {_pcLockedTime.Value}",
+            "4Time Autobook",
+            MessageBoxButtons.YesNo,
+            MessageBoxIcon.Information,
+            MessageBoxDefaultButton.Button1
+        );
+
+        if (result == DialogResult.Yes)
         {
-            var ursprünglicheMinSize = _mainUserViewInstance.MinimumSize;
-            _mainUserViewInstance.MinimumSize = new System.Drawing.Size(0, 0);
-
-            DialogResult result = MessageBox.Show(
-                _mainUserViewInstance,
-                $"Der PC wurde Entsperrt. Willst du folgende Zeit als '{bookTypeString}' buchen?\nStart: {latestEntryEnd}\nEnde: {_pcLockedTime.Value}",
-                "4Time Autobook",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Information,
-                MessageBoxDefaultButton.Button1
-            );
-
-            if (result == DialogResult.Yes)
+            Writer.Insert("Entries", new Entry
             {
-                Writer.Insert("Entries", new Entry
-                {
-                    UserID = await Task.Run(async () => Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).Result.First().UserID),
-                    Start = latestEntryEnd,
-                    End = _pcLockedTime.Value,
-                    CategoryID = category,
-                    Comment = "[AUTO]Letzer Eintrag - Lock"
-                });
-            }
-            _mainUserViewInstance.MinimumSize = ursprünglicheMinSize;
+                UserID = await Task.Run(async () => Reader.Read<User>("User", ["[UserID]"], [$"[FirstName] = '{Connector.FirstName}'", $"[LastName] = '{Connector.LastName}'"]).Result.First().UserID),
+                Start = latestEntryEnd,
+                End = _pcLockedTime.Value,
+                CategoryID = category,
+                Comment = "[AUTO]Letzer Eintrag - Lock"
+            });
         }
+        _mainUserViewInstance.MinimumSize = ursprünglicheMinSize;
     }
 
     private async static void ShowFirstEntryMessageBox(Entry? todaysFirstEntry)

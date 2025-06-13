@@ -81,7 +81,7 @@ public class YouTubeShortsBlocker
             if (processName.Contains("chrome") || processName.Contains("firefox") || processName.Contains("msedge"))
             {
                 Console.WriteLine($"Aktives Browser-Fenster erkannt: {processName} (PID: {processId}), Titel: {windowTitle}");
-                string url = GetBrowserUrl(foregroundWindowHandle, processName);
+                string url = GetBrowserUrl(foregroundWindowHandle, processName) ?? string.Empty;
 
                 if (!string.IsNullOrEmpty(url))
                 {
@@ -111,14 +111,10 @@ public class YouTubeShortsBlocker
     {
         const int nChars = 256;
         StringBuilder buff = new StringBuilder(nChars);
-        if (GetWindowText(hWnd, buff, nChars) > 0)
-        {
-            return buff.ToString();
-        }
-        return null;
+        return GetWindowText(hWnd, buff, nChars) > 0 ? buff.ToString() : string.Empty;
     }
 
-    private static string GetBrowserUrl(IntPtr windowHandle, string processName)
+    private static string? GetBrowserUrl(IntPtr windowHandle, string processName)
     {
         try
         {

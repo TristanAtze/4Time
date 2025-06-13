@@ -56,7 +56,7 @@ partial class UserView
 
         var entry = ProcessValues();
 
-        if(entry.End < entry.Start || entry.End == entry.Start)
+        if(entry.End <= entry.Start)
         {
             MessageBox.Show("Ungültige Zeiten!", "4TIME", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
@@ -110,7 +110,7 @@ partial class UserView
 
         MessageBox.Show("Daten gespeichert!", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-        if (entry.CategoryName == "Pause" || entry.CategoryName == "MittagsPause" || entry.CategoryName == "RaucherPause")
+        if (entry.CategoryName is "Pause" or "MittagsPause" or "RaucherPause")
         { 
             NotificationManager notificationManager = new(dgvEntries, allCategorys, checkBox1, checkBox2); 
         }
@@ -162,9 +162,8 @@ partial class UserView
            .OrderByDescending(i => i)
            .ToList();
 
-            foreach (int rowIndex in indices)
+            foreach (Entry? entry in indices.Select(rowIndex => AllEntrys[rowIndex]))
             {
-                var entry = AllEntrys[rowIndex];
                 Writer.Delete("Entries", [$"[EntryID] = {entry.EntryID}"]);
                 AllEntrys.Where(x => x.EntryID == entry.EntryID).ToList().ForEach(x => AllEntrys.Remove(x));
             }

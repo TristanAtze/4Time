@@ -5,7 +5,9 @@ using _4Time.DataCore.Models;
 using _4Time.Python;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.Runtime.InteropServices;
+using _4Time.General;
 
 namespace Time4SellersApp
 {
@@ -58,7 +60,7 @@ namespace Time4SellersApp
 
             _ = FillValues();
 
-            LogginName.Text = Connector.FirstName + " " + Connector.LastName;
+            LogginName.Text = Connector.FirstName.Capitalise() + " " + Connector.LastName.Capitalise().Verstraussen();
 
             LoadSettings();
 
@@ -368,9 +370,9 @@ namespace Time4SellersApp
                            .AddHours(-(double)EndzeitDauerStunden.Value)
                            .AddMinutes(-(double)EndzeitDauerMinuten.Value);
             }
-            StartzeitEndzeitStart.Text = endzeit.ToString();
-            StartzeitDauerStart.Text = endzeit.ToString();
-            EndzeitDauerStart.Text = endzeit.ToString();
+            StartzeitEndzeitStart.Text = endzeit.ToString(CultureInfo.InvariantCulture);
+            StartzeitDauerStart.Text = endzeit.ToString(CultureInfo.InvariantCulture);
+            EndzeitDauerStart.Text = endzeit.ToString(CultureInfo.InvariantCulture);
 
             string art = BookingType.SelectedItem?.ToString() ?? "";
 
@@ -408,7 +410,7 @@ namespace Time4SellersApp
             TimeSpan workDur = TimeSpan.Zero;
             for (int i = dailyEntries.Count - 1; i >= 0; i--)
             {
-                if (_allCategorys.Where(x => x.CategoryID == dailyEntries[i].CategoryID).First().IsWorkTime)
+                if (_allCategorys.First(x => x.CategoryID == dailyEntries[i].CategoryID).IsWorkTime)
                     workDur += dailyEntries[i].End - dailyEntries[i].Start;
             }
 
@@ -466,8 +468,8 @@ namespace Time4SellersApp
             this.Close();
 
             var process = Process.GetProcessesByName("4Time").FirstOrDefault();
-            string localExePath = process.MainModule.FileName;
-            string localDir = Path.GetDirectoryName(localExePath);
+            string localExePath = process?.MainModule?.FileName ?? "";
+            string localDir = Path.GetDirectoryName(localExePath) ?? "";
             Process.Start(new ProcessStartInfo { FileName = localExePath, WorkingDirectory = localDir });
         }
 
@@ -475,11 +477,9 @@ namespace Time4SellersApp
         {
             if (autostartCheckBox.Checked)
             {
-                if (!AutostartHelper.IsApplicationInCurrentUserStartup())
-                {
-                    AutostartHelper.AddApplicationToCurrentUserStartup();
-                    MessageBox.Show("Autostart wurde aktiviert. Die Anwendung wird nun automatisch gestartet.", "Autostart aktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                if (AutostartHelper.IsApplicationInCurrentUserStartup()) return;
+                AutostartHelper.AddApplicationToCurrentUserStartup();
+                MessageBox.Show("Autostart wurde aktiviert. Die Anwendung wird nun automatisch gestartet.", "Autostart aktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
