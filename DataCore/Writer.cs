@@ -20,7 +20,7 @@ internal class Writer : Connector
         string query = File.ReadAllText("res/Setup.txt");
 
         var connection = new SqlConnection(ConnectionString);
-        var command = new SqlCommand(query, connection);
+         var command = new SqlCommand(query, connection);
 
         connection.Open();
         command.ExecuteNonQuery();

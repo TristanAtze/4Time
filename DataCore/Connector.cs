@@ -1,5 +1,6 @@
 ﻿using _N1a2b3;
 using Microsoft.Data.SqlClient;
+using System.Data.SqlClient;
 
 namespace _4Time.DataCore;
 

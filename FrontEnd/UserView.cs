@@ -158,7 +158,7 @@ namespace Time4SellersApp
             }
 
             //Vormittag
-            List<Entry> WorktimeVormittag = [.. AllEntrys.Where(x => x.Start.Date == My4SellersDateTime.Date).Where(x => x.CategoryName == "Vormittag" || x.CategoryID == 9)];
+            List<Entry> WorktimeVormittag = [.. AllEntrys.Where(x => (x.Start.Date == My4SellersDateTime.Date && (x.CategoryName == "Vormittag" || x.CategoryID == 9)))];
             var FirstEntryVormittag = WorktimeVormittag.Where(x => x.Start.Date == My4SellersDateTime.Date).OrderBy(x => x.Start).FirstOrDefault();
 
             TimeSpan VormittagTimeSpan = TimeSpan.Zero;
@@ -198,7 +198,7 @@ namespace Time4SellersApp
 
             btnSpeichern.Enabled = false;
 
-            var today = dateTimePickerOverview.Value.Date; // Dies ist der ausgewählte Tag im dateTimePickerOverview
+            var today = dateTimePickerOverview.Value.Date;
             int diff = (7 + (today.DayOfWeek - DayOfWeek.Monday)) % 7;
             var weekStart = today.AddDays(-diff);
             var weekEnd = weekStart.AddDays(4); // Annahme: Woche geht von Montag bis Freitag (5 Arbeitstage)
