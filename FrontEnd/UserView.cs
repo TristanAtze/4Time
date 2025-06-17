@@ -154,10 +154,6 @@ namespace Time4SellersApp
                 dateTimePicker1.Value = DateTime.Now.Date;
                 dateTimePickerOverview.Value = DateTime.Now.Date;
             }
-            else
-            {
-                My4SellersDateTime = DateTime.Now.Date;
-            }
 
             //Vormittag
             List<Entry> WorktimeVormittag = [.. AllEntrys.Where(x => (x.Start.Date == My4SellersDateTime.Date && (x.CategoryName == "Vormittag" || x.CategoryID == 9)))];
@@ -370,9 +366,9 @@ namespace Time4SellersApp
                            .AddHours(-(double)EndzeitDauerStunden.Value)
                            .AddMinutes(-(double)EndzeitDauerMinuten.Value);
             }
-            StartzeitEndzeitStart.Text = endzeit.ToString(CultureInfo.InvariantCulture);
-            StartzeitDauerStart.Text = endzeit.ToString(CultureInfo.InvariantCulture);
-            EndzeitDauerStart.Text = endzeit.ToString(CultureInfo.InvariantCulture);
+            StartzeitEndzeitStart.Text = endzeit.ToString();
+            StartzeitDauerStart.Text = endzeit.ToString();
+            EndzeitDauerStart.Text = endzeit.ToString();
 
             string art = BookingType.SelectedItem?.ToString() ?? "";
 
