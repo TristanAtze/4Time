@@ -559,9 +559,9 @@ partial class UserView
             _my4SELLERSTimeMMry["vE"],
             relevantTicketResult.CustomTicketId,
             _my4SellersService.GetDurationInMinutesFromDateTime(_my4SELLERSTimeMMry["vS"], _my4SELLERSTimeMMry["vE"]),
-            _my4SellersService.GetDurationInMinutesFromDateTime(_my4SELLERSTimeMMry["vS"], _my4SELLERSTimeMMry["vE"]),
+            _my4SellersService.GetDurationInHoursFromDateTime(_my4SELLERSTimeMMry["vS"], _my4SELLERSTimeMMry["vE"]),
             true,
-            171894
+            relevantTicketResult.Billing.BillingId
         )
         {
             Description = $"<p>Vormittag</p>"
@@ -587,9 +587,9 @@ partial class UserView
             _my4SELLERSTimeMMry["pE"],
             relevantTicketResult.CustomTicketId,
             _my4SellersService.GetDurationInMinutesFromDateTime(_my4SELLERSTimeMMry["pS"], _my4SELLERSTimeMMry["pE"]),
-            _my4SellersService.GetDurationInMinutesFromDateTime(_my4SELLERSTimeMMry["pS"], _my4SELLERSTimeMMry["pE"]),
+            _my4SellersService.GetDurationInHoursFromDateTime(_my4SELLERSTimeMMry["pS"], _my4SELLERSTimeMMry["pE"]),
             true,
-            171894
+            relevantTicketResult.Billing.BillingId
         )
         {
             Description = $"<p>Mittagspause</p>"
@@ -616,9 +616,9 @@ partial class UserView
             _my4SELLERSTimeMMry["nE"],
             relevantTicketResult.CustomTicketId,
             _my4SellersService.GetDurationInMinutesFromDateTime(_my4SELLERSTimeMMry["nS"], _my4SELLERSTimeMMry["nE"]),
-            _my4SellersService.GetDurationInMinutesFromDateTime(_my4SELLERSTimeMMry["nS"], _my4SELLERSTimeMMry["nE"]),
+            _my4SellersService.GetDurationInHoursFromDateTime(_my4SELLERSTimeMMry["nS"], _my4SELLERSTimeMMry["nE"]),
             true,
-            171894
+            relevantTicketResult.Billing.BillingId
         )
         {
             Description = $"<p>Nachmittag</p>"
