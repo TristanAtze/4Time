@@ -155,6 +155,7 @@ namespace Time4SellersApp
             colKommentar = new DataGridViewTextBoxColumn();
             colDauer = new DataGridViewTextBoxColumn();
             tabSettings = new TabPage();
+            button7 = new Button();
             textBox2 = new TextBox();
             label28 = new Label();
             label27 = new Label();
@@ -194,7 +195,6 @@ namespace Time4SellersApp
             label24 = new Label();
             label17 = new Label();
             LockedTimeMin = new Label();
-            button7 = new Button();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -278,7 +278,7 @@ namespace Time4SellersApp
             button6.Name = "button6";
             button6.Size = new Size(164, 60);
             button6.TabIndex = 32;
-            button6.Text = "In My4SELLERS eintagen";
+            button6.Text = "In My4SELLERS eintragen";
             button6.UseVisualStyleBackColor = true;
             button6.Click += button6_Click;
             // 
@@ -929,6 +929,16 @@ namespace Time4SellersApp
             tabSettings.Text = "Settings";
             tabSettings.UseVisualStyleBackColor = true;
             // 
+            // button7
+            // 
+            button7.Location = new Point(495, 488);
+            button7.Name = "button7";
+            button7.Size = new Size(361, 29);
+            button7.TabIndex = 42;
+            button7.Text = "My4Sellers Passwort Zurücksetzten";
+            button7.UseVisualStyleBackColor = true;
+            button7.Click += button7_Click;
+            // 
             // textBox2
             // 
             textBox2.Enabled = false;
@@ -1323,16 +1333,6 @@ namespace Time4SellersApp
             LockedTimeMin.Size = new Size(248, 32);
             LockedTimeMin.TabIndex = 1;
             LockedTimeMin.Text = "PC Sperrzeit Schwelle:";
-            // 
-            // button7
-            // 
-            button7.Location = new Point(495, 488);
-            button7.Name = "button7";
-            button7.Size = new Size(361, 29);
-            button7.TabIndex = 42;
-            button7.Text = "My4Sellers Passwort Zurücksetzten";
-            button7.UseVisualStyleBackColor = true;
-            button7.Click += button7_Click;
             // 
             // UserView
             // 
