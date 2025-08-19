@@ -166,8 +166,15 @@ namespace Time4SellersApp
             }
             var WorktimeVormittagStartEnd = $"{FirstEntryVormittag?.Start.ToShortTimeString()} - {FirstEntryVormittag?.Start.Add(VormittagTimeSpan).ToShortTimeString()}";
 
-            _ = _my4SELLERSTimeMMry.TryAdd("vS", FirstEntryVormittag?.Start ?? DateTime.MinValue);
-            _ = _my4SELLERSTimeMMry.TryAdd("vE", FirstEntryVormittag?.Start.Add(VormittagTimeSpan) ?? DateTime.MinValue);
+            if (_my4SELLERSTimeMMry.ContainsKey("vS"))
+                _my4SELLERSTimeMMry["vS"] = FirstEntryVormittag?.Start ?? DateTime.MinValue;
+            else
+                _my4SELLERSTimeMMry.Add("vS", FirstEntryVormittag?.Start ?? DateTime.MinValue);
+
+            if (_my4SELLERSTimeMMry.ContainsKey("vE"))
+                _my4SELLERSTimeMMry["vE"] = FirstEntryVormittag?.Start.Add(VormittagTimeSpan) ?? DateTime.MinValue;
+            else
+                _my4SELLERSTimeMMry.Add("vE", FirstEntryVormittag?.Start.Add(VormittagTimeSpan) ?? DateTime.MinValue);
 
             //Pause
             List<Entry> WorktimePause = [.. AllEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CategoryName.Contains("ause") || x.CategoryID is >= 1 and <= 3)];
@@ -179,8 +186,15 @@ namespace Time4SellersApp
             }
             var WorktimePauseStartEnd = $"{FirstEntryPause?.Start.ToShortTimeString()} - {FirstEntryPause?.Start.Add(PauseTimeSpan).ToShortTimeString()}";
 
-            _ = _my4SELLERSTimeMMry.TryAdd("pS", FirstEntryPause?.Start ?? DateTime.MinValue);
-            _ = _my4SELLERSTimeMMry.TryAdd("pE", FirstEntryPause?.Start.Add(PauseTimeSpan) ?? DateTime.MinValue);
+            if (_my4SELLERSTimeMMry.ContainsKey("pS"))
+                _my4SELLERSTimeMMry["pS"] = FirstEntryPause?.Start ?? DateTime.MinValue;
+            else
+                _my4SELLERSTimeMMry.Add("pS", FirstEntryPause?.Start ?? DateTime.MinValue);
+
+            if (_my4SELLERSTimeMMry.ContainsKey("pE"))
+                _my4SELLERSTimeMMry["pE"] = FirstEntryPause?.Start.Add(PauseTimeSpan) ?? DateTime.MinValue;
+            else
+                _my4SELLERSTimeMMry.Add("pE", FirstEntryPause?.Start.Add(PauseTimeSpan) ?? DateTime.MinValue);
 
             //Nachmittag
             List<Entry> WorktimeNachmittag = [.. AllEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CategoryName == "Nachmittag" || x.CategoryID == 10)];
@@ -192,8 +206,15 @@ namespace Time4SellersApp
             }
             var WorktimeNachmittagStartEnd = $"{FirstEntryPause?.Start.Add(PauseTimeSpan).ToShortTimeString()} - {FirstEntryPause?.Start.Add(PauseTimeSpan + NachmittagTimeSpan).ToShortTimeString()}";
 
-            _ = _my4SELLERSTimeMMry.TryAdd("nS", FirstEntryPause?.Start.Add(PauseTimeSpan) ?? DateTime.MinValue);
-            _ = _my4SELLERSTimeMMry.TryAdd("nE", FirstEntryPause?.Start.Add(PauseTimeSpan + NachmittagTimeSpan) ?? DateTime.MinValue);
+            if (_my4SELLERSTimeMMry.ContainsKey("nS"))
+                _my4SELLERSTimeMMry["nS"] = FirstEntryPause?.Start.Add(PauseTimeSpan) ?? DateTime.MinValue;
+            else
+                _my4SELLERSTimeMMry.Add("nS", FirstEntryPause?.Start.Add(PauseTimeSpan) ?? DateTime.MinValue);
+
+            if (_my4SELLERSTimeMMry.ContainsKey("nE"))
+                _my4SELLERSTimeMMry["nE"] = FirstEntryPause?.Start.Add(PauseTimeSpan + NachmittagTimeSpan) ?? DateTime.MinValue;
+            else
+                _my4SELLERSTimeMMry.Add("nE", FirstEntryPause?.Start.Add(PauseTimeSpan + NachmittagTimeSpan) ?? DateTime.MinValue);
 
             if ((WorktimeVormittagStartEnd.Length + WorktimeNachmittagStartEnd.Length + WorktimePauseStartEnd.Length) > 9)
             {
