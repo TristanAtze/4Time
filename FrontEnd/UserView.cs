@@ -527,5 +527,11 @@ namespace Time4SellersApp
                 MessageBox.Show("Gesichtserkennung wurde deaktiviert. Die Anwendung wird nicht mehr versuchen, Ihr Gesicht zu erkennen.", "Gesichtserkennung deaktiviert", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            WindowsCredentialManager.DeletePassword("4Time/My4SELLERSpwd");
+            MessageBox.Show("Das Passwort für My4SELLERS wurde gelöscht. Bitte geben Sie es erneut ein, wenn Sie sich das nächste Mal anmelden.", "Passwort gelöscht", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }

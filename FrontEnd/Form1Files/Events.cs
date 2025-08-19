@@ -514,7 +514,10 @@ partial class UserView
 
         if (!_isMy4SellersLogin)
         {
-            string pwd = StringInputForm.ShowStringInputForm("Passworteingabe", "Bitte gib Dein My4SELLERS Passwort ein:") ?? "";
+            string pwd = WindowsCredentialManager.LoadPassword("4Time/My4SELLERSpwd").ToString() ?? 
+                StringInputForm.ShowStringInputForm("Passworteingabe", "Bitte gib Dein My4SELLERS Passwort ein:") ?? "";
+
+            
 
             var result = await _my4SellersService.Login($"{Connector.FirstName}.{Connector.LastName}@4sellers.de".ToLower().Replace(" ", ""), pwd);
 

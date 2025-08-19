@@ -92,8 +92,8 @@ namespace Time4SellersApp
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserView));
             tabControl = new TabControl();
             tabUebersicht = new TabPage();
+            Neuladen = new Button();
             button6 = new Button();
-            PauseLabel = new Label();
             pictureBox3 = new PictureBox();
             OTgesamt = new Label();
             label16 = new Label();
@@ -103,7 +103,6 @@ namespace Time4SellersApp
             dateTimePicker1 = new DateTimePicker();
             NachmittagLabel = new Label();
             VormittagLabel = new Label();
-            Neuladen = new Button();
             LogginName = new Label();
             loggedInAs = new Label();
             OTWeek = new Label();
@@ -119,6 +118,7 @@ namespace Time4SellersApp
             lblPausenzeitWoche = new Label();
             lblUeberstundenWoche = new Label();
             lblMy4SellersAusgabe = new Label();
+            PauseLabel = new Label();
             tabEintragen = new TabPage();
             pictureBox2 = new PictureBox();
             button3 = new Button();
@@ -194,6 +194,7 @@ namespace Time4SellersApp
             label24 = new Label();
             label17 = new Label();
             LockedTimeMin = new Label();
+            button7 = new Button();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -262,6 +263,15 @@ namespace Time4SellersApp
             tabUebersicht.TabIndex = 0;
             tabUebersicht.Text = "Übersicht";
             // 
+            // Neuladen
+            // 
+            Neuladen.Location = new Point(710, 463);
+            Neuladen.Name = "Neuladen";
+            Neuladen.Size = new Size(164, 62);
+            Neuladen.TabIndex = 20;
+            Neuladen.Text = "Neuladen";
+            Neuladen.Click += Neuladen_Click;
+            // 
             // button6
             // 
             button6.Location = new Point(710, 377);
@@ -271,16 +281,6 @@ namespace Time4SellersApp
             button6.Text = "In My4SELLERS eintagen";
             button6.UseVisualStyleBackColor = true;
             button6.Click += button6_Click;
-            // 
-            // PauseLabel
-            // 
-            PauseLabel.AutoSize = true;
-            PauseLabel.Font = new Font("Segoe UI", 14F);
-            PauseLabel.Location = new Point(142, 443);
-            PauseLabel.Name = "PauseLabel";
-            PauseLabel.Size = new Size(118, 25);
-            PauseLabel.TabIndex = 23;
-            PauseLabel.Text = "Pause: Lädt...";
             // 
             // pictureBox3
             // 
@@ -371,15 +371,6 @@ namespace Time4SellersApp
             VormittagLabel.Size = new Size(152, 25);
             VormittagLabel.TabIndex = 21;
             VormittagLabel.Text = "Vormittag: Lädt...";
-            // 
-            // Neuladen
-            // 
-            Neuladen.Location = new Point(710, 463);
-            Neuladen.Name = "Neuladen";
-            Neuladen.Size = new Size(164, 62);
-            Neuladen.TabIndex = 20;
-            Neuladen.Text = "Neuladen";
-            Neuladen.Click += Neuladen_Click;
             // 
             // LogginName
             // 
@@ -530,6 +521,16 @@ namespace Time4SellersApp
             lblMy4SellersAusgabe.Size = new Size(237, 26);
             lblMy4SellersAusgabe.TabIndex = 7;
             lblMy4SellersAusgabe.Text = "My 4Sellers Ausgabe";
+            // 
+            // PauseLabel
+            // 
+            PauseLabel.AutoSize = true;
+            PauseLabel.Font = new Font("Segoe UI", 14F);
+            PauseLabel.Location = new Point(142, 443);
+            PauseLabel.Name = "PauseLabel";
+            PauseLabel.Size = new Size(118, 25);
+            PauseLabel.TabIndex = 23;
+            PauseLabel.Text = "Pause: Lädt...";
             // 
             // tabEintragen
             // 
@@ -879,6 +880,7 @@ namespace Time4SellersApp
             // 
             // tabSettings
             // 
+            tabSettings.Controls.Add(button7);
             tabSettings.Controls.Add(textBox2);
             tabSettings.Controls.Add(label28);
             tabSettings.Controls.Add(label27);
@@ -931,7 +933,7 @@ namespace Time4SellersApp
             // 
             textBox2.Enabled = false;
             textBox2.Font = new Font("Segoe UI", 12F);
-            textBox2.Location = new Point(496, 404);
+            textBox2.Location = new Point(496, 397);
             textBox2.Multiline = true;
             textBox2.Name = "textBox2";
             textBox2.ReadOnly = true;
@@ -942,7 +944,7 @@ namespace Time4SellersApp
             // 
             label28.AutoSize = true;
             label28.Font = new Font("Segoe UI", 9F);
-            label28.Location = new Point(495, 386);
+            label28.Location = new Point(495, 379);
             label28.Name = "label28";
             label28.Size = new Size(208, 15);
             label28.TabIndex = 40;
@@ -952,7 +954,7 @@ namespace Time4SellersApp
             // 
             label27.AutoSize = true;
             label27.Font = new Font("Segoe UI", 9F);
-            label27.Location = new Point(495, 371);
+            label27.Location = new Point(495, 364);
             label27.Name = "label27";
             label27.Size = new Size(245, 15);
             label27.TabIndex = 39;
@@ -961,7 +963,7 @@ namespace Time4SellersApp
             // numericUpDownSecondsToLock
             // 
             numericUpDownSecondsToLock.Font = new Font("Segoe UI", 10F);
-            numericUpDownSecondsToLock.Location = new Point(815, 343);
+            numericUpDownSecondsToLock.Location = new Point(815, 335);
             numericUpDownSecondsToLock.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
             numericUpDownSecondsToLock.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
             numericUpDownSecondsToLock.Name = "numericUpDownSecondsToLock";
@@ -983,7 +985,7 @@ namespace Time4SellersApp
             // 
             label19.AutoSize = true;
             label19.Font = new Font("Segoe UI", 18F);
-            label19.Location = new Point(491, 339);
+            label19.Location = new Point(491, 332);
             label19.Name = "label19";
             label19.Size = new Size(172, 32);
             label19.TabIndex = 37;
@@ -1322,6 +1324,16 @@ namespace Time4SellersApp
             LockedTimeMin.TabIndex = 1;
             LockedTimeMin.Text = "PC Sperrzeit Schwelle:";
             // 
+            // button7
+            // 
+            button7.Location = new Point(495, 488);
+            button7.Name = "button7";
+            button7.Size = new Size(361, 29);
+            button7.TabIndex = 42;
+            button7.Text = "My4Sellers Passwort Zurücksetzten";
+            button7.UseVisualStyleBackColor = true;
+            button7.Click += button7_Click;
+            // 
             // UserView
             // 
             ClientSize = new Size(890, 561);
@@ -1406,5 +1418,6 @@ namespace Time4SellersApp
         private Label label28;
         private TextBox textBox2;
         private Button button6;
+        private Button button7;
     }
 }

@@ -1,5 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using _4Time.DataCore;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Net;
+using System.Security;
 using System.Windows.Forms;
 
 namespace Time4SellersApp;
@@ -46,6 +49,15 @@ public class StringInputForm : Form
     public static string? ShowStringInputForm(string title, string prompt)
     {
         using var form = new StringInputForm(title, prompt);
+
+        // Make form.Result to a Secure String and save it securely
+        SecureString My4SELLERSpwd = new SecureString();
+        foreach (char c in form._inputBox.Text)
+        {
+            My4SELLERSpwd.AppendChar(c);
+        }
+        WindowsCredentialManager.SavePassword("4Time/My4SELLERSpwd", My4SELLERSpwd, WindowsCredentialManager.CRED_PERSIST.LOCAL_MACHINE);
+
         return form.ShowDialog() == DialogResult.OK ? form.Result : null;
     }
 }
