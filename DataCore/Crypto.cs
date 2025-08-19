@@ -528,7 +528,7 @@ public static class Crypto
 {
     private const string AppCredentialName = "4Time/DatenVerschluesselung";
     private static byte[] myAssociatedData = Encoding.UTF8.GetBytes("System Configuration");
-    private static string allKeysFilePath = "K:\\Team Academy\\Azubi_Jahrgang_2024\\Lorenz_Kupfer\\Konsolen Programme\\AllKeysEncrypted.4Time";
+    private static string allKeysFilePath = "";
     private static FileSystemWatcher watcher = new();
 
     static Crypto()

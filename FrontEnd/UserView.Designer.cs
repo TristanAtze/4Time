@@ -229,6 +229,7 @@ namespace Time4SellersApp
             // tabUebersicht
             // 
             tabUebersicht.Controls.Add(button6);
+            tabUebersicht.Controls.Add(PauseLabel);
             tabUebersicht.Controls.Add(pictureBox3);
             tabUebersicht.Controls.Add(OTgesamt);
             tabUebersicht.Controls.Add(label16);
@@ -236,7 +237,6 @@ namespace Time4SellersApp
             tabUebersicht.Controls.Add(label10);
             tabUebersicht.Controls.Add(dateTimePickerOverview);
             tabUebersicht.Controls.Add(dateTimePicker1);
-            tabUebersicht.Controls.Add(PauseLabel);
             tabUebersicht.Controls.Add(NachmittagLabel);
             tabUebersicht.Controls.Add(VormittagLabel);
             tabUebersicht.Controls.Add(Neuladen);
@@ -1321,6 +1321,13 @@ namespace Time4SellersApp
             button6.Text = "In My4SELLERS eintagen";
             button6.UseVisualStyleBackColor = true;
             button6.Click += button6_Click;
+            // 
+            // 
+            // 
+            // 
+            // 
+            // 
+            // 
             // 
             // UserView
             // 

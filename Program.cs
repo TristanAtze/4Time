@@ -47,7 +47,12 @@ namespace _4Time
 
         static async Task Updater()
         {
-            Process.Start("K:\\Team Academy\\Azubi_Jahrgang_2024\\Ben Sowieja\\4TimeUpdater\\Updater\\bin\\Debug\\net9.0\\Updater.exe");
+            var process = Process.GetProcessesByName("Updater").FirstOrDefault();
+            if (process == null)
+            {
+                Process.Start("K:\\Team Academy\\Azubi_Jahrgang_2024\\Ben Sowieja\\4TimeUpdater\\Updater\\bin\\Debug\\net9.0\\Updater.exe");
+                return;
+            }
         }        
 
         static async Task VersionControl()
