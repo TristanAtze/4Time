@@ -546,7 +546,7 @@ partial class UserView
             "Interne Buchung",
             false,
             new BillingType(2, "Regie", "Regie (Stundenweise)"),
-            null,
+            new Surcharge(1, 0, "während der Geschäftszeiten"),
             "",
             _my4SELLERSTimeMMry["vS"],
             _my4SELLERSTimeMMry["vE"],
@@ -574,7 +574,7 @@ partial class UserView
             "gesetzl. Pausenzeiten für Auszubildende",
             false,
             new BillingType(2, "Regie", "Regie (Stundenweise)"),
-            null,
+            new Surcharge(1, 0, "während der Geschäftszeiten"),
             "",
             _my4SELLERSTimeMMry["pS"],
             _my4SELLERSTimeMMry["pE"],
@@ -603,7 +603,7 @@ partial class UserView
             "Interne Buchung",
             false,
             new BillingType(2, "Regie", "Regie (Stundenweise)"),
-            null,
+            new Surcharge(1, 0, "während der Geschäftszeiten"),
             "",
             _my4SELLERSTimeMMry["nS"],
             _my4SELLERSTimeMMry["nE"],
@@ -621,12 +621,8 @@ partial class UserView
         booked = await _my4SellersService.BookEntry(nachmittagBooking);
 
         if (!booked.Success)
-        {
             MessageBox.Show($"Fehler: Buchung konnte nicht eingetragen werden!");
-        }
         else
-        {
             MessageBox.Show($"Erfolg: Buchungen in My4SELLERS eingetragen!");
-        }
     }
 }
