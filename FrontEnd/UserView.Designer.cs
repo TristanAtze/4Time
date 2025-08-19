@@ -154,6 +154,7 @@ namespace Time4SellersApp
             colKommentar = new DataGridViewTextBoxColumn();
             colDauer = new DataGridViewTextBoxColumn();
             tabSettings = new TabPage();
+            textBox2 = new TextBox();
             label28 = new Label();
             label27 = new Label();
             numericUpDownSecondsToLock = new NumericUpDown();
@@ -192,7 +193,6 @@ namespace Time4SellersApp
             label24 = new Label();
             label17 = new Label();
             LockedTimeMin = new Label();
-            textBox2 = new TextBox();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -227,6 +227,7 @@ namespace Time4SellersApp
             // 
             // tabUebersicht
             // 
+            tabUebersicht.Controls.Add(PauseLabel);
             tabUebersicht.Controls.Add(pictureBox3);
             tabUebersicht.Controls.Add(OTgesamt);
             tabUebersicht.Controls.Add(label16);
@@ -234,7 +235,6 @@ namespace Time4SellersApp
             tabUebersicht.Controls.Add(label10);
             tabUebersicht.Controls.Add(dateTimePickerOverview);
             tabUebersicht.Controls.Add(dateTimePicker1);
-            tabUebersicht.Controls.Add(PauseLabel);
             tabUebersicht.Controls.Add(NachmittagLabel);
             tabUebersicht.Controls.Add(VormittagLabel);
             tabUebersicht.Controls.Add(Neuladen);
@@ -915,6 +915,17 @@ namespace Time4SellersApp
             tabSettings.Text = "Settings";
             tabSettings.UseVisualStyleBackColor = true;
             // 
+            // textBox2
+            // 
+            textBox2.Enabled = false;
+            textBox2.Font = new Font("Segoe UI", 12F);
+            textBox2.Location = new Point(496, 404);
+            textBox2.Multiline = true;
+            textBox2.Name = "textBox2";
+            textBox2.ReadOnly = true;
+            textBox2.Size = new Size(361, 85);
+            textBox2.TabIndex = 41;
+            // 
             // label28
             // 
             label28.AutoSize = true;
@@ -1298,17 +1309,6 @@ namespace Time4SellersApp
             LockedTimeMin.Size = new Size(248, 32);
             LockedTimeMin.TabIndex = 1;
             LockedTimeMin.Text = "PC Sperrzeit Schwelle:";
-            // 
-            // textBox2
-            // 
-            textBox2.Enabled = false;
-            textBox2.Font = new Font("Segoe UI", 12F);
-            textBox2.Location = new Point(496, 404);
-            textBox2.Multiline = true;
-            textBox2.Name = "textBox2";
-            textBox2.ReadOnly = true;
-            textBox2.Size = new Size(361, 85);
-            textBox2.TabIndex = 41;
             // 
             // UserView
             // 
