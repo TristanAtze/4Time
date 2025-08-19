@@ -92,6 +92,8 @@ namespace Time4SellersApp
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserView));
             tabControl = new TabControl();
             tabUebersicht = new TabPage();
+            button6 = new Button();
+            PauseLabel = new Label();
             pictureBox3 = new PictureBox();
             OTgesamt = new Label();
             label16 = new Label();
@@ -99,7 +101,6 @@ namespace Time4SellersApp
             label10 = new Label();
             dateTimePickerOverview = new DateTimePicker();
             dateTimePicker1 = new DateTimePicker();
-            PauseLabel = new Label();
             NachmittagLabel = new Label();
             VormittagLabel = new Label();
             Neuladen = new Button();
@@ -193,7 +194,6 @@ namespace Time4SellersApp
             label24 = new Label();
             label17 = new Label();
             LockedTimeMin = new Label();
-            button6 = new Button();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -228,8 +228,8 @@ namespace Time4SellersApp
             // 
             // tabUebersicht
             // 
+            tabUebersicht.Controls.Add(Neuladen);
             tabUebersicht.Controls.Add(button6);
-            tabUebersicht.Controls.Add(PauseLabel);
             tabUebersicht.Controls.Add(pictureBox3);
             tabUebersicht.Controls.Add(OTgesamt);
             tabUebersicht.Controls.Add(label16);
@@ -239,7 +239,6 @@ namespace Time4SellersApp
             tabUebersicht.Controls.Add(dateTimePicker1);
             tabUebersicht.Controls.Add(NachmittagLabel);
             tabUebersicht.Controls.Add(VormittagLabel);
-            tabUebersicht.Controls.Add(Neuladen);
             tabUebersicht.Controls.Add(LogginName);
             tabUebersicht.Controls.Add(loggedInAs);
             tabUebersicht.Controls.Add(OTWeek);
@@ -255,12 +254,33 @@ namespace Time4SellersApp
             tabUebersicht.Controls.Add(lblPausenzeitWoche);
             tabUebersicht.Controls.Add(lblUeberstundenWoche);
             tabUebersicht.Controls.Add(lblMy4SellersAusgabe);
+            tabUebersicht.Controls.Add(PauseLabel);
             tabUebersicht.Font = new Font("Segoe UI", 14F);
             tabUebersicht.Location = new Point(4, 24);
             tabUebersicht.Name = "tabUebersicht";
             tabUebersicht.Size = new Size(882, 533);
             tabUebersicht.TabIndex = 0;
             tabUebersicht.Text = "Übersicht";
+            // 
+            // button6
+            // 
+            button6.Location = new Point(710, 377);
+            button6.Name = "button6";
+            button6.Size = new Size(164, 60);
+            button6.TabIndex = 32;
+            button6.Text = "In My4SELLERS eintagen";
+            button6.UseVisualStyleBackColor = true;
+            button6.Click += button6_Click;
+            // 
+            // PauseLabel
+            // 
+            PauseLabel.AutoSize = true;
+            PauseLabel.Font = new Font("Segoe UI", 14F);
+            PauseLabel.Location = new Point(142, 443);
+            PauseLabel.Name = "PauseLabel";
+            PauseLabel.Size = new Size(118, 25);
+            PauseLabel.TabIndex = 23;
+            PauseLabel.Text = "Pause: Lädt...";
             // 
             // pictureBox3
             // 
@@ -331,16 +351,6 @@ namespace Time4SellersApp
             dateTimePicker1.TabIndex = 24;
             dateTimePicker1.Value = new DateTime(2025, 4, 28, 0, 0, 0, 0);
             dateTimePicker1.ValueChanged += UebersichtDTP_ValueChanged;
-            // 
-            // PauseLabel
-            // 
-            PauseLabel.AutoSize = true;
-            PauseLabel.Font = new Font("Segoe UI", 14F);
-            PauseLabel.Location = new Point(142, 443);
-            PauseLabel.Name = "PauseLabel";
-            PauseLabel.Size = new Size(118, 25);
-            PauseLabel.TabIndex = 23;
-            PauseLabel.Text = "Pause: Lädt...";
             // 
             // NachmittagLabel
             // 
@@ -1311,23 +1321,6 @@ namespace Time4SellersApp
             LockedTimeMin.Size = new Size(248, 32);
             LockedTimeMin.TabIndex = 1;
             LockedTimeMin.Text = "PC Sperrzeit Schwelle:";
-            // 
-            // button6
-            // 
-            button6.Location = new Point(710, 377);
-            button6.Name = "button6";
-            button6.Size = new Size(164, 60);
-            button6.TabIndex = 32;
-            button6.Text = "In My4SELLERS eintagen";
-            button6.UseVisualStyleBackColor = true;
-            button6.Click += button6_Click;
-            // 
-            // 
-            // 
-            // 
-            // 
-            // 
-            // 
             // 
             // UserView
             // 
