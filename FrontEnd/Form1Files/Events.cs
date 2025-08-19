@@ -547,6 +547,14 @@ partial class UserView
             return;
         }
 
+        relevantTicketResult = (await _my4SellersService.GetTicketByCustomTicketId(relevantTicketResult.CustomTicketId)).Data;
+
+        if (relevantTicketResult == null)
+        {
+            MessageBox.Show($"Fehler: Kein relevantes Ticket gefunden!");
+            return;
+        }
+
         var vormittagBooking = new TimeBookingRequest(
             relevantTicketResult.AssignedEmployee.UserId,
             "Nicht abrechenbar",
