@@ -154,6 +154,7 @@ namespace Time4SellersApp
             colKommentar = new DataGridViewTextBoxColumn();
             colDauer = new DataGridViewTextBoxColumn();
             tabSettings = new TabPage();
+            textBox2 = new TextBox();
             label28 = new Label();
             label27 = new Label();
             numericUpDownSecondsToLock = new NumericUpDown();
@@ -192,7 +193,7 @@ namespace Time4SellersApp
             label24 = new Label();
             label17 = new Label();
             LockedTimeMin = new Label();
-            textBox2 = new TextBox();
+            button6 = new Button();
             tabControl.SuspendLayout();
             tabUebersicht.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -227,6 +228,7 @@ namespace Time4SellersApp
             // 
             // tabUebersicht
             // 
+            tabUebersicht.Controls.Add(button6);
             tabUebersicht.Controls.Add(pictureBox3);
             tabUebersicht.Controls.Add(OTgesamt);
             tabUebersicht.Controls.Add(label16);
@@ -915,6 +917,17 @@ namespace Time4SellersApp
             tabSettings.Text = "Settings";
             tabSettings.UseVisualStyleBackColor = true;
             // 
+            // textBox2
+            // 
+            textBox2.Enabled = false;
+            textBox2.Font = new Font("Segoe UI", 12F);
+            textBox2.Location = new Point(496, 404);
+            textBox2.Multiline = true;
+            textBox2.Name = "textBox2";
+            textBox2.ReadOnly = true;
+            textBox2.Size = new Size(361, 85);
+            textBox2.TabIndex = 41;
+            // 
             // label28
             // 
             label28.AutoSize = true;
@@ -1299,16 +1312,15 @@ namespace Time4SellersApp
             LockedTimeMin.TabIndex = 1;
             LockedTimeMin.Text = "PC Sperrzeit Schwelle:";
             // 
-            // textBox2
+            // button6
             // 
-            textBox2.Enabled = false;
-            textBox2.Font = new Font("Segoe UI", 12F);
-            textBox2.Location = new Point(496, 404);
-            textBox2.Multiline = true;
-            textBox2.Name = "textBox2";
-            textBox2.ReadOnly = true;
-            textBox2.Size = new Size(361, 85);
-            textBox2.TabIndex = 41;
+            button6.Location = new Point(710, 377);
+            button6.Name = "button6";
+            button6.Size = new Size(164, 60);
+            button6.TabIndex = 32;
+            button6.Text = "In My4SELLERS eintagen";
+            button6.UseVisualStyleBackColor = true;
+            button6.Click += button6_Click;
             // 
             // UserView
             // 
@@ -1393,5 +1405,6 @@ namespace Time4SellersApp
         private Button button5;
         private Label label28;
         private TextBox textBox2;
+        private Button button6;
     }
 }

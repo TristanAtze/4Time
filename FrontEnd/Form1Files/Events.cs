@@ -4,6 +4,8 @@ using _4Time.DataCore.Models;
 using _4Time.FrontEnd;
 using _4Time.FrontEnd.Jokes;
 using _4Time.Python;
+using BenjaminBiber.My4Sellers.Models;
+using BenjaminBiber.My4Sellers.Services;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Time4SellersApp;
@@ -11,6 +13,9 @@ namespace Time4SellersApp;
 partial class UserView
 {
     private static bool _isOutlookImporting = false;
+    private static My4SellersService? _my4SellersService = null!;
+    private static bool _isMy4SellersLogin;
+    private static Dictionary<string, DateTime> _my4SELLERSTimeMMry = [];
 
     private void RbStartzeitEndzeit_CheckedChanged(object sender, EventArgs e)
     {
@@ -502,5 +507,126 @@ partial class UserView
     private void button5_Click(object sender, EventArgs e)
     {
         MessageBox.Show($"{Curry.GetCurry()}", "Curry", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    }
+    private async void button6_Click(object sender, EventArgs e)
+    {
+        _my4SellersService ??= new My4SellersService(new HttpClient(), new ApiUrls());
+
+        if (!_isMy4SellersLogin)
+        {
+            string pwd = StringInputForm.ShowStringInputForm("Passworteingabe", "Bitte gib Dein My4SELLERS Passwort ein:") ?? "";
+
+            var result = await _my4SellersService.Login($"{Connector.FirstName}.{Connector.LastName}@4sellers.de".ToLower().Replace(" ", ""), pwd);
+
+            if (result.Success)
+            {
+                MessageBox.Show($"Login erfolgreich als: {result.Data.UserName}");
+                _isMy4SellersLogin = true;
+            }
+            else
+            {
+                MessageBox.Show($"Fehler: {result.Error}");
+                return;
+            }
+        }
+
+        var tickets = (await _my4SellersService.GetAllTicketsForUser()).Data.Tickets;
+
+        Ticket? relevantTicketResult = tickets.FirstOrDefault(x => x.Title.Contains("arbeitszeit", StringComparison.CurrentCultureIgnoreCase));
+
+        if (relevantTicketResult == null)
+        {
+            MessageBox.Show($"Fehler: Kein relevantes Ticket gefunden!");
+            return;
+        }
+
+        var vormittagBooking = new TimeBookingRequest(
+            relevantTicketResult.AssignedEmployee.UserId,
+            "Nicht abrechenbar",
+            "Interne Buchung",
+            false,
+            new BillingType(2, "Regie", "Regie (Stundenweise)"),
+            null,
+            "",
+            _my4SELLERSTimeMMry["vS"],
+            _my4SELLERSTimeMMry["vE"],
+            relevantTicketResult.CustomTicketId,
+            _my4SellersService.GetDurationInMinutesFromDateTime(_my4SELLERSTimeMMry["vS"], _my4SELLERSTimeMMry["vE"]),
+            _my4SellersService.GetDurationInMinutesFromDateTime(_my4SELLERSTimeMMry["vS"], _my4SELLERSTimeMMry["vE"]),
+            true,
+            171894
+        )
+        {
+            Description = $"<p>Vormittag</p>"
+        };
+
+        var booked = await _my4SellersService.BookEntry(vormittagBooking);
+
+        if (!booked.Success)
+        {
+            MessageBox.Show($"Fehler: Buchung konnte nicht eingetragen werden!");
+            return;
+        }
+
+        var pauseBooking = new TimeBookingRequest(
+            relevantTicketResult.AssignedEmployee.UserId,
+            "Nicht abrechenbar",
+            "gesetzl. Pausenzeiten für Auszubildende",
+            false,
+            new BillingType(2, "Regie", "Regie (Stundenweise)"),
+            null,
+            "",
+            _my4SELLERSTimeMMry["pS"],
+            _my4SELLERSTimeMMry["pE"],
+            relevantTicketResult.CustomTicketId,
+            _my4SellersService.GetDurationInMinutesFromDateTime(_my4SELLERSTimeMMry["pS"], _my4SELLERSTimeMMry["pE"]),
+            _my4SellersService.GetDurationInMinutesFromDateTime(_my4SELLERSTimeMMry["pS"], _my4SELLERSTimeMMry["pE"]),
+            true,
+            171894
+        )
+        {
+            Description = $"<p>Mittagspause</p>"
+        };
+
+
+        booked = await _my4SellersService.BookEntry(pauseBooking);
+
+        if (!booked.Success)
+        {
+            MessageBox.Show($"Fehler: Buchung konnte nicht eingetragen werden!");
+            return;
+        }
+
+        var nachmittagBooking = new TimeBookingRequest(
+            relevantTicketResult.AssignedEmployee.UserId,
+            "Nicht abrechenbar",
+            "Interne Buchung",
+            false,
+            new BillingType(2, "Regie", "Regie (Stundenweise)"),
+            null,
+            "",
+            _my4SELLERSTimeMMry["nS"],
+            _my4SELLERSTimeMMry["nE"],
+            relevantTicketResult.CustomTicketId,
+            _my4SellersService.GetDurationInMinutesFromDateTime(_my4SELLERSTimeMMry["nS"], _my4SELLERSTimeMMry["nE"]),
+            _my4SellersService.GetDurationInMinutesFromDateTime(_my4SELLERSTimeMMry["nS"], _my4SELLERSTimeMMry["nE"]),
+            true,
+            171894
+        )
+        {
+            Description = $"<p>Nachmittag</p>"
+        };
+
+
+        booked = await _my4SellersService.BookEntry(nachmittagBooking);
+
+        if (!booked.Success)
+        {
+            MessageBox.Show($"Fehler: Buchung konnte nicht eingetragen werden!");
+        }
+        else
+        {
+            MessageBox.Show($"Erfolg: Buchungen in My4SELLERS eingetragen!");
+        }
     }
 }

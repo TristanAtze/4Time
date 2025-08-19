@@ -65,6 +65,7 @@
 
   <ItemGroup>
     <PackageReference Include="Autoupdater.NET.Official" Version="1.9.2" />
+    <PackageReference Include="BenjaminBiber.My4Sellers" Version="1.0.0" />
     <PackageReference Include="Dapper" Version="2.1.66" />
     <PackageReference Include="Interop.UIAutomationClient" Version="10.19041.0" />
     <PackageReference Include="Interop.UIAutomationClient.Signed" Version="10.19041.0" />

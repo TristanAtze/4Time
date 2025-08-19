@@ -72,10 +72,10 @@ public static class OutlookCalendar
                 x.CategoryID = x.CategoryID = categories.FirstOrDefault(c => c.Description == "Planmäßige Abwesenheit")?.CategoryID ?? 7;
         });
 
-        if (calendarItems != null) System.Runtime.InteropServices.Marshal.ReleaseComObject(calendarItems);
-        if (calendarFolder != null) System.Runtime.InteropServices.Marshal.ReleaseComObject(calendarFolder);
-        if (nameSpace != null) System.Runtime.InteropServices.Marshal.ReleaseComObject(nameSpace);
-        if (outlook != null) System.Runtime.InteropServices.Marshal.ReleaseComObject(outlook);
+        if (calendarItems != null) _ = System.Runtime.InteropServices.Marshal.ReleaseComObject(calendarItems);
+        if (calendarFolder != null) _ = System.Runtime.InteropServices.Marshal.ReleaseComObject(calendarFolder);
+        if (nameSpace != null) _ = System.Runtime.InteropServices.Marshal.ReleaseComObject(nameSpace);
+        if (outlook != null) _ = System.Runtime.InteropServices.Marshal.ReleaseComObject(outlook);
 
         GC.Collect();
         GC.WaitForPendingFinalizers();

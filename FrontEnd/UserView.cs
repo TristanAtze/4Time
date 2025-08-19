@@ -166,6 +166,9 @@ namespace Time4SellersApp
             }
             var WorktimeVormittagStartEnd = $"{FirstEntryVormittag?.Start.ToShortTimeString()} - {FirstEntryVormittag?.Start.Add(VormittagTimeSpan).ToShortTimeString()}";
 
+            _ = _my4SELLERSTimeMMry.TryAdd("vS", FirstEntryVormittag?.Start ?? DateTime.MinValue);
+            _ = _my4SELLERSTimeMMry.TryAdd("vE", FirstEntryVormittag?.Start.Add(VormittagTimeSpan) ?? DateTime.MinValue);
+
             //Pause
             List<Entry> WorktimePause = [.. AllEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CategoryName.Contains("ause") || x.CategoryID is >= 1 and <= 3)];
             var FirstEntryPause = WorktimePause.Where(x => x.Start.Date == My4SellersDateTime).OrderBy(x => x.Start).FirstOrDefault();
@@ -175,6 +178,9 @@ namespace Time4SellersApp
                 PauseTimeSpan += l.End - l.Start;
             }
             var WorktimePauseStartEnd = $"{FirstEntryPause?.Start.ToShortTimeString()} - {FirstEntryPause?.Start.Add(PauseTimeSpan).ToShortTimeString()}";
+
+            _ = _my4SELLERSTimeMMry.TryAdd("pS", FirstEntryPause?.Start ?? DateTime.MinValue);
+            _ = _my4SELLERSTimeMMry.TryAdd("pE", FirstEntryPause?.Start.Add(PauseTimeSpan) ?? DateTime.MinValue);
 
             //Nachmittag
             List<Entry> WorktimeNachmittag = [.. AllEntrys.Where(x => x.Start.Date == My4SellersDateTime).Where(x => x.CategoryName == "Nachmittag" || x.CategoryID == 10)];
@@ -186,13 +192,15 @@ namespace Time4SellersApp
             }
             var WorktimeNachmittagStartEnd = $"{FirstEntryPause?.Start.Add(PauseTimeSpan).ToShortTimeString()} - {FirstEntryPause?.Start.Add(PauseTimeSpan + NachmittagTimeSpan).ToShortTimeString()}";
 
+            _ = _my4SELLERSTimeMMry.TryAdd("nS", FirstEntryPause?.Start.Add(PauseTimeSpan) ?? DateTime.MinValue);
+            _ = _my4SELLERSTimeMMry.TryAdd("nE", FirstEntryPause?.Start.Add(PauseTimeSpan + NachmittagTimeSpan) ?? DateTime.MinValue);
+
             if ((WorktimeVormittagStartEnd.Length + WorktimeNachmittagStartEnd.Length + WorktimePauseStartEnd.Length) > 9)
             {
                 VormittagLabel.Text = $"Vormittag:    {WorktimeVormittagStartEnd} (Interne Buchung)" ?? $"Vormittag: 00:00";
                 NachmittagLabel.Text = $"Nachmittag: {WorktimeNachmittagStartEnd} (Interne Buchung)" ?? $"Nachmittag: 00:00";
                 PauseLabel.Text = $"Pause:          {WorktimePauseStartEnd} (gesetzl. Pausenzeiten für Auszubildende)" ?? $"Pause: 00:00";
             }
-            
 
             btnSpeichern.Enabled = false;
 
@@ -489,7 +497,8 @@ namespace Time4SellersApp
             if (FaceRegocnitionCheck.Checked)
             {
                 int seconds = (int)numericUpDownSecondsToLock.Value;
-                WebcamLockController.OnPythonOutput += (output) => {
+                WebcamLockController.OnPythonOutput += (output) =>
+                {
                     if (txtOutputLog.InvokeRequired)
                     {
                         textBox2.Invoke(new Action(() => textBox2.AppendText($"Webcam: {output}{Environment.NewLine}")));
@@ -499,7 +508,8 @@ namespace Time4SellersApp
                         textBox2.AppendText($"Webcam: {output}{Environment.NewLine}");
                     }
                 };
-                WebcamLockController.OnPythonError += (error) => {
+                WebcamLockController.OnPythonError += (error) =>
+                {
                     if (txtOutputLog.InvokeRequired)
                     {
                         textBox2.Invoke(new Action(() => textBox2.AppendText($"Webcam ERROR: {error}{Environment.NewLine}")));
