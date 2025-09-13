@@ -37,11 +37,12 @@ namespace _4Time.DataCore
                     await connection.OpenAsync();
                     using (var command = new SqlCommand(sql.ToString(), connection))
                     {
-                        using (var dbReader = command.ExecuteReader())
+                        // Verwende die asynchrone Variante, um Threadpool-Blockierungen zu vermeiden
+                        using (var dbReader = await command.ExecuteReaderAsync())
                         {
                             while (await dbReader.ReadAsync())
                             {
-                                await semaphore.WaitAsync(); 
+                                await semaphore.WaitAsync();
 
                                 var rowData = ExtractRowDataForProcessing(dbReader, typeof(T), properties);
 
