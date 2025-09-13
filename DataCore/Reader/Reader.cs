@@ -7,7 +7,8 @@ namespace _4Time.DataCore
 {
     internal class Reader : Connector
     {
-        private const int MaxDegreeOfParallelism = 8; //Handel wie viele Threads gleichzeitig ausgeführt werden können
+        // Dynamisch gewählter Parallelitätsgrad basierend auf der Hardware.
+        private static readonly int MaxDegreeOfParallelism = Math.Max(1, Environment.ProcessorCount - 1);
 
         internal static async Task<List<T>> Read<T>(string table, string[]? columns = null, string[]? conditions = null, string? password = null) where T : new()
         {
@@ -44,26 +45,28 @@ namespace _4Time.DataCore
 
                                 var rowData = ExtractRowDataForProcessing(dbReader, typeof(T), properties);
 
-                                processingTasks.Add(Task.Run(async () =>
-                                {
-                                    try
-                                    {
-                                        return await ProcessRowAsync<T>(rowData, properties, password);
-                                    }
-                                    finally
-                                    {
-                                        semaphore.Release(); // "Slot" wieder freigeben
-                                    }
-                                }));
+                                processingTasks.Add(ProcessRowWithSemaphoreAsync(rowData));
                             }
                         } // dbReader wird hier disposed
                     } // command wird hier disposed
                 } // connection wird hier disposed
 
                 resultsArray = await Task.WhenAll(processingTasks);
+            }
 
-            } 
             return resultsArray.ToList();
+
+            static async Task<T> ProcessRowWithSemaphoreAsync(RowDataHolder rowData)
+            {
+                try
+                {
+                    return await ProcessRowAsync<T>(rowData, properties, password);
+                }
+                finally
+                {
+                    semaphore.Release(); // "Slot" wieder freigeben
+                }
+            }
         }
 
         private static RowDataHolder ExtractRowDataForProcessing(SqlDataReader dbReader, Type typeOfT, PropertyInfo[] properties)
