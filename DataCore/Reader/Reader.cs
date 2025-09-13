@@ -56,7 +56,7 @@ namespace _4Time.DataCore
 
             return resultsArray.ToList();
 
-            async Task<T> ProcessRowWithSemaphoreAsync(RowDataHolder rowData)
+            static async Task<T> ProcessRowWithSemaphoreAsync(RowDataHolder rowData)
             {
                 try
                 {
