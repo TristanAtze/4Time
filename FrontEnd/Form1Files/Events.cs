@@ -81,7 +81,7 @@ partial class UserView
         if (oldId.HasValue)
         {
             entry.EntryID = oldId.Value;
-            Writer.Update("Entries", entry, [$"[EntryID] = {entry.EntryID}"]);
+            Writer.Update("Entries", entry, new() { { "EntryID", entry.EntryID } });
         }
         else
             Writer.Insert("Entries", entry);
@@ -169,7 +169,7 @@ partial class UserView
 
             foreach (Entry? entry in indices.Select(rowIndex => AllEntrys[rowIndex]))
             {
-                Writer.Delete("Entries", [$"[EntryID] = {entry.EntryID}"]);
+                Writer.Delete("Entries", new() { { "EntryID", entry.EntryID } });
                 AllEntrys.Where(x => x.EntryID == entry.EntryID).ToList().ForEach(x => AllEntrys.Remove(x));
             }
 
