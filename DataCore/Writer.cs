@@ -191,6 +191,10 @@ internal class Writer : Connector
 
     internal static void Delete(string table, Dictionary<string, object?>? conditions = null)
     {
+        if (string.IsNullOrWhiteSpace(table))
+        {
+            throw new ArgumentException("Table name must not be null or empty.", nameof(table));
+        }
         using var connection = new SqlConnection(ConnectionString);
         using var command = new SqlCommand();
         command.Connection = connection;
