@@ -1,4 +1,4 @@
-﻿using _4Time.DataCore.Models;
+using _4Time.DataCore.Models;
 using Microsoft.Data.SqlClient;
 
 namespace _4Time.DataCore;
@@ -19,12 +19,11 @@ internal class Writer : Connector
     {
         string query = File.ReadAllText("res/Setup.txt");
 
-        var connection = new SqlConnection(ConnectionString);
-         var command = new SqlCommand(query, connection);
+        using var connection = new SqlConnection(ConnectionString);
+        using var command = new SqlCommand(query, connection);
 
         connection.Open();
         command.ExecuteNonQuery();
-        connection.Close();
     }
 
     internal static async Task UserSetupAsync()
@@ -37,8 +36,8 @@ internal class Writer : Connector
                 END
             ";
 
-        var connection = new SqlConnection(ConnectionString);
-        var command = new SqlCommand(query, connection);
+        using var connection = new SqlConnection(ConnectionString);
+        using var command = new SqlCommand(query, connection);
 
         command.Parameters.AddWithValue("@firstName", Connector.FirstName.ToLower());
         command.Parameters.AddWithValue("@lastName", Connector.LastName.ToLower());
@@ -46,7 +45,6 @@ internal class Writer : Connector
 
         connection.Open();
         command.ExecuteNonQuery();
-        connection.Close();
     }
 
     internal static void Insert(string table, object obj)
@@ -54,19 +52,19 @@ internal class Writer : Connector
         Dictionary<string, object?> columns = [];
 
         //Alle Spalten ermitteln
-        string schemaQuery = $"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}'";
-        var schemaConnection = new SqlConnection(ConnectionString);
-        var schemaCommand = new SqlCommand(schemaQuery, schemaConnection);
-
-        schemaConnection.Open();
-        var schemaReader = schemaCommand.ExecuteReader();
-
-        while (schemaReader.Read())
+        string schemaQuery = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = @table";
+        using (var schemaConnection = new SqlConnection(ConnectionString))
+        using (var schemaCommand = new SqlCommand(schemaQuery, schemaConnection))
         {
-            if (!UNSETTABLE_COLUMNS[obj.GetType()].Contains(schemaReader.GetString(0)))
-                columns.Add(schemaReader.GetString(0), null);
+            schemaCommand.Parameters.AddWithValue("@table", table);
+            schemaConnection.Open();
+            using var schemaReader = schemaCommand.ExecuteReader();
+            while (schemaReader.Read())
+            {
+                if (!UNSETTABLE_COLUMNS[obj.GetType()].Contains(schemaReader.GetString(0)))
+                    columns.Add(schemaReader.GetString(0), null);
+            }
         }
-        schemaConnection.Close();
 
         //Spalten mit Werten füllen
         foreach (var prop in obj.GetType().GetProperties())
@@ -77,7 +75,9 @@ internal class Writer : Connector
             }
         }
 
-        //INSERT-Statement erstellen
+        using var connection = new SqlConnection(ConnectionString);
+        using var command = new SqlCommand();
+        command.Connection = connection;
         string query = $"INSERT INTO [dbo].[{table}] ";
 
         if (columns.Count > 0)
@@ -97,33 +97,39 @@ internal class Writer : Connector
                 columns["Comment"] = Crypto.Encryption(valueComment?.ToString() ?? "");
             }
 
-            query += "([" + string.Join("], [", columns.Keys) + "]) VALUES (";
-            query += string.Join(", ", columns.Values.Select(v => v == null ? "NULL" : $"'{v}'")) + ")";
+            var columnNames = columns.Keys.Select(k => $"[{k}]");
+            var paramNames = columns.Keys.Select((_, i) => $"@p{i}");
+            query += $"({string.Join(", ", columnNames)}) VALUES ({string.Join(", ", paramNames)})";
+
+            int index = 0;
+            foreach (var value in columns.Values)
+            {
+                command.Parameters.AddWithValue($"@p{index}", value ?? DBNull.Value);
+                index++;
+            }
         }
         else
         {
             query += "DEFAULT VALUES";
         }
 
-        var connection = new SqlConnection(ConnectionString);
-        var command = new SqlCommand(query, connection);
-
+        command.CommandText = query;
         connection.Open();
         command.ExecuteNonQuery();
-        connection.Close();
     }
 
-    internal static void Update(string table, object obj, string[] condition)
+    internal static void Update(string table, object obj, Dictionary<string, object?> conditions)
     {
         Dictionary<string, object?> columns = [];
-        //Alle Spalten ermitteln
-        string schemaQuery = $"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}'";
-        var schemaConnection = new SqlConnection(ConnectionString);
 
+        //Alle Spalten ermitteln
+        string schemaQuery = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = @table";
+        using (var schemaConnection = new SqlConnection(ConnectionString))
         using (var schemaCommand = new SqlCommand(schemaQuery, schemaConnection))
         {
+            schemaCommand.Parameters.AddWithValue("@table", table);
             schemaConnection.Open();
-            var schemaReader = schemaCommand.ExecuteReader();
+            using var schemaReader = schemaCommand.ExecuteReader();
             while (schemaReader.Read())
             {
                 if (!UNSETTABLE_COLUMNS[obj.GetType()].Contains(schemaReader.GetString(0)))
@@ -131,9 +137,7 @@ internal class Writer : Connector
                     columns.Add(schemaReader.GetString(0), null);
                 }
             }
-            schemaConnection.Close();
         }
-        ;
 
         //Spalten mit Werten füllen
         foreach (var prop in obj.GetType().GetProperties())
@@ -148,37 +152,70 @@ internal class Writer : Connector
                     columns[prop.Name] = prop.GetValue(obj);
             }
         }
-        //UPDATE-Statement erstellen
-        string query = "";
-        if (columns.Count > 0)
+
+        if (columns.Count == 0)
+            return;
+
+        using var connection = new SqlConnection(ConnectionString);
+        using var command = new SqlCommand();
+        command.Connection = connection;
+
+        var setClauses = new List<string>();
+        int index = 0;
+        foreach (var kvp in columns)
         {
-            query = $"UPDATE [dbo].[{table}] SET ";
-            query += string.Join(", ", columns.Select(kvp => $"[{kvp.Key}] = {(kvp.Value == null ? "NULL" : $"'{kvp.Value}'")}"));
-            query += $" WHERE ";
-            query += string.Join(" AND ", condition);
+            setClauses.Add($"[{kvp.Key}] = @p{index}");
+            command.Parameters.AddWithValue($"@p{index}", kvp.Value ?? DBNull.Value);
+            index++;
         }
 
-        var connection = new SqlConnection(ConnectionString);
-        var command = new SqlCommand(query, connection);
+        var conditionClauses = new List<string>();
+        int condIndex = 0;
+        foreach (var kvp in conditions)
+        {
+            conditionClauses.Add($"[{kvp.Key}] = @c{condIndex}");
+            command.Parameters.AddWithValue($"@c{condIndex}", kvp.Value ?? DBNull.Value);
+            condIndex++;
+        }
+
+        string query = $"UPDATE [dbo].[{table}] SET {string.Join(", ", setClauses)}";
+        if (conditionClauses.Count > 0)
+        {
+            query += " WHERE " + string.Join(" AND ", conditionClauses);
+        }
+
+        command.CommandText = query;
         connection.Open();
         command.ExecuteNonQuery();
-        connection.Close();
     }
 
-    internal static void Delete(string table, params string[] conditions)
+    internal static void Delete(string table, Dictionary<string, object?>? conditions = null)
     {
+        using var connection = new SqlConnection(ConnectionString);
+        using var command = new SqlCommand();
+        command.Connection = connection;
+
         string query = $"DELETE FROM [dbo].[{table}]";
 
-        if (conditions.Length > 0)
+        var conditionClauses = new List<string>();
+        if (conditions != null)
         {
-            query += " WHERE " + string.Join(" AND ", conditions);
+            int index = 0;
+            foreach (var kvp in conditions)
+            {
+                conditionClauses.Add($"[{kvp.Key}] = @c{index}");
+                command.Parameters.AddWithValue($"@c{index}", kvp.Value ?? DBNull.Value);
+                index++;
+            }
         }
 
-        var connection = new SqlConnection(ConnectionString);
-        var command = new SqlCommand(query, connection);
+        if (conditionClauses.Count > 0)
+        {
+            query += " WHERE " + string.Join(" AND ", conditionClauses);
+        }
 
+        command.CommandText = query;
         connection.Open();
         command.ExecuteNonQuery();
-        connection.Close();
     }
 }
